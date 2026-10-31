@@ -46,5 +46,5 @@ document.addEventListener("DOMContentLoaded",()=>{
   compose.onclick=composeLetter;
  }
 });
-window.AYFAR_on_enter=checkDailyLetter;
+window.AYFAR_on_enter=(role)=>{const compose=$("#compose-love");if(compose)compose.style.display=role==="ayoub"?"block":"none";checkDailyLetter()};
 })();
