@@ -1,14 +1,17 @@
 (()=>{
+let realtimeChannel=null;
 const $=s=>document.querySelector(s),esc=v=>String(v??"").replace(/[&<>"\']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;", "\'":"&#39;"}[c]));
 const show=html=>{$("#home").classList.add("hidden");$("#page").classList.remove("hidden");$("#pagebody").innerHTML=html};
 async function open(){
  const role=window.WorldStore.get().active,client=window.ayfarSupabase;
  show('<div class="panel"><p>جارٍ تحميل الرسائل...</p></div>');
  try{
+  if(realtimeChannel){await client.removeChannel(realtimeChannel);realtimeChannel=null;}
   const {data:{user},error:uerr}=await client.auth.getUser();if(uerr||!user)throw new Error("انتهت جلسة الدخول، سجّل الدخول مجدداً.");
   const {data:profiles,error:perr}=await client.from("profiles").select("id,role").in("role",["ayoub","farahati"]);if(perr)throw perr;
   const recipient=profiles.find(p=>p.role==="farahati");if(role==="ayoub"&&!recipient)throw new Error("تعذر العثور على حساب فرحتي.");
   await render(role,user,recipient);
+  realtimeChannel=client.channel("ayfar-private-messages-"+user.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"private_messages"},payload=>{if(payload.new&&payload.new.recipient_id===user.id){render(role,user,recipient).catch(err=>console.error("Message refresh failed:",err));}}).subscribe();
  }catch(e){show('<div class="panel"><h2>تعذر فتح الرسائل</h2><p>'+esc(e.message||"حدث خطأ في الاتصال.")+'</p><button class="primary" id="retry-msg">إعادة المحاولة</button></div>');$("#retry-msg").onclick=open}
 }
 async function render(role,user,recipient){
