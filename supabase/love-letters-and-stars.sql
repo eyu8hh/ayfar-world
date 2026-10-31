@@ -98,3 +98,19 @@ end $$;
 grant execute on function public.get_daily_love_letter() to authenticated;
 grant execute on function public.open_daily_love_letter(uuid) to authenticated;
 grant execute on function public.change_ayfar_stars(bigint,text) to authenticated;
+
+-- Permit replies in either direction while restricting both accounts to each other.
+drop policy if exists "ayoub can send to farahati" on public.private_messages;
+drop policy if exists "both can send private messages to each other" on public.private_messages;
+create policy "both can send private messages to each other"
+on public.private_messages for insert to authenticated
+with check (
+  auth.uid() = sender_id
+  and (
+    (exists(select 1 from public.profiles where id=auth.uid() and role='ayoub')
+      and exists(select 1 from public.profiles where id=recipient_id and role='farahati'))
+    or
+    (exists(select 1 from public.profiles where id=auth.uid() and role='farahati')
+      and exists(select 1 from public.profiles where id=recipient_id and role='ayoub'))
+  )
+);
