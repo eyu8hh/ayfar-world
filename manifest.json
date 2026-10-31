@@ -1,0 +1,18 @@
+{
+  "name": "AYFAR WORLD",
+  "short_name": "AYFAR WORLD",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff9f7",
+  "theme_color": "#70243f",
+  "icons": [
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "description": "AYFAR WORLD — عالم رومانسي خاص يجمع أيوب وفرح."
+}
