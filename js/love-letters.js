@@ -3,7 +3,7 @@ const $=s=>document.querySelector(s),client=()=>window.ayfarSupabase,esc=v=>Stri
 const page=html=>{$("#home").classList.add("hidden");$("#page").classList.remove("hidden");$("#pagebody").innerHTML=html};
 let activeLetter=null;
 async function checkDailyLetter(){
- if(window.WorldStore.get().active!=="farhati")return;
+ if(!["farhati","farahati"].includes(window.WorldStore.get().active))return;
  const {data,error}=await client().rpc("get_daily_love_letter");
  if(error){console.error("Daily letter:",error.message);return}
  if(!data||!data.length)return;
@@ -11,6 +11,7 @@ async function checkDailyLetter(){
  showEnvelope();
 }
 function showEnvelope(){
+ if(document.getElementById("love-overlay"))return;
  const overlay=document.createElement("div");overlay.id="love-overlay";
  overlay.innerHTML='<div class="love-card"><div class="love-sparkle">✦　♡　✦</div><small>JUST FOR YOU · FROM AYOUB</small><h2>رسالة صغيرة تنتظركِ يا فرحتي</h2><p>هناك كلمات اختارها أيوب لتصلكِ اليوم...</p><button id="open-love-envelope" class="envelope"><span>💌</span><b>افتحي ظرفكِ</b></button><div class="love-foot">رسالة واحدة في اليوم، لأن بعض الكلمات تستحق وقتها ♡</div></div>';
  document.body.appendChild(overlay);
