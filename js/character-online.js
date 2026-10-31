@@ -1,15 +1,15 @@
 (()=> {
  const $=s=>document.querySelector(s), sb=window.ayfarSupabase, body=$("#pagebody");
  const bank=[["سبايدرمان","أبطال خارقون"],["باتمان","أبطال خارقون"],["سوبرمان","أبطال خارقون"],["آيرون مان","أبطال خارقون"],["المرأة الخارقة","أبطال خارقون"],["هاري بوتر","خيال وسينما"],["إلسا","خيال وسينما"],["شيرلوك هولمز","خيال وسينما"],["جاك سبارو","خيال وسينما"],["سيمبا","كرتون وأنمي"],["سبونج بوب","كرتون وأنمي"],["بيكاتشو","كرتون وأنمي"],["ناروتو","كرتون وأنمي"],["لوفي","كرتون وأنمي"],["ماريو","كرتون وألعاب"],["سونيك","كرتون وألعاب"],["توم","كرتون وأنمي"],["جيري","كرتون وأنمي"],["سندريلا","خيال وسينما"],["علاء الدين","خيال وسينما"],["مستر بين","شخصيات معروفة"],["Wednesday","خيال وسينما"],["ميكي ماوس","كرتون وأنمي"],["شريك","كرتون وأنمي"]];
- let role=null, state=null, timer=null, busy=false;
+ let role=null, state=null, timer=null, busy=false, lastRendered="";
  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const label=p=>p==="ayoub"?"أيوب 🌙":"فرحتي 🌸";
  const toast=t=>{const el=$("#toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2200)};
  const call=async(name,args)=>{const {data,error}=await sb.rpc(name,args||{});if(error)throw error;return data};
  const shell=inner=>{body.innerHTML='<div class="panel character-panel"><div class="character-top"><span class="game-mark">🎭</span><span class="game-kicker">AYFAR WORLD · ONLINE GAME</span></div>'+inner+'</div>'};
  function stop(){if(timer){clearInterval(timer);timer=null}}
- async function refresh(){try{const next=await call("character_game_get");state=next;render()}catch(e){stop();shell('<h2>تعذر تحميل اللعبة</h2><p>'+esc(e.message)+'</p><p class="notice">تأكد من تشغيل ملف إعداد اللعبة في Supabase.</p><button class="secondary-action" id="cg-back">العودة</button>');$("#cg-back").onclick=()=>$("#back").click()}}
- async function act(name,payload){if(busy)return;busy=true;try{state=await call("character_game_act",{action_name:name,payload:payload||{}});render()}catch(e){toast(e.message||"تعذر تنفيذ الخطوة")}finally{busy=false}}
+ async function refresh(){try{const next=await call("character_game_get");const signature=JSON.stringify(next);if(signature!==lastRendered){state=next;lastRendered=signature;render()}}catch(e){stop();shell('<h2>تعذر تحميل اللعبة</h2><p>'+esc(e.message)+'</p><p class="notice">تأكد من تشغيل ملف إعداد اللعبة في Supabase.</p><button class="secondary-action" id="cg-back">العودة</button>');$("#cg-back").onclick=()=>$("#back").click()}}
+ async function act(name,payload){if(busy)return;busy=true;try{state=await call("character_game_act",{action_name:name,payload:payload||{}});lastRendered=JSON.stringify(state);render()}catch(e){toast(e.message||"تعذر تنفيذ الخطوة")}finally{busy=false}}
  function render(){
   if(!state)return;
   const own=state.picks?.[role], other=role==="ayoub"?"farhati":"ayoub", asker=state.asker;
@@ -42,6 +42,6 @@
    $("#cg-submit").onclick=()=>{const v=$("#cg-guess").value;if(!v)return toast("اختر شخصية");act("guess",{guess:v})};return;
   }
  }
- document.addEventListener("click",e=>{const b=e.target.closest('[data-game="characters"]');if(!b)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();role=window.WorldStore?.get()?.active;if(role==="farahati")role="farhati";if(!["ayoub","farhati"].includes(role)){toast("سجّل الدخول أولاً");return}stop();$("#home").classList.add("hidden");$("#page").classList.remove("hidden");refresh();timer=setInterval(refresh,3000)},true);
+ document.addEventListener("click",e=>{const b=e.target.closest('[data-game="characters"]');if(!b)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();role=window.WorldStore?.get()?.active;if(role==="farahati")role="farhati";if(!["ayoub","farhati"].includes(role)){toast("سجّل الدخول أولاً");return}stop();lastRendered="";$("#home").classList.add("hidden");$("#page").classList.remove("hidden");refresh();timer=setInterval(refresh,3000)},true);
  window.addEventListener("beforeunload",stop);
 })();
