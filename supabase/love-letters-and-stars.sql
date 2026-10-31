@@ -21,7 +21,7 @@ language plpgsql security definer set search_path=public
 as $$
 declare last_opened date;
 begin
-  if not exists(select 1 from public.profiles where id=auth.uid() and role='farhati') then
+  if not exists(select 1 from public.profiles where id=auth.uid() and role in ('farhati','farahati')) then
     raise exception 'غير مصرح';
   end if;
   select max(opened_at::date) into last_opened from public.love_letters where opened_at is not null;
@@ -37,7 +37,7 @@ language plpgsql security definer set search_path=public
 as $$
 declare last_opened date; next_id uuid;
 begin
-  if not exists(select 1 from public.profiles where id=auth.uid() and role='farhati') then
+  if not exists(select 1 from public.profiles where id=auth.uid() and role in ('farhati','farahati')) then
     raise exception 'غير مصرح';
   end if;
   select max(opened_at::date) into last_opened from public.love_letters where opened_at is not null;
@@ -54,11 +54,13 @@ create table if not exists public.ayfar_star_wallet (
   updated_at timestamptz not null default now()
 );
 insert into public.ayfar_star_wallet(id,balance) values(1,0) on conflict(id) do nothing;
+-- Ensure the singleton wallet exists even if an earlier migration stopped midway.
+insert into public.ayfar_star_wallet(id,balance) values(1,0) on conflict(id) do nothing;
 alter table public.ayfar_star_wallet enable row level security;
 drop policy if exists "Both can view star wallet" on public.ayfar_star_wallet;
 create policy "Both can view star wallet" on public.ayfar_star_wallet
 for select to authenticated
-using (exists(select 1 from public.profiles where id=auth.uid() and role in ('ayoub','farhati')));
+using (exists(select 1 from public.profiles where id=auth.uid() and role in ('ayoub','farhati','farahati')));
 grant select on public.ayfar_star_wallet to authenticated;
 
 create table if not exists public.ayfar_star_history (
@@ -72,7 +74,7 @@ alter table public.ayfar_star_history enable row level security;
 drop policy if exists "Both can view star history" on public.ayfar_star_history;
 create policy "Both can view star history" on public.ayfar_star_history
 for select to authenticated
-using (exists(select 1 from public.profiles where id=auth.uid() and role in ('ayoub','farhati')));
+using (exists(select 1 from public.profiles where id=auth.uid() and role in ('ayoub','farhati','farahati')));
 grant select on public.ayfar_star_history to authenticated;
 
 create or replace function public.change_ayfar_stars(p_delta bigint,p_reason text default null)
@@ -81,7 +83,7 @@ language plpgsql security definer set search_path=public
 as $$
 declare new_balance bigint;
 begin
-  if not exists(select 1 from public.profiles where id=auth.uid() and role='farhati') then
+  if not exists(select 1 from public.profiles where id=auth.uid() and role in ('farhati','farahati')) then
     raise exception 'فقط فرحتي تستطيع تغيير رصيد النجوم';
   end if;
   if p_delta=0 then raise exception 'يجب أن يكون التغيير أكبر أو أقل من صفر'; end if;
@@ -108,9 +110,9 @@ with check (
   auth.uid() = sender_id
   and (
     (exists(select 1 from public.profiles where id=auth.uid() and role='ayoub')
-      and exists(select 1 from public.profiles where id=recipient_id and role='farhati'))
+      and exists(select 1 from public.profiles where id=recipient_id and role in ('farhati','farahati')))
     or
-    (exists(select 1 from public.profiles where id=auth.uid() and role='farhati')
+    (exists(select 1 from public.profiles where id=auth.uid() and role in ('farhati','farahati'))
       and exists(select 1 from public.profiles where id=recipient_id and role='ayoub'))
   )
 );
