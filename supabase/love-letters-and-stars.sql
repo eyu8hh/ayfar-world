@@ -21,7 +21,7 @@ language plpgsql security definer set search_path=public
 as $$
 declare last_opened date;
 begin
-  if not exists(select 1 from public.profiles where id=auth.uid() and role='farahati') then
+  if not exists(select 1 from public.profiles where id=auth.uid() and role='farhati') then
     raise exception 'غير مصرح';
   end if;
   select max(opened_at::date) into last_opened from public.love_letters where opened_at is not null;
@@ -37,7 +37,7 @@ language plpgsql security definer set search_path=public
 as $$
 declare last_opened date; next_id uuid;
 begin
-  if not exists(select 1 from public.profiles where id=auth.uid() and role='farahati') then
+  if not exists(select 1 from public.profiles where id=auth.uid() and role='farhati') then
     raise exception 'غير مصرح';
   end if;
   select max(opened_at::date) into last_opened from public.love_letters where opened_at is not null;
@@ -108,9 +108,9 @@ with check (
   auth.uid() = sender_id
   and (
     (exists(select 1 from public.profiles where id=auth.uid() and role='ayoub')
-      and exists(select 1 from public.profiles where id=recipient_id and role='farahati'))
+      and exists(select 1 from public.profiles where id=recipient_id and role='farhati'))
     or
-    (exists(select 1 from public.profiles where id=auth.uid() and role='farahati')
+    (exists(select 1 from public.profiles where id=auth.uid() and role='farhati')
       and exists(select 1 from public.profiles where id=recipient_id and role='ayoub'))
   )
 );
