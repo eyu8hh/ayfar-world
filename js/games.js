@@ -20,8 +20,8 @@ async function join(id){
  catch(e){status("تعذر الانضمام: "+e.message)}
 }
 function renderRoom(){
- const key=room.game_key,host=room.host_id===uid;
- page('<div class="panel sync-game"><div class="bigheart">♡</div><small class="eyebrow">AYFAR WORLD · LIVE GAME</small><h2>'+esc(gameNames[key])+'</h2><p id="game-status">'+(room.status==="waiting"?"بانتظار انضمام الطرف الآخر…":"اتصلتما! المباراة جاهزة للبدء.")+'</p>'+(room.status==="waiting"?'<div class="room-code">'+room.id+'</div><p>أرسل رمز المباراة للطرف الآخر ليدخل إليها من قسم الألعاب.</p>':'<div id="game-board"></div>')+'<button class="secondary-action" id="game-exit">العودة إلى الألعاب</button></div>');
+ const key=room.game_key;
+ page('<div class="panel sync-game"><div class="bigheart">♡</div><small class="eyebrow">AYFAR WORLD · LIVE GAME</small><h2>'+esc(gameNames[key])+(room.status==="waiting"?"":'</h2><p id="game-status">اتصلتما! المباراة جاهزة للبدء.</p><div id="game-board"></div>')+(room.status==="waiting"?'</h2><p id="game-status">بانتظار انضمام الطرف الآخر…</p><div class="room-code">'+room.id+'</div><p>أرسل هذا الرمز للطرف الآخر، ثم ينضم من خانة «الانضمام إلى مباراة».</p>':'')+'<button class="secondary-action" id="game-exit">العودة إلى الألعاب</button></div>');
  $("#game-exit").onclick=()=>{cleanup();location.reload()};
  if(room.status==="playing")renderBoard();
  channel=client().channel("ayfar-game-"+room.id).on("postgres_changes",{event:"UPDATE",schema:"public",table:"ayfar_games",filter:"id=eq."+room.id},payload=>{if(payload.new){room=payload.new;renderRoom()}}).subscribe(s=>{if(s==="SUBSCRIBED")status(room.status==="waiting"?"بانتظار انضمام الطرف الآخر…":"متصل بالهاتف الآخر ♡")});
@@ -33,6 +33,10 @@ function renderBoard(){
  board.innerHTML='<p>أنت تلعب الآن من حساب '+(role==="ayoub"?"أيوب 🌙":"فرحتي 🌸")+'</p><p class="notice">هذه جلسة متزامنة. نطوّر قواعد كل لعبة وواجهتها في الخطوة التالية.</p><p>الجولة: '+Number(s.round||1)+'</p><p>النقاط — أيوب: '+Number(s.scores?.ayoub||0)+' · فرحتي: '+Number(s.scores?.farhati||0)+'</p>';
 }
 window.AYFAR_Games={start,join,cleanup};
+const joinBox=document.createElement("section");
+joinBox.className="panel";joinBox.style.margin="16px 0";joinBox.innerHTML='<small class="eyebrow">JOIN YOUR PARTNER</small><h3>الانضمام إلى مباراة</h3><input id="ayfar-room-id" class="text" placeholder="ألصق رمز المباراة هنا" aria-label="رمز المباراة"><button class="primary" id="ayfar-join-room" style="margin-top:10px">انضمام ♡</button><p id="ayfar-join-error" class="notice"></p>';
+document.addEventListener("DOMContentLoaded",()=>{const games=document.querySelector(".games");if(games)games.parentNode.insertBefore(joinBox,games)});
+joinBox.querySelector("#ayfar-join-room").onclick=()=>{const id=joinBox.querySelector("#ayfar-room-id").value.trim();if(!id){joinBox.querySelector("#ayfar-join-error").textContent="أدخل رمز المباراة أولاً.";return}join(id)};
 document.addEventListener("click",e=>{
  const b=e.target.closest("[data-game]");if(!b)return;
  const key=b.dataset.game;if(gameNames[key]){e.preventDefault();e.stopImmediatePropagation();start(key)}
