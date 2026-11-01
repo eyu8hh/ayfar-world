@@ -27,9 +27,10 @@ begin
  if v_game.game_key not in ('twenty','word') then raise exception 'هذه اللعبة لا تستخدم كلمة سرية'; end if;
  if v_game.status<>'playing' then raise exception 'المباراة ليست قيد اللعب'; end if;
  if coalesce(v_game.state->>'owner','')<>'' then raise exception 'تم تثبيت الكلمة السرية بالفعل'; end if;
- if (v_game.game_key='twenty' and v_user<>case when v_game.host_id=v_user then v_game.host_id else v_game.guest_id end) then raise exception 'الدور غير صالح'; end if;
  select lower(role) into v_role from public.profiles where id=v_user;
- if v_role not in ('ayoub','farhati','farahati') then raise exception 'الحساب غير مخوّل'; end if;
+ if v_role='farahati' then v_role:='farhati'; end if;
+ if v_game.state->>'turn' is distinct from v_role then raise exception 'ليس دورك لتثبيت الكلمة السرية'; end if;
+ if v_role not in ('ayoub','farhati') then raise exception 'الحساب غير مخوّل'; end if;
  if length(trim(coalesce(p_secret,''))) not between 1 and 200 then raise exception 'الكلمة السرية مطلوبة (حتى 200 حرف)'; end if;
  insert into public.ayfar_game_secrets(game_id,owner_id,secret) values(p_game_id,v_user,trim(p_secret));
  update public.ayfar_games set
@@ -55,7 +56,10 @@ begin
  if not found then raise exception 'لم يتم تثبيت الكلمة السرية بعد'; end if;
  if v_user=v_secret.owner_id then raise exception 'صاحب الكلمة لا يمكنه تخمينها'; end if;
  select lower(role) into v_role from public.profiles where id=v_user;
- if v_role not in ('ayoub','farhati','farahati') then raise exception 'الحساب غير مخوّل'; end if;
+ if v_role='farahati' then v_role:='farhati'; end if;
+ if v_game.game_key='word' and v_game.state->>'turn'=v_role then raise exception 'ليس دورك للتخمين'; end if;
+ if v_game.game_key='twenty' and v_game.state->>'owner'=v_role then raise exception 'صاحب الكلمة لا يمكنه التخمين'; end if;
+ if v_role not in ('ayoub','farhati') then raise exception 'الحساب غير مخوّل'; end if;
  if length(trim(coalesce(p_guess,''))) not between 1 and 200 then raise exception 'اكتب تخميناً صالحاً'; end if;
  v_guess:=lower(trim(p_guess));
  v_correct:=v_guess=lower(trim(v_secret.secret));
@@ -67,9 +71,10 @@ begin
            to_jsonb(coalesce((state->'scores'->>case when v_role in ('farhati','farahati') then 'farhati' else 'ayoub' end)::int,0)+case when game_key='word' then 2 else 3 end))),
          '{round}',to_jsonb(coalesce((state->>'round')::int,1)+1)),
        '{owner}', 'null'::jsonb),
+     status=case when coalesce((state->>'round')::int,1)+1>coalesce((state->>'total')::int,5) then 'finished' else status end,
      version=version+1,updated_at=now()
    where id=p_game_id returning * into v_game;
-   update public.ayfar_game_secrets set secret='__cleared__',owner_id=v_user where game_id=p_game_id;
+   delete from public.ayfar_game_secrets where game_id=p_game_id;
  else
    update public.ayfar_games set version=version+1,updated_at=now() where id=p_game_id returning * into v_game;
  end if;
