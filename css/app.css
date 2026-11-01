@@ -173,3 +173,16 @@ button:active{filter:saturate(1.12)}
  .games button{min-height:152px}
  .primary,.secondary-action{touch-action:manipulation}
 }
+
+
+/* AYFAR WORLD · home dashboard / phase 03 */
+.continue-wrap{margin:18px 0 22px}
+.continue-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 21px;border:1px solid #d9b0bf;border-radius:23px;background:linear-gradient(112deg,#70243f 0%,#8e3c5b 52%,#47765a 140%);box-shadow:0 16px 34px rgba(82,35,55,.17);color:#fff}
+.continue-card .eyebrow{color:#f4cbd8;letter-spacing:1.4px}
+.continue-card h3{margin:5px 0;color:#fff;font-size:20px}
+.continue-card p{margin:0;color:#f6e8ed;font-size:12px;line-height:1.6}
+.continue-card .primary{flex:0 0 auto;background:#fff;color:#70243f;box-shadow:0 7px 18px rgba(25,5,14,.17)}
+.home-anniversary{background:linear-gradient(120deg,#f4dce5 0%,#fff4f6 58%,#eaf2eb 100%);border-color:#d9b3c1}
+.home-anniversary-head>span{background:#70243f;color:#fff;box-shadow:0 5px 12px rgba(112,36,63,.16)}
+.home-anniversary-head h3{font-size:21px}
+@media(max-width:520px){.continue-card{align-items:stretch;flex-direction:column;padding:18px}.continue-card .primary{width:100%}}
