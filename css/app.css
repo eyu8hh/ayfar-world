@@ -17,3 +17,94 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 0
 
 /* Home dashboard anniversary card */
 .home-anniversary{position:relative;overflow:hidden;margin:18px 0 22px;padding:18px 19px;border:1px solid #edcbd7;border-radius:22px;background:linear-gradient(125deg,#fff0f4 0%,#fffaf8 58%,#f4edf1 100%);box-shadow:0 12px 30px #70243f0d}.home-anniversary:after{content:"♡";position:absolute;left:12px;bottom:-36px;font-size:110px;line-height:1;color:#70243f0a;pointer-events:none}.home-anniversary-head{display:flex;align-items:center;gap:12px;position:relative;z-index:1}.home-anniversary-head>span{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:15px;background:#f6dce5;color:var(--burgundy);font-size:27px}.home-anniversary-head h3{margin:3px 0 2px;color:var(--burgundy);font-size:19px}.home-anniversary-head p{margin:0;color:var(--muted);font-size:11px}.home-anniversary #home-anniversary-countdown{position:relative;z-index:1}.home-anniversary .date-count-grid{margin:15px 0 5px;gap:7px}.home-anniversary .date-count-grid>div{padding:10px 3px;background:#ffffffc9}.home-anniversary .date-count-grid strong{font-size:clamp(19px,5vw,27px)}.home-anniversary .date-count-grid small{font-size:10px}.home-anniversary .date-status{text-align:center;margin:7px 0 0;font-size:12px!important}
+
+
+/* AYFAR WORLD · visual identity refinement / phase 01 */
+:root{
+  --ink:#482333;--muted:#806a74;--line:#ead8de;--burgundy:#69243e;
+  --pink:#d98da7;--green:#426d55;--green-soft:#e9f1ea;
+  --surface:#fffdfb;--surface-rose:#fff5f7;
+  --shadow-soft:0 10px 28px rgba(82,35,55,.07);
+  --shadow-card:0 15px 38px rgba(82,35,55,.09);
+}
+body{
+  background:
+    radial-gradient(ellipse at 8% 4%,rgba(232,190,204,.25),transparent 34rem),
+    radial-gradient(ellipse at 94% 38%,rgba(194,216,197,.22),transparent 30rem),
+    linear-gradient(145deg,#fffaf8 0%,#fbf0f3 54%,#f2f6f1 100%);
+  background-attachment:fixed;
+}
+button,.primary,.secondary-action,.text{transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease,opacity .18s ease}
+button:disabled{cursor:not-allowed;opacity:.58}
+:where(button,input,textarea):focus-visible{outline:3px solid rgba(105,36,62,.28);outline-offset:3px}
+.shell{max-width:1080px;padding:clamp(14px,2.4vw,26px)}
+.loginbox{border-color:rgba(234,216,222,.9);background:rgba(255,253,251,.94);box-shadow:0 24px 70px rgba(82,35,55,.11);backdrop-filter:blur(12px)}
+.logo{box-shadow:inset 0 0 0 1px rgba(105,36,62,.06);background:linear-gradient(145deg,#f8e6ec,#f0cfda)}
+.login h1{letter-spacing:2.5px}
+header{min-height:54px}
+header button,.secondary-action{min-height:42px}
+.brand{gap:11px}
+.brand>b,.brand span b{letter-spacing:1.7px}
+.sync{border:1px solid rgba(66,109,85,.12);font-weight:700}
+.hero{min-height:182px;border:1px solid rgba(226,190,203,.45);box-shadow:var(--shadow-soft);background:linear-gradient(112deg,rgba(244,218,227,.96),rgba(251,238,241,.96) 58%,rgba(232,241,233,.96))}
+.hero h2{letter-spacing:-.35px}
+.heroheart{opacity:.82;transform:rotate(-9deg)}
+.home-anniversary{box-shadow:var(--shadow-soft);border-color:#e9cbd5}
+.stats article,.games button,.panel,.feature{box-shadow:var(--shadow-soft)}
+.stats article{border-color:rgba(234,216,222,.9);background:rgba(255,253,251,.94);min-height:105px}
+.stats strong{font-variant-numeric:tabular-nums;color:var(--burgundy)}
+.features{gap:14px}
+.feature{border:1px solid rgba(234,216,222,.72);overflow:hidden}
+.feature:after{content:"";position:absolute;inset:auto -18px -32px auto;width:92px;height:92px;border-radius:50%;background:rgba(255,255,255,.25);pointer-events:none}
+.special{background:linear-gradient(135deg,#f5dfe7,#fff7f7)}
+.rating{background:linear-gradient(135deg,#e4eee5,#f8fbf8)}
+.message-feature{background:linear-gradient(110deg,#f7e5eb,#fffaf8)}
+.games{gap:13px}
+.games button{
+  position:relative;min-height:150px;border-color:rgba(234,216,222,.9);
+  background:linear-gradient(150deg,#fffefd,#fff9f8);
+  box-shadow:0 7px 20px rgba(82,35,55,.045);
+  padding:17px;align-items:flex-start;
+}
+.games button:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(#d995ad,#9ab59e);opacity:.0;transition:opacity .18s ease}
+.games button b{line-height:1.5;color:var(--ink)}
+.games button small{line-height:1.6}
+.games button em{font-weight:700;color:#50745c}
+.panel{border-color:rgba(234,216,222,.9);box-shadow:var(--shadow-card)}
+.primary{min-height:46px;padding:12px 22px;background:linear-gradient(112deg,#cf7896 0%,#8a3656 58%,#69243e 100%);box-shadow:0 7px 16px rgba(105,36,62,.16)}
+.primary:active,.secondary-action:active{transform:translateY(1px)}
+.text{min-height:45px;border-color:#e5d3da;background:#fffdfc;color:var(--ink)}
+.text:focus{border-color:#bd7891;box-shadow:0 0 0 3px rgba(189,120,145,.12);outline:0}
+.question-card{box-shadow:inset 0 1px rgba(255,255,255,.75)}
+.answer-actions button{min-height:52px}
+.character-choice,.result-grid article{box-shadow:0 5px 15px rgba(82,35,55,.035)}
+.message-bubble{box-shadow:0 4px 12px rgba(82,35,55,.045)}
+#toast{z-index:10001;box-shadow:0 10px 28px rgba(40,12,25,.2);transition:opacity .2s ease,transform .2s ease}
+#love-overlay{backdrop-filter:blur(7px)}
+.love-card{box-shadow:0 28px 90px rgba(22,6,17,.34)}
+.star-history>div{background:rgba(255,250,248,.95)}
+@media(hover:hover){
+  .games button:hover,.stats article:hover{transform:translateY(-3px);box-shadow:var(--shadow-card);border-color:#dfb8c6}
+  .games button:hover:before{opacity:1}
+  .feature:hover{transform:translateY(-2px);box-shadow:var(--shadow-card)}
+  header button:hover,.secondary-action:hover{background:#f9edf1;border-color:#dcb7c5}
+  .primary:hover{box-shadow:0 10px 22px rgba(105,36,62,.23);filter:saturate(1.06)}
+}
+@media(max-width:520px){
+  .shell{padding:12px}
+  header{padding-bottom:15px}
+  .brand{font-size:22px}
+  .hero{min-height:160px;border-radius:23px}
+  .heroheart{left:14px;font-size:112px}
+  .heading{margin-top:24px}
+  .stats article{min-height:94px;border-radius:16px}
+  .games{gap:9px}
+  .games button{min-height:148px;padding:13px;border-radius:17px}
+  .games b{line-height:1.55}
+  .panel{padding:20px 16px;border-radius:21px}
+  .date-count-grid{gap:6px}
+  .date-count-grid>div{padding:10px 3px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
