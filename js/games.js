@@ -53,7 +53,7 @@ $("#send-clue")?.addEventListener("click",()=>{const v=$("#clue").value.trim();i
 
 $("#ask-btn")?.addEventListener("click",()=>{const v=$("#ask").value.trim();if(!v)return;save(x=>{if(x.owner===role||x.turn!==role||x.asked>=20||x.pending)return;x.pending=v;x.turn=x.owner;x.asked++})});
 document.querySelectorAll("[data-yn]").forEach(b=>b.onclick=()=>save(x=>{if(x.owner!==role||!x.pending)return;x.last=b.dataset.yn;x.pending=null;x.turn=other(x.owner)}));
-$("#guess-btn")?.addEventListener("click",()=>{const v=$("#guess").value.trim();if(!v)return;save(x=>{if(v.toLocaleLowerCase("ar")===String(x.secret).toLocaleLowerCase("ar")){if(key==="word"){x.scores[role]+=2;x.round++;x.secret=null;x.owner=null;x.turn=role;x.clues=[];}else{x.scores[role]+=3;x.round++;x.secret=null;x.owner=null;x.asked=0;x.pending=null;x.last=null;x.turn=role;}if(x.round>x.total)x.phase="finished"}else toast(key==="word"?"تخمين غير صحيح، حاول مجدداً":"ليس صحيحاً، واصل طرح الأسئلة")})});
+$("#guess-btn")?.addEventListener("click",()=>{const v=$("#guess").value.trim();if(!v)return;save(x=>{if(v.toLocaleLowerCase("ar")===String(x.secret).toLocaleLowerCase("ar")){if(key==="word"){x.scores[role]+=2;x.round++;x.secret=null;x.owner=null;x.turn=role;x.clues=[];}else{x.scores[role]+=3;x.round++;x.secret=null;x.owner=null;x.asked=0;x.pending=null;x.last=null;x.turn=role;}if(x.round>x.total)x.phase="finished"}else if(key==="twenty"&&x.asked>=20){x.round++;x.secret=null;x.owner=null;x.asked=0;x.pending=null;x.last=null;x.turn=role;if(x.round>x.total)x.phase="finished";toast("انتهت الأسئلة، ننتقل إلى الجولة التالية.")}else toast(key==="word"?"تخمين غير صحيح، حاول مجدداً":"ليس صحيحاً، واصل طرح الأسئلة")})});
 }
 function bodyChoice(){}
 window.AYFAR_Games={start,join,cleanup};
