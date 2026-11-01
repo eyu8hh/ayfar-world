@@ -1,44 +1,64 @@
 (()=> {
 "use strict";
-const client=()=>window.ayfarSupabase, $=s=>document.querySelector(s);
-const gameNames={who:"من يعرف الآخر أكثر؟",thisorthat:"هذا أم ذاك؟",qa:"سؤال وجواب",truth:"صراحة أم تحدي",speed:"تحدي السرعة",xo:"إكس أو – XO",predict:"ماذا سيختار؟",difference:"اكتشف الاختلاف",compatibility:"اختبار التوافق",twenty:"عشرون سؤالاً",word:"خمن الكلمة",riddles:"من أكون؟ – الألغاز"};
-let channel=null,room=null,role=null,uid=null,poll=null;
+const client=()=>window.ayfarSupabase,$=s=>document.querySelector(s);
+const names={who:"من يعرف الآخر أكثر؟",thisorthat:"هذا أم ذاك؟",qa:"سؤال وجواب",truth:"صراحة أم تحدي",speed:"تحدي السرعة",xo:"إكس أو – XO",predict:"ماذا سيختار؟",difference:"اكتشف الاختلاف",compatibility:"اختبار التوافق",twenty:"عشرون سؤالاً",word:"خمن الكلمة",riddles:"من أكون؟ – الألغاز"};
+const prompts={
+ who:["ما أكثر شيء يفرح شريكك؟","ما الوجبة التي يفضلها شريكك؟","ما أكثر شيء يزعج شريكك؟","ما المكان الذي يتمنى شريكك زيارته؟","ما الهدية التي تسعد شريكك؟"],
+ thisorthat:[["البحر","الجبل"],["القهوة","الشاي"],["السهر","الاستيقاظ مبكراً"],["السفر","البقاء في المنزل"],["الأفلام","المسلسلات"],["الصيف","الشتاء"],["المكالمات","الرسائل"],["المفاجآت","التخطيط"],["الحلو","المالح"],["مدينة","طبيعة"]],
+ qa:["ما ذكرى تتمنى أن نعيشها معاً؟","ما الشيء الصغير الذي يحسن يومك؟","ما صفة تحبها في نفسك؟","ما مكانك المفضل للهدوء؟","ما حلم تريد تحقيقه؟","ما أكثر موقف جعلك تبتسم مؤخراً؟"],
+ truth:["ما أول انطباع أخذته عني؟","ما شيء لم تخبرني به من قبل؟","صف يوماً مثالياً بالنسبة لك.","ما عادة مضحكة لديك؟","قل مجاملة صادقة للطرف الآخر."],
+ speed:[["ما لون السماء الصافية؟","أزرق"],["كم يوماً في الأسبوع؟","7"],["ما عكس كلمة طويل؟","قصير"],["ما عاصمة المغرب؟","الرباط"],["كم ضلعاً للمثلث؟","3"]],
+ predict:["ما النشاط الذي تفضله في عطلة نهاية الأسبوع؟","ما الهدية التي تختارها؟","أي وجهة سفر تفضل؟","ما الطعام الذي تختاره الآن؟","هل تفضل الهدوء أم المغامرة؟"],
+ compatibility:["وقت الصباح","وقت المساء","البحر","الجبل","رسالة","مكالمة","فيلم","نزهة","تخطيط","عفوية"],
+ twenty:["شخص","مكان","حيوان","شيء في المنزل","طعام"],
+ word:["قمر","مظلة","فراشة","مكتبة","سفينة","مرآة","برتقالة","ساعة"],
+ riddles:[["له أوراق وليس نباتاً، وله غلاف وليس هدية","كتاب"],["يسير بلا قدمين ويبكي بلا عينين","سحاب"],["كلما أخذت منه كبر","حفرة"],["له أسنان ولا يعض","مشط"],["بيت بلا أبواب ولا نوافذ","بيضة"]]
+};
+let room=null,role=null,uid=null,channel=null,poll=null,joinBox;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function page(html){$("#home").classList.add("hidden");$("#page").classList.remove("hidden");$("#pagebody").innerHTML=html}
-function status(t){const n=$("#game-status");if(n)n.textContent=t}
-async function currentUser(){const {data,error}=await client().auth.getUser();if(error||!data.user)throw new Error("انتهت جلسة الدخول. سجّل الدخول مجدداً.");uid=data.user.id}
-async function rpc(name,args){const {data,error}=await client().rpc(name,args);if(error)throw error;return data}
+const other=p=>p==="ayoub"?"farhati":"ayoub",label=p=>p==="ayoub"?"أيوب 🌙":"فرحتي 🌸";
+function show(html){$("#home").classList.add("hidden");$("#page").classList.remove("hidden");$("#pagebody").innerHTML=html}
+function toast(t){const x=$("#toast");if(x){x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2200)}}
+async function currentUser(){const {data,error}=await client().auth.getUser();if(error||!data.user)throw Error("انتهت جلسة الدخول. سجّل الدخول مجدداً.");uid=data.user.id}
+async function rpc(n,a){const {data,error}=await client().rpc(n,a);if(error)throw error;return data}
+function fresh(key){return {key,phase:"ready",round:0,total:key==="thisorthat"||key==="predict"||key==="compatibility"?10:key==="xo"?3:5,scores:{ayoub:0,farhati:0},answers:{},history:[],turn:"ayoub",board:Array(9).fill(""),questionIndex:0,secret:null,asked:0,clue:0,found:[]}}
 function cleanup(){if(channel)client().removeChannel(channel);channel=null;if(poll)clearInterval(poll);poll=null;room=null}
-function gameState(key){return {key,round:1,turn:"ayoub",answers:{},scores:{ayoub:0,farhati:0},moves:[],createdAt:new Date().toISOString()}}
-async function start(key){
- try{cleanup();await currentUser();role=window.WorldStore.get().active;
- const row=await rpc("ayfar_game_create",{p_game_key:key,p_state:gameState(key)});room=row;renderRoom();
- }catch(e){page('<div class="panel"><h2>تعذر إنشاء المباراة</h2><p>'+esc(e.message)+'</p><button class="primary" id="game-back">العودة</button></div>');$("#game-back").onclick=()=>location.reload()}
+async function start(key){try{cleanup();await currentUser();role=window.WorldStore.get().active;room=await rpc("ayfar_game_create",{p_game_key:key,p_state:fresh(key)});watch();render()}catch(e){show('<div class="panel"><h2>تعذر إنشاء المباراة</h2><p>'+esc(e.message)+'</p><button class="primary" id="gb">عودة</button></div>');$("#gb").onclick=()=>location.reload()}}
+async function join(id){try{await currentUser();role=window.WorldStore.get().active;room=await rpc("ayfar_game_join",{p_game_id:id});watch();render()}catch(e){const n=$("#ayfar-join-error");if(n)n.textContent=e.message;else toast(e.message)}}
+function watch(){if(!room)return;if(channel)client().removeChannel(channel);channel=client().channel("ayfar-game-"+room.id).on("postgres_changes",{event:"UPDATE",schema:"public",table:"ayfar_games",filter:"id=eq."+room.id},p=>{if(p.new){room=p.new;render()}}).subscribe();if(poll)clearInterval(poll);poll=setInterval(async()=>{if(!room)return;const {data}=await client().from("ayfar_games").select("*").eq("id",room.id).single();if(data&&data.version!==room.version){room=data;render()}},3500)}
+async function save(mutator,status){if(!room)return;const s=JSON.parse(JSON.stringify(room.state||{}));mutator(s);try{room=await rpc("ayfar_game_update",{p_game_id:room.id,p_expected_version:room.version,p_state:s,p_status:status||null});render()}catch(e){const {data}=await client().from("ayfar_games").select("*").eq("id",room.id).single();if(data){room=data;render()}toast(e.message||"تعذر حفظ الحركة؛ تمت مزامنة آخر تحديث.")}}
+function shell(inner){show('<div class="panel sync-game"><div class="bigheart">♡</div><small class="eyebrow">AYFAR WORLD · PLAY TOGETHER</small>'+inner+'</div>')}
+function render(){if(!room)return;const s=room.state||fresh(room.game_key),key=room.game_key;if(room.status==="waiting"){shell('<h2>'+esc(names[key])+'</h2><p id="game-status">بانتظار انضمام الطرف الآخر…</p><div class="room-code">'+esc(room.id)+'</div><button class="primary" id="copy-room">نسخ رمز المباراة</button><p>أرسل الرمز للطرف الآخر، ثم ينضم من الصفحة الرئيسية.</p><button class="secondary-action" id="exit">العودة</button>');$("#copy-room").onclick=()=>navigator.clipboard?.writeText(room.id).then(()=>toast("تم نسخ الرمز"));$("#exit").onclick=()=>{cleanup();location.reload()};return}
+if(s.phase==="ready"){shell('<h2>'+esc(names[key])+'</h2><p>اتصلتما بنجاح! كل واحد يلعب من هاتفه.</p><div class="score-strip"><span>🌙 '+s.scores.ayoub+'</span><span>🌸 '+s.scores.farhati+'</span></div>'+(role==="ayoub"?'<button class="primary" id="begin">ابدأ اللعب ♡</button>':'<p class="notice">بانتظار أيوب لبدء المباراة…</p>')+'<button class="secondary-action" id="exit">الخروج</button>');$("#begin")?.addEventListener("click",()=>save(x=>{x.phase="play";x.round=1;x.turn="ayoub";x.answers={}}));$("#exit").onclick=()=>{cleanup();location.reload()};return}
+if(s.phase==="finished"){shell('<h2>انتهت المباراة! 🏆</h2><div class="result-grid"><article>🌙 أيوب<strong>'+s.scores.ayoub+' نقطة</strong></article><article>🌸 فرحتي<strong>'+s.scores.farhati+' نقطة</strong></article></div><button class="primary" id="again">مباراة جديدة</button><button class="secondary-action" id="exit">العودة</button>');$("#again").onclick=()=>start(key);$("#exit").onclick=()=>{cleanup();location.reload()};return}
+let html='<h2>'+esc(names[key])+'</h2><p>الجولة '+s.round+' من '+s.total+'</p><div class="score-strip"><span>🌙 '+s.scores.ayoub+'</span><span>🌸 '+s.scores.farhati+'</span></div>';
+const submitted=!!s.answers[role],both=!!s.answers.ayoub&&!!s.answers.farhati;
+if(key==="xo"){html+='<p>الدور: '+label(s.turn)+'</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:300px;margin:18px auto">'+s.board.map((v,i)=>'<button class="secondary-action" data-cell="'+i+'" style="height:72px;font-size:28px" '+(v||s.turn!==role?'disabled':'')+'>'+esc(v||"·")+'</button>').join("")+'</div><p>أنت: '+(role==="ayoub"?"X":"O")+'</p>'}
+else if(key==="twenty"){if(!s.secret){html+='<p>على '+label(s.turn)+' اختيار شيء سري في ذهنه.</p>'+(role===s.turn?'<input id="secret" class="text" placeholder="اكتب الشيء السري (لن يظهر للطرف الآخر)"><button class="primary" id="set-secret">تثبيت الشيء</button>':'<p class="notice">بانتظار اختيار الشيء السري…</p>')}else{html+='<p>الأسئلة: '+s.asked+'/20</p><p>الدور الحالي: '+label(s.turn)+'</p>'+(role===s.turn?'<input id="ask" class="text" placeholder="اكتب سؤال نعم أو لا"><button class="primary" id="ask-btn">إرسال السؤال</button>':'<p class="notice">بانتظار السؤال…</p>')+(s.pending&&role!==s.turn?'<div class="question-card">'+esc(s.pending)+'<div><button class="primary" data-yn="نعم">نعم</button> <button class="secondary-action" data-yn="لا">لا</button></div></div>':"")+(s.last?'<p>آخر إجابة: '+esc(s.last)+'</p>':"")+(role===s.turn?'<input id="guess" class="text" placeholder="أو اكتب تخمينك"><button class="secondary-action" id="guess-btn">تخمين</button>':"")}}
+else if(key==="word"){if(!s.secret){html+='<p>على '+label(s.turn)+' اختيار كلمة سرية.</p>'+(role===s.turn?'<input id="secret" class="text" placeholder="الكلمة السرية"><button class="primary" id="set-secret">تثبيت الكلمة</button>':'<p class="notice">بانتظار الكلمة…</p>')}else{html+='<p>الكلمة السرية اختيرت. قدم تلميحاً دون ذكرها.</p>'+(role===other(s.turn)?'<input id="clue" class="text" placeholder="اكتب تلميحاً"><button class="primary" id="send-clue">إرسال التلميح</button>':"")+'<p>التلميحات: '+(s.clues||[]).map(esc).join(" · ")+'</p>'+(role===s.turn?'<input id="guess" class="text" placeholder="خمن الكلمة"><button class="secondary-action" id="guess-btn">تأكيد التخمين</button>':"")}}
+else if(key==="riddles"){const q=prompts.riddles[(s.round-1)%prompts.riddles.length];html+='<div class="question-card">'+esc(q[0])+'</div>'+(submitted?'<p class="notice">تم إرسال إجابتك. بانتظار الطرف الآخر…</p>':'<input id="answer" class="text" placeholder="اكتب الحل"><button class="primary" id="submit">تحقق من الإجابة</button>')}
+else if(key==="difference"){const cells=["🌙","🌸","♡","⭐","🌙","🌸","♡","⭐","🌙","🌸","♡","⭐"];html+='<p>ابحثا عن الرمز المختلف في الشبكة، ثم اختارا موضعه.</p><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">'+cells.map((v,i)=>'<button class="secondary-action" data-diff="'+i+'" style="padding:16px">'+(i===7?"💎":v)+'</button>').join("")+'</div><p>أول إجابة صحيحة تحصل على نقطة.</p>'}
+else if(key==="thisorthat"||key==="compatibility"){const q=key==="thisorthat"?prompts.thisorthat[(s.round-1)%prompts.thisorthat.length]:[prompts.compatibility[(s.round*2-2)%10],prompts.compatibility[(s.round*2-1)%10]];html+='<div class="question-card">'+(key==="thisorthat"?"اختر ما تفضله":"أي الخيارين أقرب إليك؟")+'</div>'+q.map(v=>'<button class="secondary-action choice" data-choice="'+esc(v)+'" style="margin:6px">'+esc(v)+'</button>').join("")+(submitted?'<p>تم تسجيل اختيارك، بانتظار الآخر.</p>':"")+(both?'<p>اختيار أيوب: '+esc(s.answers.ayoub)+' · اختيار فرحتي: '+esc(s.answers.farhati)+'</p>':"")}
+else if(key==="who"||key==="predict"||key==="qa"||key==="truth"||key==="speed"){const list=prompts[key],q=key==="speed"?list[(s.round-1)%list.length][0]:list[(s.round-1)%list.length];html+='<div class="question-card">'+esc(q)+'</div>'+(key==="truth"?'<button class="secondary-action" data-choice="صراحة">صراحة</button><button class="secondary-action" data-choice="تحدي">تحدي</button>':"")+(submitted?'<p class="notice">إجابتك محفوظة. بانتظار الطرف الآخر…</p>':'<textarea id="answer" class="text" rows="3" placeholder="اكتب إجابتك هنا"></textarea><button class="primary" id="submit">إرسال الإجابة</button>')+(both?'<div class="question-card">أيوب: '+esc(s.answers.ayoub)+'<br>فرحتي: '+esc(s.answers.farhati)+'</div><button class="primary" id="next">الجولة التالية</button>':"")}
+html+='<p id="game-status" class="notice">تتم مزامنة الحركات بين الهاتفين تلقائياً.</p><button class="secondary-action" id="exit">الخروج</button>';shell(html);
+$("#exit").onclick=()=>{cleanup();location.reload()};
+$("#submit")?.addEventListener("click",()=>{const v=$("#answer")?.value.trim();if(!v)return toast("اكتب إجابتك أولاً");save(x=>{x.answers[role]=v;if(x.answers.ayoub&&x.answers.farhati){if(key==="speed"){const expected=prompts.speed[(x.round-1)%prompts.speed.length][1].toLowerCase();for(const p of ["ayoub","farhati"])if(String(x.answers[p]).toLowerCase()===expected)x.scores[p]++}else if(x.answers.ayoub===x.answers.farhati){x.scores.ayoub++;x.scores.farhati++}}})});
+$("#next")?.addEventListener("click",()=>save(x=>{x.round++;x.answers={};if(x.round>x.total)x.phase="finished"}));
+bodyChoice();
+function bodyChoice(){document.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>save(x=>{x.answers[role]=b.dataset.choice;if(x.answers.ayoub&&x.answers.farhati&&x.answers.ayoub===x.answers.farhati){x.scores.ayoub++;x.scores.farhati++}}))}
+document.querySelectorAll("[data-cell]").forEach(b=>b.onclick=()=>save(x=>{const i=+b.dataset.cell;if(x.board[i]||x.turn!==role)return;x.board[i]=role==="ayoub"?"X":"O";const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];const won=wins.some(a=>a.every(n=>x.board[n]===x.board[a[0]]));if(won){x.scores[role]+=1;x.round++;x.board=Array(9).fill("");if(x.round>x.total)x.phase="finished"}else if(x.board.every(Boolean)){x.round++;x.board=Array(9).fill("");if(x.round>x.total)x.phase="finished"}else x.turn=other(role)}));
+document.querySelectorAll("[data-diff]").forEach(b=>b.onclick=()=>{if(+b.dataset.diff===7)save(x=>{if(!x.found.includes(7)){x.found.push(7);x.scores[role]++;if(x.found.length>=5){x.round++;x.found=[];if(x.round>x.total)x.phase="finished"}}});else toast("ليس هذا الاختلاف، حاول مجدداً")});
+$("#set-secret")?.addEventListener("click",()=>{const v=$("#secret").value.trim();if(!v)return toast("اكتب الكلمة أولاً");save(x=>{x.secret=v;x.turn=role;x.clues=[]})});
+$("#send-clue")?.addEventListener("click",()=>{const v=$("#clue").value.trim();if(!v)return;save(x=>{x.clues=x.clues||[];x.clues.push(v)})});
+$("#guess-btn")?.addEventListener("click",()=>{const v=$("#guess").value.trim();if(!v)return;save(x=>{if(v.toLowerCase()===String(x.secret).toLowerCase()){x.scores[other(x.turn)]+=2;x.round++;x.secret=null;x.clues=[];if(x.round>x.total)x.phase="finished"}else toast("محاولة غير صحيحة")})});
+$("#ask-btn")?.addEventListener("click",()=>{const v=$("#ask").value.trim();if(!v)return;save(x=>{x.pending=v;x.turn=other(x.turn);x.asked++})});
+document.querySelectorAll("[data-yn]").forEach(b=>b.onclick=()=>save(x=>{x.last=b.dataset.yn;x.pending=null;x.turn=other(x.turn)}));
+$("#guess-btn")?.addEventListener("click",()=>{const v=$("#guess").value.trim();if(!v)return;save(x=>{if(v.toLowerCase()===String(x.secret).toLowerCase()){x.scores[role]+=3;x.round++;x.secret=null;x.asked=0;if(x.round>x.total)x.phase="finished"}else toast("ليس صحيحاً، واصل طرح الأسئلة")})});
 }
-async function join(id){
- try{cleanup();await currentUser();role=window.WorldStore.get().active;room=await rpc("ayfar_game_join",{p_game_id:id});renderRoom()}
- catch(e){status("تعذر الانضمام: "+e.message)}
-}
-function renderRoom(){
- const key=room.game_key;
- page('<div class="panel sync-game"><div class="bigheart">♡</div><small class="eyebrow">AYFAR WORLD · LIVE GAME</small><h2>'+esc(gameNames[key])+(room.status==="waiting"?"":'</h2><p id="game-status">اتصلتما! المباراة جاهزة للبدء.</p><div id="game-board"></div>')+(room.status==="waiting"?'</h2><p id="game-status">بانتظار انضمام الطرف الآخر…</p><div class="room-code">'+room.id+'</div><p>أرسل هذا الرمز للطرف الآخر، ثم ينضم من خانة «الانضمام إلى مباراة».</p>':'')+'<button class="secondary-action" id="game-exit">العودة إلى الألعاب</button></div>');
- $("#game-exit").onclick=()=>{cleanup();location.reload()};
- if(room.status==="playing")renderBoard();
- channel=client().channel("ayfar-game-"+room.id).on("postgres_changes",{event:"UPDATE",schema:"public",table:"ayfar_games",filter:"id=eq."+room.id},payload=>{if(payload.new){room=payload.new;renderRoom()}}).subscribe(s=>{if(s==="SUBSCRIBED")status(room.status==="waiting"?"بانتظار انضمام الطرف الآخر…":"متصل بالهاتف الآخر ♡")});
- poll=setInterval(async()=>{try{const {data,error}=await client().from("ayfar_games").select("*").eq("id",room.id).single();if(!error&&data&&data.version!==room.version){room=data;renderRoom()}}catch(_){}},4000);
-}
-function renderBoard(){
- const board=$("#game-board");if(!board)return;
- const s=room.state||{};
- board.innerHTML='<p>أنت تلعب الآن من حساب '+(role==="ayoub"?"أيوب 🌙":"فرحتي 🌸")+'</p><p class="notice">هذه جلسة متزامنة. نطوّر قواعد كل لعبة وواجهتها في الخطوة التالية.</p><p>الجولة: '+Number(s.round||1)+'</p><p>النقاط — أيوب: '+Number(s.scores?.ayoub||0)+' · فرحتي: '+Number(s.scores?.farhati||0)+'</p>';
-}
+function bodyChoice(){}
 window.AYFAR_Games={start,join,cleanup};
-const joinBox=document.createElement("section");
-joinBox.className="panel";joinBox.style.margin="16px 0";joinBox.innerHTML='<small class="eyebrow">JOIN YOUR PARTNER</small><h3>الانضمام إلى مباراة</h3><input id="ayfar-room-id" class="text" placeholder="ألصق رمز المباراة هنا" aria-label="رمز المباراة"><button class="primary" id="ayfar-join-room" style="margin-top:10px">انضمام ♡</button><p id="ayfar-join-error" class="notice"></p>';
-document.addEventListener("DOMContentLoaded",()=>{const games=document.querySelector(".games");if(games)games.parentNode.insertBefore(joinBox,games)});
-joinBox.querySelector("#ayfar-join-room").onclick=()=>{const id=joinBox.querySelector("#ayfar-room-id").value.trim();if(!id){joinBox.querySelector("#ayfar-join-error").textContent="أدخل رمز المباراة أولاً.";return}join(id)};
-document.addEventListener("click",e=>{
- const b=e.target.closest("[data-game]");if(!b)return;
- const key=b.dataset.game;if(gameNames[key]){e.preventDefault();e.stopImmediatePropagation();start(key)}
-},true);
+joinBox=document.createElement("section");joinBox.className="panel";joinBox.style.margin="16px 0";joinBox.innerHTML='<small class="eyebrow">JOIN YOUR PARTNER</small><h3>الانضمام إلى مباراة</h3><input id="ayfar-room-id" class="text" placeholder="ألصق رمز المباراة هنا"><button class="primary" id="ayfar-join-room" style="margin-top:10px">انضمام ♡</button><p id="ayfar-join-error" class="notice"></p>';
+document.addEventListener("DOMContentLoaded",()=>{const g=document.querySelector(".games");if(g)g.parentNode.insertBefore(joinBox,g)});
+joinBox.querySelector("#ayfar-join-room").onclick=()=>{const id=joinBox.querySelector("#ayfar-room-id").value.trim();if(id)join(id);else $("#ayfar-join-error").textContent="أدخل الرمز أولاً."};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-game]");if(!b||!names[b.dataset.game])return;e.preventDefault();e.stopImmediatePropagation();start(b.dataset.game)},true);
 })();
