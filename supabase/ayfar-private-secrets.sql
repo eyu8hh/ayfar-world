@@ -71,6 +71,7 @@ begin
            to_jsonb(coalesce((state->'scores'->>case when v_role in ('farhati','farahati') then 'farhati' else 'ayoub' end)::int,0)+case when game_key='word' then 2 else 3 end))),
          '{round}',to_jsonb(coalesce((state->>'round')::int,1)+1)),
        '{owner}', 'null'::jsonb),
+     turn=case when game_key='word' then v_role else turn end,
      status=case when coalesce((state->>'round')::int,1)+1>coalesce((state->>'total')::int,5) then 'finished' else status end,
      version=version+1,updated_at=now()
    where id=p_game_id returning * into v_game;
