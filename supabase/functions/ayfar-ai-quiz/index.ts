@@ -130,10 +130,6 @@ Deno.serve(async (req) => {
     const rawRole = String(profile?.role || "").toLowerCase();
     const role = rawRole === "farahati" ? "farhati" : rawRole;
     if (!["ayoub", "farhati"].includes(role)) return json({ error: "الحساب غير مخوّل." }, 403);
-    if ((role === "ayoub" && game.host_id !== userId) || (role === "farhati" && game.guest_id !== userId)) {
-      return json({ error: "دور الحساب لا يطابق موقعه في هذه المباراة." }, 403);
-    }
-
     if (action === "create") {
       if (role !== "ayoub") return json({ error: "أيوب فقط يمكنه بدء المسابقة الذكية." }, 403);
       const { data: existing } = await admin.from("ayfar_ai_quiz_sessions").select("*").eq("game_id", game.id).maybeSingle();
