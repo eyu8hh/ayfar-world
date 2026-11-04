@@ -4,7 +4,7 @@ create extension if not exists pgcrypto;
 
 create table if not exists public.ayfar_games (
   id uuid primary key default gen_random_uuid(),
-  game_key text not null check (game_key in ('who','thisorthat','qa','truth','speed','xo','predict','difference','compatibility','twenty','word','riddles')),
+  game_key text not null check (game_key in ('who','thisorthat','qa','truth','speed','xo','predict','difference','compatibility','twenty','word','riddles','guess','flags','geography')),
   status text not null default 'waiting' check (status in ('waiting','playing','finished','cancelled')),
   host_id uuid not null references auth.users(id) on delete cascade,
   guest_id uuid references auth.users(id) on delete set null,
@@ -31,7 +31,7 @@ begin
  if v_user is null then raise exception 'يجب تسجيل الدخول أولاً'; end if;
  select lower(role) into v_role from public.profiles where id=v_user;
  if v_role not in ('ayoub','farhati','farahati') then raise exception 'الحساب غير مخوّل للعب'; end if;
- if p_game_key not in ('who','thisorthat','qa','truth','speed','xo','predict','difference','compatibility','twenty','word','riddles') then raise exception 'لعبة غير معروفة'; end if;
+ if p_game_key not in ('who','thisorthat','qa','truth','speed','xo','predict','difference','compatibility','twenty','word','riddles','guess','flags','geography') then raise exception 'لعبة غير معروفة'; end if;
  insert into public.ayfar_games(game_key,host_id,state) values(p_game_key,v_user,coalesce(p_state,'{}'::jsonb)) returning * into v_game;
  return v_game;
 end $$;
