@@ -38,6 +38,7 @@ function scoreRound(s,key){
 }
 function fresh(key){const sizes={...Object.fromEntries(Object.keys(prompts).map(k=>[k,prompts[k].length])),...Object.fromEntries(["flags","geography"].map(k=>[k,window.AYFAR_KNOWLEDGE?.[k]?.length||0]))};sizes.riddles=window.AYFAR_KNOWLEDGE?.riddles?.length||prompts.riddles.length;const questionOrder={};for(const [k,n] of Object.entries(sizes))if(n)questionOrder[k]=shuffleOrder(n);return {key,phase:"ready",round:0,total:key==="thisorthat"||key==="predict"||key==="compatibility"||key==="riddles"||key==="flags"||key==="geography"||key==="mixed"?10:5,scores:{ayoub:0,farhati:0},answers:{},history:[],turn:"ayoub",questionIndex:0,questionOrder,scoredRound:0,found:[],diffIndex:Math.floor(Math.random()*12)}}
 const ROOM_KEY="ayfar_active_room_v1",LAST_GAME_KEY="ayfar_last_game_v1";function rememberGame(key,id){try{localStorage.setItem(LAST_GAME_KEY,JSON.stringify({key,id,at:Date.now()}))}catch(_){}}function cleanup(){chatOpen=false;chatSending=false;if(channel)client().removeChannel(channel);channel=null;if(poll)clearInterval(poll);poll=null;if(clock)clearInterval(clock);clock=null;speedExpiryPending=false;room=null;try{localStorage.removeItem(ROOM_KEY)}catch(_){}}
+async function leaveCurrentGame(){const current=room;if(current&&["waiting","playing"].includes(current.status)&&current.state?.phase!=="finished"){try{const state={...(current.state||{}),phase:"finished",endedEarly:true};await rpc("ayfar_game_update",{p_game_id:current.id,p_expected_version:current.version,p_state:state,p_status:"cancelled"});}catch(e){console.warn("AYFAR game leave:",e);}}cleanup();location.reload();}
 function challengeGameName(challenge){return challenge?.state?.aiQuiz?"المسابقة الذكية":names[typeof challenge==="string"?challenge:challenge?.game_key]||"لعبتنا الخاصة";}
 function showChallengeWaiting(c){
  if(document.querySelector("#challenge-waiting"))return;
@@ -72,8 +73,9 @@ async function refreshChallenges(){
  const acceptedStored=(()=>{try{return localStorage.getItem("ayfar_pending_challenge_v1")}catch(_){return null}})();
  incomingChallenge=pendingIncoming;
  renderIncomingChallenge(incomingChallenge);
- if(pendingOutgoing&&pendingOutgoing.id===acceptedStored){
+ if(pendingOutgoing){
   outgoingChallenge=pendingOutgoing;
+  if(!acceptedStored){try{localStorage.setItem("ayfar_pending_challenge_v1",pendingOutgoing.id)}catch(_){}}
   if(!room&&!document.querySelector("#challenge-waiting"))showChallengeWaiting(pendingOutgoing);
  }
  const accepted=rows.find(c=>c.id===acceptedStored&&c.from_user===uid&&c.status==="accepted"&&c.game_id);
@@ -98,7 +100,7 @@ async function initChallenges(profileRole){
 }
 async function createChallenge(key,state){
  try{
-  if(room&&["waiting","playing"].includes(room.status)){toast("لديك مباراة نشطة بالفعل. أنهها أولاً.");return;}
+  if(room&&["waiting","playing"].includes(room.status)&&room.state?.phase!=="finished"){toast("لديك مباراة نشطة بالفعل. أنهها أولاً.");return;}
   await currentUser();role=window.WorldStore.get().active==="farahati"?"farhati":window.WorldStore.get().active;
   const challenge=await rpc("ayfar_challenge_send",{p_game_key:key,p_state:state});
   outgoingChallenge=challenge;
@@ -158,7 +160,7 @@ function shell(inner){
  document.querySelectorAll("[data-chat-quick]").forEach(b=>b.addEventListener("click",()=>{const input=$("#game-chat-input");if(input){input.value=(input.value+" "+b.dataset.chatQuick).trim();chatDraft=input.value;input.focus();}}));
  $("#game-chat-form")?.addEventListener("submit",async e=>{e.preventDefault();if(chatSending)return;const input=$("#game-chat-input"),value=input?.value.trim();if(!value)return;chatSending=true;chatDraft="";if(input)input.value="";const message={id:uid+":"+Date.now(),sender:role,text:value,at:new Date().toISOString()};try{await save(x=>{x.chatMessages=Array.isArray(x.chatMessages)?x.chatMessages:[];x.chatMessages.push(message);if(x.chatMessages.length>100)x.chatMessages=x.chatMessages.slice(-100)});}finally{chatSending=false;const send=$("#game-chat-form button[type=submit]");if(send)send.disabled=false}});
 }
-function render(){if(!room)return;const s=room.state||fresh(room.game_key),key=room.game_key;if(room.status==="waiting"){shell('<h2>'+esc(names[key])+'</h2><p>هذه مباراة قديمة أُنشئت بنظام رمز الدعوة السابق.</p><p class="notice">ابدأ تحدياً جديداً من الصفحة الرئيسية بالطريقة الجديدة.</p><button class="primary" id="exit">العودة إلى الألعاب</button>');$("#exit").onclick=()=>{cleanup();location.reload()};return}
+function render(){if(!room)return;const s=room.state||fresh(room.game_key),key=room.game_key;if(room.status==="waiting"){shell('<h2>'+esc(names[key])+'</h2><p>هذه مباراة قديمة أُنشئت بنظام رمز الدعوة السابق.</p><p class="notice">ابدأ تحدياً جديداً من الصفحة الرئيسية بالطريقة الجديدة.</p><button class="primary" id="exit">العودة إلى الألعاب</button>');$("#exit").onclick=leaveCurrentGame;return}
 if(s.phase==="ready"){shell('<h2>'+esc(names[key])+'</h2><p>اتصلتما بنجاح! كل واحد يلعب من هاتفه.</p><div class="score-strip"><span>🌙 '+s.scores.ayoub+'</span><span>🌸 '+s.scores.farhati+'</span></div>'+(role==="ayoub"?'<button class="primary" id="begin">ابدأ اللعب ♡</button>':'<p class="notice">بانتظار أيوب لبدء المباراة…</p>')+'<button class="secondary-action" id="exit">الخروج</button>');$("#begin")?.addEventListener("click",async()=>{if(role!=="ayoub"||s.phase!=="ready")return;if(s.aiQuiz){try{const {data,error}=await client().functions.invoke("ayfar-ai-quiz",{body:{action:"create",gameId:room.id,categories:s.aiQuizSettings.categories,difficulty:s.aiQuizSettings.difficulty}});if(error)throw error;if(data?.error)throw Error(data.error);await save(x=>{x.phase="play";x.round=1;x.aiQuizSession=data.sessionId;x.aiQuestion=data.question;x.aiIndex=0;x.aiCategory=data.category;x.aiDifficulty=data.difficulty;x.aiSubmitted={};x.aiResults=null});}catch(e){toast(e.message||"تعذر إنشاء الأسئلة الذكية")}return;}save(x=>{if(role!=="ayoub"||x.phase!=="ready")return;x.phase="play";x.round=1;x.turn="ayoub";x.answers={};if(key==="speed")x.deadlineAt=Date.now()+15000;})});$("#exit").onclick=()=>{cleanup();location.reload()};return}
 if(s.phase==="finished"){const winner=s.scores.ayoub>s.scores.farhati?"أيوب 🌙":s.scores.farhati>s.scores.ayoub?"فرحتي 🌸":"تعادل جميل ♡";const completed=s.aiQuiz?Math.min(Number(s.aiIndex||0)+1,Number(s.total||0)):Math.min(Number(s.round||1)-1,Number(s.total||0));shell('<h2>انتهت المباراة! 🏆</h2><div class="question-card"><small>النتيجة النهائية</small><h3>'+winner+'</h3><p>الجولات المكتملة: '+completed+' من '+s.total+'</p></div><div class="result-grid"><article>🌙 أيوب<strong>'+s.scores.ayoub+' نقطة</strong></article><article>🌸 فرحتي<strong>'+s.scores.farahati+' نقطة</strong></article></div><p class="notice">الأجمل أنكما لعبتما معاً ♡</p><button class="primary" id="again">مباراة جديدة</button><button class="secondary-action" id="exit">العودة</button>');$("#again").onclick=()=>start(key);$("#exit").onclick=()=>{cleanup();location.reload()};return}
 let html='<h2>'+esc(names[key])+'</h2><p>الجولة '+s.round+' من '+s.total+'</p>'+(key==="speed"?'<div class="question-card">الوقت المتبقي: <b id="speed-countdown">15</b> ثانية</div>':"")+'<div class="score-strip"><span>🌙 '+s.scores.ayoub+'</span><span>🌸 '+s.scores.farhati+'</span></div>';
