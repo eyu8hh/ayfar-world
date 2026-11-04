@@ -38,7 +38,7 @@ function scoreRound(s,key){
 }
 function fresh(key){const sizes={...Object.fromEntries(Object.keys(prompts).map(k=>[k,prompts[k].length])),...Object.fromEntries(["flags","geography"].map(k=>[k,window.AYFAR_KNOWLEDGE?.[k]?.length||0]))};sizes.riddles=window.AYFAR_KNOWLEDGE?.riddles?.length||prompts.riddles.length;const questionOrder={};for(const [k,n] of Object.entries(sizes))if(n)questionOrder[k]=shuffleOrder(n);return {key,phase:"ready",round:0,total:key==="thisorthat"||key==="predict"||key==="compatibility"||key==="riddles"||key==="flags"||key==="geography"||key==="mixed"?10:5,scores:{ayoub:0,farhati:0},answers:{},history:[],turn:"ayoub",questionIndex:0,questionOrder,scoredRound:0,found:[],diffIndex:Math.floor(Math.random()*12)}}
 const ROOM_KEY="ayfar_active_room_v1",LAST_GAME_KEY="ayfar_last_game_v1";function rememberGame(key,id){try{localStorage.setItem(LAST_GAME_KEY,JSON.stringify({key,id,at:Date.now()}))}catch(_){}}function cleanup(){chatOpen=false;chatSending=false;chatDraft="";if(channel)client().removeChannel(channel);channel=null;if(poll)clearInterval(poll);poll=null;if(clock)clearInterval(clock);clock=null;speedExpiryPending=false;room=null;try{localStorage.removeItem(ROOM_KEY)}catch(_){}}
-async function leaveCurrentGame(){const current=room;if(current&&["waiting","playing"].includes(current.status)&&current.state?.phase!=="finished"){try{const state={...(current.state||{}),phase:"finished",endedEarly:true};await rpc("ayfar_game_update",{p_game_id:current.id,p_expected_version:current.version,p_state:state,p_status:"cancelled"});}catch(e){console.warn("AYFAR game leave:",e);}}cleanup();location.reload();}
+async function leaveCurrentGame(){if(room&&room.state?.phase!=="finished"){try{localStorage.removeItem(ROOM_KEY);}catch(_){}cleanup();location.reload();return;}cleanup();location.reload();}
 function challengeGameName(challenge){return challenge?.state?.aiQuiz?"المسابقة الذكية":names[typeof challenge==="string"?challenge:challenge?.game_key]||"لعبتنا الخاصة";}
 function showChallengeWaiting(c){
  if(document.querySelector("#challenge-waiting"))return;
@@ -145,6 +145,50 @@ async function cancelChallenge(){
  try{localStorage.removeItem("ayfar_pending_challenge_v1")}catch(_){}
  outgoingChallenge=null;location.reload();
 }
+async function loadOpenGames(){
+ const host=$("#unfinished-games");if(!host)return;
+ host.innerHTML='<div class="unfinished-loading">نبحث عن مبارياتكما المحفوظة…</div>';
+ try{
+  await currentUser();
+  const {data,error}=await client().from("ayfar_games").select("*").or("host_id.eq."+uid+",guest_id.eq."+uid).in("status",["playing","waiting"]).order("updated_at",{ascending:false}).limit(20);
+  if(error)throw error;
+  const rows=(data||[]).filter(x=>x.state?.phase!=="finished"&&!x.state?.endedEarly);
+  if(!rows.length){host.innerHTML='<div class="unfinished-empty"><span>♡</span><b>لا توجد مباريات معلّقة</b><small>كل مباراة تبدأانها ستظهر هنا إذا خرجتما قبل إكمالها.</small></div>';return;}
+  host.innerHTML=rows.map(x=>{
+   const title=x.state?.aiQuiz?"المسابقة الذكية":names[x.game_key]||"مباراة AYFAR";
+   const round=Math.max(0,Number(x.state?.round||0)),total=Math.max(1,Number(x.state?.total||10));
+   const when=x.updated_at?new Intl.DateTimeFormat("ar-MA",{dateStyle:"medium",timeStyle:"short"}).format(new Date(x.updated_at)):"";
+   const status=x.state?.phase==="ready"?"بانتظار بدء اللعب":x.state?.phase==="play"?"الجولة "+round+" من "+total:"مباراة محفوظة";
+   return '<article class="unfinished-match"><div class="unfinished-match-icon">♡</div><div class="unfinished-match-info"><b>'+esc(title)+'</b><small>'+esc(status)+' · آخر تحديث '+esc(when)+'</small><div class="unfinished-match-score"><span>🌙 '+Number(x.state?.scores?.ayoub||0)+'</span><span>🌸 '+Number(x.state?.scores?.farhati||0)+'</span></div></div><div class="unfinished-match-actions"><button class="unfinished-resume" data-resume-game="'+esc(x.id)+'">إكمال المباراة</button><button class="unfinished-stop" data-stop-game="'+esc(x.id)+'">إيقاف</button></div></article>';
+  }).join("");
+  host.querySelectorAll("[data-resume-game]").forEach(b=>b.addEventListener("click",()=>resumeGame(b.dataset.resumeGame)));
+  host.querySelectorAll("[data-stop-game]").forEach(b=>b.addEventListener("click",()=>stopSavedGame(b.dataset.stopGame)));
+ }catch(e){console.warn("AYFAR saved matches:",e);host.innerHTML='<div class="unfinished-empty"><b>تعذر تحميل المباريات</b><small>تحقق من الاتصال ثم أعد المحاولة.</small><button class="unfinished-resume" id="retry-open-games">إعادة المحاولة</button></div>';$("#retry-open-games")?.addEventListener("click",loadOpenGames);}
+}
+async function resumeGame(id){
+ try{
+  await currentUser();
+  const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();
+  if(error)throw error;if(!data||!["playing","waiting"].includes(data.status)||data.state?.phase==="finished")throw Error("هذه المباراة لم تعد متاحة.");
+  if(room)cleanup();
+  room=data;role=window.WorldStore.get().active==="farahati"?"farhati":"ayoub";
+  try{localStorage.setItem(ROOM_KEY,room.id);}catch(_){}
+  const home=$("#home"),page=$("#page");if(home)home.classList.add("hidden");if(page)page.classList.remove("hidden");
+  watch();render();
+ }catch(e){toast(e.message||"تعذر استئناف المباراة");loadOpenGames();}
+}
+async function stopSavedGame(id){
+ if(!window.confirm("هل تريد إيقاف هذه المباراة نهائياً؟ لن تتمكنا من إكمالها بعد ذلك."))return;
+ try{
+  await currentUser();
+  const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();
+  if(error)throw error;if(!data)throw Error("المباراة غير موجودة.");
+  const state={...(data.state||{}),phase:"finished",endedEarly:true,stoppedBy:role||window.WorldStore.get().active,stoppedAt:new Date().toISOString()};
+  await rpc("ayfar_game_update",{p_game_id:data.id,p_expected_version:data.version,p_state:state,p_status:"cancelled"});
+  if(room?.id===id)cleanup();
+  toast("تم إيقاف المباراة");loadOpenGames();
+ }catch(e){toast(e.message||"تعذر إيقاف المباراة");}
+}
 async function restore(){try{const id=localStorage.getItem(ROOM_KEY);if(!id)return;await currentUser();const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();if(error)throw error;if(!data){localStorage.removeItem(ROOM_KEY);return}room=data;role=window.WorldStore.get().active==="farhati"?"farhati":"ayoub";watch();render()}catch(e){console.warn("AYFAR game restore:",e);toast("تعذر استعادة المباراة. تحقق من الاتصال ثم حدّث الصفحة.")}}
 function watch(){if(!room)return;if(channel)client().removeChannel(channel);channel=client().channel("ayfar-game-"+room.id).on("postgres_changes",{event:"UPDATE",schema:"public",table:"ayfar_games",filter:"id=eq."+room.id},p=>{if(p.new&&(!room||Number(p.new.version)>Number(room.version))){room=p.new;render()}}).subscribe();if(poll)clearInterval(poll);poll=setInterval(async()=>{if(!room)return;const {data}=await client().from("ayfar_games").select("*").eq("id",room.id).single();if(data&&Number(data.version)>Number(room.version)){room=data;render()}},3500)}
 async function save(mutator,status){if(!room)return;for(let attempt=0;attempt<3;attempt++){const base=room,s=JSON.parse(JSON.stringify(base.state||{}));mutator(s);try{room=await rpc("ayfar_game_update",{p_game_id:base.id,p_expected_version:base.version,p_state:s,p_status:status||null});render();return}catch(e){const {data}=await client().from("ayfar_games").select("*").eq("id",base.id).single();if(!data)break;room=data;if(Number(data.version)<=Number(base.version))break;}}render();toast("تعذر حفظ الحركة بعد عدة محاولات. تمت مزامنة آخر حالة؛ أعد المحاولة إن لم تظهر إجابتك.")}
@@ -212,6 +256,6 @@ function bodyChoice(){document.querySelectorAll("[data-choice]").forEach(b=>b.on
 
 }
 
-window.AYFAR_Games={start,startAiQuiz,cleanup,restore,resume:restore,initChallenges};
+window.AYFAR_Games={start,startAiQuiz,cleanup,restore,resume:restore,resumeGame,stopSavedGame,loadOpenGames,initChallenges};
 document.addEventListener("click",e=>{const ai=e.target.closest("[data-ai-quiz]");if(ai){e.preventDefault();e.stopImmediatePropagation();startAiQuiz();return}const b=e.target.closest("[data-game]");if(!b||!names[b.dataset.game])return;e.preventDefault();e.stopImmediatePropagation();start(b.dataset.game)},true);
 })();
