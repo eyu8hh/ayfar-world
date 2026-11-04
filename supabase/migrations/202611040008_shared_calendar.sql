@@ -2,7 +2,8 @@
 create table if not exists public.ayfar_shared_calendar (
   id uuid primary key default gen_random_uuid(),
   title text not null check (char_length(trim(title)) between 1 and 120),
-  starts_at timestamptz not null,\n  all_day boolean not null default false,
+  starts_at timestamptz not null,
+  all_day boolean not null default false,
   category text not null default 'خاص' check (category in ('خاص','مناسبة','خطة','تذكير')),
   notes text not null default '' check (char_length(notes) <= 500),
   created_by uuid not null references auth.users(id) on delete cascade,
