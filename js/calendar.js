@@ -74,7 +74,8 @@
     if(!title||!date){feedback("أكملا عنوان الموعد وتاريخه.");return;}
     if(!user){feedback("تعذر التحقق من الحساب. أغلقي النافذة وافتحيها مجدداً.");return;}
     busy=true;$("#calendar-save").disabled=true;feedback("جارٍ حفظ الموعد…");
-    const localStart=new Date(date+"T"+(time||"00:00")+":00");\n    const {error}=await supa().from("ayfar_shared_calendar").insert({title,starts_at:localStart.toISOString(),all_day:!time,category,notes,created_by:user.id});
+    const localStart=new Date(date+"T"+(time||"00:00")+":00");
+    const {error}=await supa().from("ayfar_shared_calendar").insert({title,starts_at:localStart.toISOString(),all_day:!time,category,notes,created_by:user.id});
     busy=false;$("#calendar-save").disabled=false;
     if(error){feedback("تعذر الحفظ: "+error.message);return;}
     selected=date;const d=parseDate(date);cursor=new Date(d.getFullYear(),d.getMonth(),1);$("#calendar-event-title").value="";$("#calendar-event-time").value="";$("#calendar-event-notes").value="";await load();feedback("أُضيف الموعد إلى تقويمكما ♡");
