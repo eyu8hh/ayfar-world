@@ -5,15 +5,15 @@ This document records the approved scope for the existing AYFAR WORLD project. I
 ## 1. Question bank — approved target: 1500
 
 - Preserve the existing 557 curated questions unchanged.
-- Add 943 new questions across exactly these three categories:
-  - اللغة والأدب: 314 new questions
-  - الحياة والطبيعة: 314 new questions
-  - الفنون والثقافة: 315 new questions
+- Add 946 new unique questions across exactly these three categories:
+  - اللغة والأدب: 315 new questions
+  - الحياة والطبيعة: 315 new questions
+  - الفنون والثقافة: 316 new questions
 - No sports category or sports questions in this expansion.
 - Every multiple-choice item must have four distinct options, one unambiguous correct answer, a concise explanation, and one of three difficulty levels (سهل، متوسط، صعب).
 - Questions must be Arabic, factually defensible, non-duplicative (including normalized Arabic text), and have stable unique IDs.
 - Random selection must avoid repeating a question within the same match. Existing game scoring and per-question answer reveal behavior must remain unchanged.
-- Current implementation checkpoint: 557 original + 58 accepted in batch 01 = 615 questions. Two draft items were automatically excluded as duplicates. Remaining to reach target: 885 questions (294 language & literature, 296 life & nature, 295 arts & culture).
+- Current implementation checkpoint: 557 source records contain 554 unique question texts; three legacy duplicates are excluded from the runtime pool without deleting their source records. Batch 01 adds 58 unique questions, so the runtime pool currently contains 612 unique questions. Remaining to reach 1500: 888 questions (295 language & literature, 297 life & nature, 296 arts & culture).
 - Do not label the bank as complete until a runtime count confirms exactly 1500 valid unique questions.
 
 ## 2. New games — design review before integration
