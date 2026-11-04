@@ -79,7 +79,7 @@ begin
   if v_challenge.status<>'pending' then raise exception 'لم يعد هذا التحدي متاحاً'; end if;
   if v_challenge.created_at < now()-interval '30 minutes' then
     update public.ayfar_game_challenges set status='expired',updated_at=now() where id=p_challenge_id;
-    raise exception 'انتهت صلاحية هذا التحدي. اطلب تحدياً جديداً.';
+    return null;
   end if;
   if exists(select 1 from public.ayfar_games where (host_id=v_user or guest_id=v_user) and status='playing' and coalesce(state->>'phase','') <> 'finished' and updated_at > now()-interval '3 hours') then
     raise exception 'لديك مباراة نشطة بالفعل. أنهها أولاً.';
