@@ -186,3 +186,10 @@ button:active{filter:saturate(1.12)}
 .home-anniversary-head>span{background:#70243f;color:#fff;box-shadow:0 5px 12px rgba(112,36,63,.16)}
 .home-anniversary-head h3{font-size:21px}
 @media(max-width:520px){.continue-card{align-items:stretch;flex-direction:column;padding:18px}.continue-card .primary{width:100%}}
+
+/* Knowledge games */
+.flag-question{display:block;width:min(100%,260px);height:150px;object-fit:contain;margin:18px auto;border-radius:12px;box-shadow:0 8px 24px rgba(72,35,51,.12);background:#fff}
+.knowledge-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}
+.knowledge-option{min-height:48px;font-size:14px;font-weight:700}
+.knowledge-option:disabled{opacity:.58}
+.hint-line{margin:7px 0!important;text-align:right!important;color:var(--ink)!important}
