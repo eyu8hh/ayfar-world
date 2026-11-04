@@ -7,7 +7,7 @@ const cors = {
 };
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
-const categories = ["ثقافة عامة","علوم","تاريخ","جغرافيا","المغرب","رياضة","سينما","ألغاز"];
+const categories = ["ثقافة عامة","علوم","تاريخ","جغرافيا","المغرب","سينما","ألغاز"];
 const difficulties = ["سهل","متوسط","صعب"];
 const schema = {
   type: "object",
@@ -84,8 +84,13 @@ Deno.serve(async (req) => {
     const { data: game, error: gameError } = await admin.from("ayfar_games").select("id,game_key,status,host_id,guest_id").eq("id", gameId || (sessionId ? (await admin.from("ayfar_ai_quiz_sessions").select("game_id").eq("id",sessionId).single()).data?.game_id : "")).single();
     if (gameError || !game || ![game.host_id,game.guest_id].includes(userId)) return json({ error: "المباراة غير موجودة أو لست مشاركاً فيها." }, 403);
     if (game.game_key !== "riddles" || game.status !== "playing") return json({ error: "هذه المباراة ليست في وضع المسابقة الذكية." }, 400);
+    const { data: profile, error: profileError } = await admin.from("profiles").select("role").eq("id",userId).single();
+    if (profileError) throw profileError;
+    const role = String(profile?.role || "").toLowerCase() === "farahati" ? "farhati" : String(profile?.role || "").toLowerCase();
+    if (!["ayoub","farhati"].includes(role)) return json({ error: "الحساب غير مخوّل." }, 403);
 
     if (action === "create") {
+      if (role !== "ayoub") return json({ error: "أيوب فقط يمكنه بدء المسابقة الذكية." }, 403);
       const cats = Array.isArray(requestedCats) ? requestedCats.filter((c: string) => categories.includes(c)) : categories;
       if (!cats.length) return json({ error: "اختر تصنيفاً واحداً على الأقل." }, 400);
       const level = ["متنوع", ...difficulties].includes(difficulty) ? difficulty : "متنوع";
@@ -101,41 +106,63 @@ Deno.serve(async (req) => {
 
     const { data: session, error: sessionError } = await admin.from("ayfar_ai_quiz_sessions").select("*").eq("id", sessionId).eq("game_id",game.id).single();
     if (sessionError || !session) return json({ error: "جلسة المسابقة غير موجودة." }, 404);
-    const { data: profile } = await admin.from("profiles").select("role").eq("id",userId).single();
-    const role = String(profile?.role || "").toLowerCase() === "farahati" ? "farhati" : String(profile?.role || "").toLowerCase();
-    if (!["ayoub","farhati"].includes(role)) return json({ error: "الحساب غير مخوّل." }, 403);
 
     if (action === "submit") {
       if (session.status !== "active") return json({ error: "هذه الجولة مكتملة بالفعل." }, 409);
-      const current = session.submissions || {};
-      if (current[role]) return json({ error: "سبق أن أرسلت إجابتك لهذه الجولة." }, 409);
       const cleanAnswer = String(answer || "").trim().slice(0,240);
       if (!cleanAnswer) return json({ error: "اكتب إجابتك أولاً." }, 400);
-      const nextSubs = { ...current, [role]: cleanAnswer };
-      const update = await admin.from("ayfar_ai_quiz_sessions").update({ submissions: nextSubs, updated_at: new Date().toISOString() }).eq("id",session.id).eq("status","active");
-      if (update.error) throw update.error;
-      if (!nextSubs.ayoub || !nextSubs.farhati) return json({ submitted: true, waiting: true });
-      const q = session.questions[session.current_index];
+      const { data: submittedSession, error: submissionError } = await admin.rpc("ayfar_ai_quiz_submit_answer", {
+        p_session_id: session.id, p_role: role, p_answer: cleanAnswer
+      });
+      if (submissionError) {
+        const { data: latest } = await admin.from("ayfar_ai_quiz_sessions").select("*").eq("id",session.id).maybeSingle();
+        if (latest?.status === "revealed" && latest.results) return json({ submitted: true, waiting: false, results: latest.results, index: latest.current_index, total: 15 });
+        if (latest?.status === "active" && latest.submissions?.[role]) return json({ submitted: true, waiting: true });
+        return json({ error: submissionError.message || "تعذر حفظ الإجابة." }, 409);
+      }
+      if (!submittedSession) return json({ error: "تعذر حفظ الإجابة." }, 409);
+      const nextSubs = submittedSession.submissions || {};
+      if (!nextSubs.ayoub || !nextSubs.farahati) return json({ submitted: true, waiting: true });
+      const q = submittedSession.questions[submittedSession.current_index];
       const judged = await Promise.all(["ayoub","farhati"].map(async (p) => {
         const out = await openAI(`قيّم إجابة اللاعب في مسابقة ثقافة عامة. السؤال: ${q.question}. الإجابة النموذجية: ${q.answer}. إجابة اللاعب: ${nextSubs[p]}. اعتبر المرادفات والصياغات المختلفة صحيحة إذا كان المعنى صحيحاً. لا تقبل إجابة تناقض الحقيقة. أعد JSON فيه correct وfeedback بالعربية بجملة قصيرة.`, "ayfar_answer_grade", gradeSchema);
         return { answer: nextSubs[p], correct: out.correct, feedback: out.feedback, points: out.correct ? 2 : 0 };
       }));
       const results = { ayoub: judged[0], farhati: judged[1], correctAnswer: q.answer, explanation: q.explanation };
-      const saved = await admin.from("ayfar_ai_quiz_sessions").update({ results, status: "revealed", updated_at: new Date().toISOString() }).eq("id",session.id);
+      const saved = await admin.from("ayfar_ai_quiz_sessions").update({ results, status: "revealed", updated_at: new Date().toISOString() }).eq("id",session.id).eq("status","active").select("id").maybeSingle();
       if (saved.error) throw saved.error;
+      if (!saved.data) {
+        const { data: latest } = await admin.from("ayfar_ai_quiz_sessions").select("*").eq("id",session.id).maybeSingle();
+        if (latest?.status === "revealed" && latest.results) return json({ submitted: true, waiting: false, results: latest.results, index: latest.current_index, total: 15 });
+        return json({ error: "تعذر تثبيت نتيجة الجولة. أعد المحاولة." }, 409);
+      }
       return json({ submitted: true, waiting: false, results, index: session.current_index, total: 15 });
     }
 
     if (action === "next") {
+      if (role !== "ayoub") return json({ error: "أيوب فقط يمكنه الانتقال للسؤال التالي." }, 403);
       if (session.status !== "revealed") return json({ error: "لم تُكشف نتيجة الجولة بعد." }, 409);
       const nextIndex = session.current_index + 1;
       if (nextIndex >= 15) {
-        await admin.from("ayfar_ai_quiz_sessions").update({ status: "finished", updated_at: new Date().toISOString() }).eq("id",session.id);
+        const { data: finished, error } = await admin.from("ayfar_ai_quiz_sessions").update({ status: "finished", updated_at: new Date().toISOString() }).eq("id",session.id).eq("status","revealed").eq("current_index",session.current_index).select("id").maybeSingle();
+        if (error) throw error;
+        if (!finished) {
+          const { data: latest } = await admin.from("ayfar_ai_quiz_sessions").select("status").eq("id",session.id).maybeSingle();
+          if (latest?.status !== "finished") return json({ error: "تم الانتقال بالفعل؛ حدّث المسابقة." }, 409);
+        }
         return json({ finished: true, total: 15 });
       }
       const next = session.questions[nextIndex];
-      const { error } = await admin.from("ayfar_ai_quiz_sessions").update({ current_index: nextIndex, submissions: {}, results: null, status: "active", updated_at: new Date().toISOString() }).eq("id",session.id);
+      const { data: advanced, error } = await admin.from("ayfar_ai_quiz_sessions").update({ current_index: nextIndex, submissions: {}, results: null, status: "active", updated_at: new Date().toISOString() }).eq("id",session.id).eq("status","revealed").eq("current_index",session.current_index).select("id").maybeSingle();
       if (error) throw error;
+      if (!advanced) {
+        const { data: latest } = await admin.from("ayfar_ai_quiz_sessions").select("*").eq("id",session.id).maybeSingle();
+        if (latest?.status === "active") {
+          const currentQuestion = latest.questions[latest.current_index];
+          return json({ finished: false, index: latest.current_index, total: 15, question: currentQuestion.question, category: currentQuestion.category, difficulty: currentQuestion.difficulty });
+        }
+        return json({ error: "تم الانتقال بالفعل؛ أعد تحميل المسابقة." }, 409);
+      }
       return json({ finished: false, index: nextIndex, total: 15, question: next.question, category: next.category, difficulty: next.difficulty });
     }
     return json({ error: "إجراء غير معروف." }, 400);
