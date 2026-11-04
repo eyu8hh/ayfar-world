@@ -31,7 +31,7 @@ function scoreRound(s,key){
  if(Number(s.scoredRound)===Number(s.round))return;
  const correct=(p,answer)=>norm(s.answers[p])===norm(answer);
  if(key==="truth"){for(const p of ["ayoub","farhati"])if(s.answers[p]!=="[تم التخطي]"&&s.answers[p]!=="[انتهى الوقت]")s.scores[p]++}
- else if(["flags","geography"].includes(key)){const item=(window.AYFAR_KNOWLEDGE?.[key]||[])[questionIndex(s,key,window.AYFAR_KNOWLEDGE?.[key]?.length||1)];for(const p of ["ayoub","farhati"])if(correct(p,item?.answer))s.scores[p]+=2}
+ else if(key==="flags"){const item=(window.AYFAR_KNOWLEDGE?.flags||[])[questionIndex(s,key,window.AYFAR_KNOWLEDGE?.flags?.length||1)];for(const p of ["ayoub","farhati"])if(correct(p,item?.answer))s.scores[p]+=2}
  else if(["mixed","speed","riddles","geography","sports"].includes(key)){const list=quizBanks[key]||[],item=list[questionIndex(s,key,list.length||1)],expected=item?.options?.[item.correctAnswer],points=key==="speed"?1:2;for(const p of ["ayoub","farhati"])if(expected&&correct(p,expected))s.scores[p]+=points}
  else if(key==="qa"){for(const p of ["ayoub","farhati"])if(s.answers[p]&&s.answers[p]!=="[تم التخطي]")s.scores[p]++}
  else if(["thisorthat","compatibility"].includes(key)&&s.answers.ayoub===s.answers.farhati){s.scores.ayoub++;s.scores.farhati++}
