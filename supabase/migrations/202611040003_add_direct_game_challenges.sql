@@ -49,7 +49,7 @@ begin
   update public.ayfar_game_challenges set status='expired',updated_at=now()
   where status='pending' and created_at < now()-interval '30 minutes';
 
-  if exists(select 1 from public.ayfar_games where (host_id in (v_user,v_target) or guest_id in (v_user,v_target)) and status in ('waiting','playing') and updated_at > now()-interval '3 hours') then
+  if exists(select 1 from public.ayfar_games where (host_id in (v_user,v_target) or guest_id in (v_user,v_target)) and status='playing' and coalesce(state->>'phase','') <> 'finished' and updated_at > now()-interval '3 hours') then
     raise exception 'لديكما مباراة نشطة بالفعل. أنهيها أو عُد إليها أولاً.';
   end if;
   if exists(select 1 from public.ayfar_game_challenges where status='pending' and (from_user in (v_user,v_target) or to_user in (v_user,v_target))) then
