@@ -86,7 +86,7 @@ async function gradeSession(admin: any, session: any) {
     let feedback = correct ? "إجابة صحيحة، أحسنت!" : "ليست الإجابة المطابقة للإجابة النموذجية.";
     if (Deno.env.get("AYFAR_AI_GRADING_ENABLED") === "true") {
       try {
-        const out = await openAI(\`قيّم إجابة اللاعب في مسابقة ثقافة عامة. السؤال: \${q.question}. الإجابة النموذجية: \${q.answer}. إجابة اللاعب: \${claimed.submissions[p]}. اعتبر المرادفات والصياغات المختلفة صحيحة إذا كان المعنى صحيحاً. لا تقبل إجابة تناقض الحقيقة. أعد JSON فيه correct وfeedback بالعربية بجملة قصيرة.\`, "ayfar_answer_grade", gradeSchema);
+        const out = await openAI(`قيّم إجابة اللاعب في مسابقة ثقافة عامة. السؤال: ${q.question}. الإجابة النموذجية: ${q.answer}. إجابة اللاعب: ${claimed.submissions[p]}. اعتبر المرادفات والصياغات المختلفة صحيحة إذا كان المعنى صحيحاً. لا تقبل إجابة تناقض الحقيقة. أعد JSON فيه correct وfeedback بالعربية بجملة قصيرة.`, "ayfar_answer_grade", gradeSchema);
         correct = out.correct;
         feedback = out.feedback;
       } catch (error) {
