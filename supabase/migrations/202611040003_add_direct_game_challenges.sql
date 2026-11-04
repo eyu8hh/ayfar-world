@@ -81,7 +81,7 @@ begin
     update public.ayfar_game_challenges set status='expired',updated_at=now() where id=p_challenge_id;
     raise exception 'انتهت صلاحية هذا التحدي. اطلب تحدياً جديداً.';
   end if;
-  if exists(select 1 from public.ayfar_games where (host_id=v_user or guest_id=v_user) and status in ('waiting','playing') and updated_at > now()-interval '3 hours') then
+  if exists(select 1 from public.ayfar_games where (host_id=v_user or guest_id=v_user) and status='playing' and coalesce(state->>'phase','') <> 'finished' and updated_at > now()-interval '3 hours') then
     raise exception 'لديك مباراة نشطة بالفعل. أنهها أولاً.';
   end if;
 
