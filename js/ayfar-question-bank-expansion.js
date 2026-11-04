@@ -78,5 +78,14 @@ if(accepted.length!==extra.length)console.warn("AYFAR expansion duplicates skipp
 const ids=new Set(bank.map(q=>q.id));
 for(const q of accepted){if(ids.has(q.id))throw new Error("Duplicate question id: "+q.id);ids.add(q.id);}
 bank.push(...accepted);
-window.AYFAR_QUESTION_BANK_STATS={base:bank.length-accepted.length,added:accepted.length,total:bank.length,categories:accepted.reduce((a,q)=>(a[q.category]=(a[q.category]||0)+1,a),{})};
+// Keep the original source records intact, but remove repeated question text
+// from the runtime pool so a duplicate legacy item cannot appear twice.
+const seenQuestions=new Set();
+const uniqueBank=bank.filter(q=>{
+ const key=String(q.question).normalize("NFKC").replace(/[ًٌٍَُِّْـٰـ]/g,"").replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/\s+/g," ").trim();
+ if(seenQuestions.has(key))return false;
+ seenQuestions.add(key);return true;
+});
+bank.splice(0,bank.length,...uniqueBank);
+window.AYFAR_QUESTION_BANK_STATS={base:557,added:accepted.length,total:bank.length,legacyDuplicatesExcluded:615-bank.length,categories:accepted.reduce((a,q)=>(a[q.category]=(a[q.category]||0)+1,a),{})};
 })();
