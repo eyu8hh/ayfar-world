@@ -90,7 +90,7 @@
   $("#dream-cancel").addEventListener("click",()=>setForm());
   $("#dreams-form").addEventListener("submit",async event=>{
     event.preventDefault();if(busy)return;
-    const title=$("#dream-title-input").value.trim(),details=$("#dream-details-input").value.trim();
+    const title=$("#dream-title-input").value.trim(),details=$("#dream-details-input").value.trim(),wasEditing=Boolean(editingId);
     if(!title){feedback("اكتبا عنوان الحلم أولاً.");return;}
     if(!user){feedback("تعذر التحقق من الحساب. أغلقي النافذة وافتحيها مجدداً.");return;}
     busy=true;$("#dream-save").disabled=true;feedback("جارٍ الحفظ…");
@@ -99,7 +99,7 @@
         ?await supa().from("ayfar_shared_dreams").update({title,details}).eq("id",editingId).select().single()
         :await supa().from("ayfar_shared_dreams").insert({title,details,created_by:user.id}).select().single();
       if(result.error)throw result.error;
-      setForm();await load();feedback(editingId?"":"تم حفظ الحلم بينكما ♡");
+      setForm();await load();feedback(wasEditing?"تم تحديث الحلم ♡":"تم حفظ الحلم بينكما ♡");
     }catch(error){feedback("تعذر الحفظ: "+(error.message||"خطأ غير معروف"));}
     finally{busy=false;$("#dream-save").disabled=false;}
   });
