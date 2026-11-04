@@ -820,3 +820,62 @@ body.ayoub-theme .planned-features article{background:#202f43;border-color:#4051
 body.ayoub-theme .planned-features article>b{color:#e7edf5}
 body.ayoub-theme .planned-features article>span{color:#e2c991}
 @media(min-width:700px){.planned-features{grid-template-columns:repeat(3,minmax(0,1fr))}.home-section-nav{justify-content:center}}
+
+
+/* AYFAR — vivid plans & activities section */
+#home-plans{position:relative}
+.plans-intro{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:12px;overflow:hidden;margin:4px 0 18px;padding:20px 19px;border:1px solid #efd5df;border-radius:24px;background:linear-gradient(125deg,#fff1f4 0%,#fffaf4 55%,#edf5ed 100%);box-shadow:0 12px 28px rgba(91,35,57,.07)}
+.plans-intro-copy{position:relative;z-index:1;max-width:78%}
+.plans-intro-copy .eyebrow{color:#a35470}
+.plans-intro-copy h3{margin:5px 0 7px;color:#70243f;font-size:21px}
+.plans-intro-copy p{margin:0;color:#806b74;font-size:12px;line-height:1.85}
+.plans-intro-art{position:relative;flex:0 0 74px;width:74px;height:74px;display:grid;place-items:center;border-radius:24px;background:linear-gradient(145deg,#8f3655,#c16b83);color:#fff;transform:rotate(7deg);box-shadow:0 12px 25px rgba(143,54,85,.22)}
+.plans-intro-art b{font-size:36px;font-weight:500;line-height:1}
+.plans-intro-art span,.plans-intro-art i{position:absolute;font-style:normal;color:#f9e3a9}
+.plans-intro-art span{top:8px;right:12px;font-size:17px}
+.plans-intro-art i{bottom:8px;left:12px;font-size:15px}
+.plans-section-caption{display:flex;align-items:center;justify-content:space-between;margin:0 2px 11px}
+.plans-section-caption span{font-size:13px;font-weight:900;color:var(--text,#382832)}
+.plans-section-caption small{font-size:10px;color:var(--muted,#88747d);padding:5px 9px;border-radius:999px;background:rgba(163,77,107,.08)}
+.planned-features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.plan-card{--plan-ink:#8e3655;--plan-wash:#fff0f4;--plan-line:#f0d4df;position:relative;isolation:isolate;min-width:0;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;gap:13px;overflow:hidden;padding:14px 13px 12px;border:1px solid var(--plan-line);border-radius:21px;background:linear-gradient(150deg,var(--plan-wash),#fff 82%);box-shadow:0 8px 20px rgba(48,22,33,.055);transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
+.plan-card:before{content:"";position:absolute;z-index:-1;width:112px;height:112px;border-radius:50%;left:-47px;bottom:-58px;background:var(--plan-ink);opacity:.055}
+.plan-card-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.plan-icon{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:15px;background:var(--plan-ink);color:#fff;font-size:23px;box-shadow:0 7px 15px color-mix(in srgb,var(--plan-ink) 22%,transparent)}
+.plan-tag{max-width:68%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:5px 8px;border:1px solid var(--plan-line);border-radius:999px;background:rgba(255,255,255,.72);color:var(--plan-ink);font-size:9px;font-weight:800}
+.plan-card-copy{display:flex;flex-direction:column;gap:6px}
+.plan-card-copy>b{font-size:14px;line-height:1.5;color:#382832}
+.plan-card-copy>small{font-size:10px;line-height:1.75;color:#806f77}
+.plan-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:5px;padding-top:9px;border-top:1px solid var(--plan-line)}
+.plan-card-bottom>span{font-size:9px;color:#8b747e}
+.plan-card-bottom>em{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-size:9px;font-style:normal;font-weight:900;color:var(--plan-ink)}
+.plan-card-bottom>em b{font-size:13px}
+.plan-dreams{--plan-ink:#a83f68;--plan-wash:#fff0f5;--plan-line:#f2d2df}
+.plan-calendar{--plan-ink:#3c8068;--plan-wash:#edf7f0;--plan-line:#d4e9db}
+.plan-question{--plan-ink:#b27a27;--plan-wash:#fff7e7;--plan-line:#f0e1bf}
+.plan-activity{--plan-ink:#6d65a8;--plan-wash:#f2f0ff;--plan-line:#dedaf4}
+.plan-goals{--plan-ink:#39818d;--plan-wash:#eaf7f8;--plan-line:#d0e9eb}
+.plan-surprise{--plan-ink:#bd654c;--plan-wash:#fff1eb;--plan-line:#f1d9ce}
+.plans-footnote{display:flex;align-items:flex-start;gap:10px;margin:14px 1px 0;padding:12px 13px;border:1px dashed #e5c8d3;border-radius:16px;background:linear-gradient(110deg,rgba(249,231,238,.72),rgba(239,247,239,.7))}
+.plans-footnote>span{flex:0 0 auto;color:#a34d6b;font-size:17px}
+.plans-footnote p{margin:0;color:#806b74;font-size:10px;line-height:1.8}
+.plans-footnote p b{color:#70243f}
+body.ayoub-theme .plans-intro{border-color:#45566d;background:linear-gradient(125deg,#263247,#202f43 58%,#263b3a);box-shadow:0 12px 28px rgba(0,0,0,.16)}
+body.ayoub-theme .plans-intro-copy .eyebrow{color:#d8bc87}
+body.ayoub-theme .plans-intro-copy h3{color:#f0dfbd}
+body.ayoub-theme .plans-intro-copy p{color:#bdc8d6}
+body.ayoub-theme .plans-intro-art{background:linear-gradient(145deg,#82663d,#c0a16c);color:#172132}
+body.ayoub-theme .plans-section-caption span{color:#e7edf5}
+body.ayoub-theme .plans-section-caption small{background:#33435a;color:#d5c39e}
+body.ayoub-theme .plan-card{background:linear-gradient(150deg,color-mix(in srgb,var(--plan-ink) 17%,#202f43),#202f43 82%);border-color:#40516a;box-shadow:0 8px 20px rgba(0,0,0,.14)}
+body.ayoub-theme .plan-icon{color:#182437;box-shadow:none}
+body.ayoub-theme .plan-tag{background:#29394e;border-color:#465872;color:#e2c991}
+body.ayoub-theme .plan-card-copy>b{color:#f0f2f5}
+body.ayoub-theme .plan-card-copy>small,body.ayoub-theme .plan-card-bottom>span{color:#b9c5d2}
+body.ayoub-theme .plan-card-bottom{border-color:#40516a}
+body.ayoub-theme .plans-footnote{border-color:#53647a;background:linear-gradient(110deg,#273449,#253b3a)}
+body.ayoub-theme .plans-footnote p{color:#c3ceda}
+body.ayoub-theme .plans-footnote p b{color:#e6d2a8}
+@media(hover:hover){.plan-card:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(48,22,33,.11);border-color:var(--plan-ink)}}
+@media(max-width:360px){.plans-intro{padding:16px 14px}.plans-intro-art{flex-basis:60px;width:60px;height:60px}.plan-card{padding:12px 10px;min-height:196px}.plan-card-copy>b{font-size:13px}.plan-card-copy>small{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.plan-card{transition:none}}
