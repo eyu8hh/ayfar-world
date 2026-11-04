@@ -133,7 +133,7 @@ async function rejectChallenge(id){
 }
 async function cancelChallenge(){
  if(!outgoingChallenge)return;
- try{await rpc("ayfar_challenge_cancel",{p_challenge_id:outgoingChallenge.id);}
+ try{await rpc("ayfar_challenge_cancel",{p_challenge_id:outgoingChallenge.id});}
  catch(e){toast(e.message||"تعذر إلغاء التحدي");return;}
  try{localStorage.removeItem("ayfar_pending_challenge_v1")}catch(_){}
  outgoingChallenge=null;location.reload();
