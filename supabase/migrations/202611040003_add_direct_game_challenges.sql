@@ -36,7 +36,7 @@ declare
 begin
   if v_user is null then raise exception 'يجب تسجيل الدخول أولاً'; end if;
   select lower(role) into v_role from public.profiles where id=v_user;
-  if v_role not in ('ayoub','farhati','farahati') then raise exception 'الحساب غير مخوّل لإرسال التحديات'; end if;
+  if coalesce(v_role,'') not in ('ayoub','farhati','farahati') then raise exception 'الحساب غير مخوّل لإرسال التحديات'; end if;
   if p_game_key not in ('who','thisorthat','qa','truth','speed','predict','compatibility','riddles','flags','geography','mixed') then raise exception 'لعبة غير معروفة'; end if;
 
   if v_role='ayoub' then
