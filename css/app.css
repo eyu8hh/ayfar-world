@@ -493,3 +493,87 @@ body.ayoub-theme .heart.active{background:#665438;border-color:#c5a46d}
  body.ayoub-theme header button:hover,body.ayoub-theme .secondary-action:hover{background:#2a3a50;border-color:#c5a46d}
  body.ayoub-theme .primary:hover{filter:brightness(1.07);box-shadow:0 12px 25px rgba(0,0,0,.3)}
 }
+
+
+/* Dual identity login — a balanced welcome for Ayoub & Farahati */
+.login{
+ position:relative;isolation:isolate;overflow:hidden;
+ background:
+  radial-gradient(ellipse at 8% 18%,rgba(27,43,66,.16),transparent 42%),
+  radial-gradient(ellipse at 92% 82%,rgba(71,118,92,.15),transparent 42%);
+}
+.login:before,.login:after{
+ content:"";position:absolute;z-index:-1;pointer-events:none;border-radius:50%;
+ filter:blur(2px)
+}
+.login:before{
+ width:min(58vw,520px);height:min(58vw,520px);top:2%;left:-17%;
+ background:radial-gradient(circle,rgba(24,39,61,.15),rgba(24,39,61,0) 68%)
+}
+.login:after{
+ width:min(58vw,520px);height:min(58vw,520px);bottom:0;right:-17%;
+ background:radial-gradient(circle,rgba(71,118,92,.17),rgba(231,160,181,0) 70%)
+}
+.loginbox{
+ position:relative;overflow:hidden;
+ border:1px solid transparent;
+ background:linear-gradient(145deg,rgba(255,253,251,.97),rgba(255,250,247,.94)) padding-box,
+ linear-gradient(110deg,#263b59 0%,#b89a63 47%,#e7a0b5 53%,#47765c 100%) border-box;
+ box-shadow:0 24px 70px rgba(37,31,43,.13),0 5px 18px rgba(112,36,63,.06);
+}
+.loginbox:before{
+ content:"";position:absolute;top:0;left:0;right:0;height:5px;
+ background:linear-gradient(90deg,#1b2b43 0%,#b89a63 48%,#e7a0b5 52%,#47765c 100%)
+}
+.login .logo{
+ background:linear-gradient(135deg,#1b2b43 0%,#b89a63 49%,#e7a0b5 51%,#47765c 100%);
+ color:#fff;font-size:31px;box-shadow:0 8px 20px rgba(58,48,58,.14);
+}
+.login-identities{
+ display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 0 18px;
+}
+.login-identities .person{
+ min-width:0;margin:0;padding:10px;border-radius:16px;gap:8px;
+ transition:transform .2s ease,box-shadow .2s ease;
+}
+.login-identities .person i{
+ flex:0 0 39px;width:39px;height:39px;border-radius:13px;font-size:21px
+}
+.login-identities .person span{min-width:0}
+.login-identities .person span b{font-size:13px}
+.login-identities .person span small{font-size:10px;white-space:nowrap}
+.login-identities .person em{font-size:15px}
+.ayoub-person{
+ background:linear-gradient(145deg,#17263b,#263b56)!important;
+ border:1px solid #52647a!important;color:#f1dfb8;
+}
+.ayoub-person i{background:linear-gradient(145deg,#c7aa70,#8e7042)!important;color:#17263b}
+.ayoub-person span b{color:#f5ead4}
+.ayoub-person span small,.ayoub-person em{color:#d7c49c}
+.farahati-person{
+ background:linear-gradient(145deg,#fff0f4,#edf5ee)!important;
+ border:1px solid #e7cbd4!important;color:#47765c;
+}
+.farahati-person i{background:linear-gradient(145deg,#f0b8c8,#dcebdd)!important;color:#70243f}
+.farahati-person span b{color:#70243f}
+.farahati-person span small,.farahati-person em{color:#47765c}
+.login .eyebrow{color:#826c76}
+.login .auth-form{margin-top:17px;text-align:right}
+.login .field{color:#65505c}
+.login .text{background:rgba(255,255,255,.82);border-color:#e6dce0}
+.login .primary{
+ background:linear-gradient(100deg,#1b2b43 0%,#786443 47%,#b8758d 53%,#47765c 100%);
+ box-shadow:0 9px 22px rgba(67,56,67,.16);
+}
+.login .local{color:#47765c}
+@media(hover:hover){
+ .login-identities .person:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(45,37,49,.1)}
+}
+@media(max-width:380px){
+ .loginbox{padding:28px 15px 22px}
+ .login-identities{gap:7px}
+ .login-identities .person{padding:8px 7px;gap:6px}
+ .login-identities .person i{flex-basis:34px;width:34px;height:34px}
+ .login-identities .person span b{font-size:12px}
+ .login-identities .person span small{font-size:9px}
+}
