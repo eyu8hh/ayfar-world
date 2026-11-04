@@ -82,8 +82,18 @@ async function gradeSession(admin: any, session: any) {
   }
   const q = claimed.questions[claimed.current_index];
   const judged = await Promise.all(["ayoub", "farhati"].map(async (p) => {
-    const out = await openAI(`قيّم إجابة اللاعب في مسابقة ثقافة عامة. السؤال: ${q.question}. الإجابة النموذجية: ${q.answer}. إجابة اللاعب: ${claimed.submissions[p]}. اعتبر المرادفات والصياغات المختلفة صحيحة إذا كان المعنى صحيحاً. لا تقبل إجابة تناقض الحقيقة. أعد JSON فيه correct وfeedback بالعربية بجملة قصيرة.`, "ayfar_answer_grade", gradeSchema);
-    return { answer: claimed.submissions[p], correct: out.correct, feedback: out.feedback, points: out.correct ? 2 : 0 };
+    let correct = normalize(claimed.submissions[p]) === normalize(q.answer);
+    let feedback = correct ? "إجابة صحيحة، أحسنت!" : "ليست الإجابة المطابقة للإجابة النموذجية.";
+    if (Deno.env.get("AYFAR_AI_GRADING_ENABLED") === "true") {
+      try {
+        const out = await openAI(\`قيّم إجابة اللاعب في مسابقة ثقافة عامة. السؤال: \${q.question}. الإجابة النموذجية: \${q.answer}. إجابة اللاعب: \${claimed.submissions[p]}. اعتبر المرادفات والصياغات المختلفة صحيحة إذا كان المعنى صحيحاً. لا تقبل إجابة تناقض الحقيقة. أعد JSON فيه correct وfeedback بالعربية بجملة قصيرة.\`, "ayfar_answer_grade", gradeSchema);
+        correct = out.correct;
+        feedback = out.feedback;
+      } catch (error) {
+        console.warn("AI grading unavailable; using local answer matching:", error);
+      }
+    }
+    return { answer: claimed.submissions[p], correct, feedback, points: correct ? 2 : 0 };
   }));
   const results = { ayoub: judged[0], farhati: judged[1], correctAnswer: q.answer, explanation: q.explanation };
   const { data: saved, error: saveError } = await admin.from("ayfar_ai_quiz_sessions")
@@ -113,7 +123,7 @@ Deno.serve(async (req) => {
     if (userError || !userData.user) return json({ error: "جلسة الدخول غير صالحة." }, 401);
     const admin = createClient(url, service);
     const body = await req.json();
-    const { action, gameId, sessionId, answer, categories: requestedCats, difficulty } = body;
+    const { action, gameId, sessionId, answer, categories: requestedCats, difficulty, localQuestions } = body;
     const userId = userData.user.id;
 
     let resolvedGameId = gameId;
@@ -134,28 +144,52 @@ Deno.serve(async (req) => {
       const { data: existing } = await admin.from("ayfar_ai_quiz_sessions").select("*").eq("game_id", game.id).maybeSingle();
       if (existing) {
         const q = existing.questions?.[existing.current_index];
-        return json({ sessionId: existing.id, index: existing.current_index, total: 15, question: q?.question || "", category: q?.category || "", difficulty: q?.difficulty || "", status: existing.status, submissions: { ayoub: !!existing.submissions?.ayoub, farhati: !!existing.submissions?.farhati }, results: existing.results || null });
+        return json({ sessionId: existing.id, index: existing.current_index, total: 15, question: q?.question || "", options: q?.options || [], category: q?.category || "", difficulty: q?.difficulty || "", status: existing.status, submissions: { ayoub: !!existing.submissions?.ayoub, farhati: !!existing.submissions?.farhati }, results: existing.results || null });
       }
       const cats = Array.isArray(requestedCats) ? requestedCats.filter((c: string) => categories.includes(c)) : categories;
       if (!cats.length) return json({ error: "اختر تصنيفاً واحداً على الأقل." }, 400);
       const level = ["متنوع", ...difficulties].includes(difficulty) ? difficulty : "متنوع";
       const prompt = `أنشئ مسابقة عربية أصلية من 15 سؤالاً بالضبط، متنوعة وغير مكررة داخل المجموعة. استخدم التصنيفات التالية فقط: ${cats.join("، ")}. مستوى الصعوبة: ${level === "متنوع" ? "وزع الأسئلة على السهل والمتوسط والصعب" : level}. اجعل الأسئلة دقيقة وذات إجابة محددة ومعلومة عامة مستقرة، وضمن المغرب وأسئلته عند اختيار تصنيف المغرب. لا تخترع حقائق أو أسئلة ملتبسة. أخرج JSON فقط وفق المخطط.`;
-      const generated = await openAI(prompt, "ayfar_quiz", schema);
+      let questions: any[] | null = null;
+      if (Array.isArray(localQuestions) && localQuestions.length === 15) {
+        const valid = localQuestions.every((q: any) =>
+          q && typeof q.question === "string" && q.question.trim() &&
+          typeof q.answer === "string" && q.answer.trim() &&
+          typeof q.explanation === "string" &&
+          Array.isArray(q.options) && q.options.length >= 2 &&
+          q.options.every((v: any) => typeof v === "string")
+        );
+        if (valid) questions = localQuestions.map((q: any) => ({
+          question: q.question.slice(0, 500), answer: q.answer.slice(0, 160),
+          explanation: q.explanation.slice(0, 500), category: categories.includes(q.category) ? q.category : "ثقافة عامة",
+          difficulty: difficulties.includes(q.difficulty) ? q.difficulty : "متوسط",
+          options: q.options.slice(0, 4).map((v: string) => v.slice(0, 160))
+        }));
+      }
+      if (!questions) {
+        try {
+          const generated = await openAI(prompt, "ayfar_quiz", schema);
+          questions = generated.questions;
+        } catch (error) {
+          console.warn("AI question generation unavailable; no local question payload was supplied:", error);
+          throw new Error("تعذر إنشاء الأسئلة. حدّث الموقع وحاول مجدداً لاستخدام بنك الأسئلة المجاني.");
+        }
+      }
       const { data: session, error } = await admin.from("ayfar_ai_quiz_sessions").insert({
-        game_id: game.id, questions: generated.questions, current_index: 0, submissions: {}, status: "active"
+        game_id: game.id, questions, current_index: 0, submissions: {}, status: "active"
       }).select("*").single();
       if (error) {
         if (error.code === "23505") {
           const { data: raced } = await admin.from("ayfar_ai_quiz_sessions").select("*").eq("game_id", game.id).single();
           if (raced) {
             const q = raced.questions?.[raced.current_index];
-            return json({ sessionId: raced.id, index: raced.current_index, total: 15, question: q?.question || "", category: q?.category || "", difficulty: q?.difficulty || "", status: raced.status, submissions: { ayoub: !!raced.submissions?.ayoub, farhati: !!raced.submissions?.farhati }, results: raced.results || null });
+            return json({ sessionId: raced.id, index: raced.current_index, total: 15, question: q?.question || "", options: q?.options || [], category: q?.category || "", difficulty: q?.difficulty || "", status: raced.status, submissions: { ayoub: !!raced.submissions?.ayoub, farhati: !!raced.submissions?.farhati }, results: raced.results || null });
           }
         }
         throw error;
       }
       const q = session.questions[0];
-      return json({ sessionId: session.id, index: 0, total: 15, question: q.question, category: q.category, difficulty: q.difficulty, status: session.status, submissions: { ayoub: false, farhati: false }, results: null });
+      return json({ sessionId: session.id, index: 0, total: 15, question: q.question, options: q.options || [], category: q.category, difficulty: q.difficulty, status: session.status, submissions: { ayoub: false, farhati: false }, results: null });
     }
 
     const { data: session, error: sessionError } = await admin.from("ayfar_ai_quiz_sessions").select("*").eq("id", sessionId).eq("game_id", game.id).single();
@@ -170,7 +204,7 @@ Deno.serve(async (req) => {
         if (refreshed) latest = refreshed;
       }
       const q = latest.questions?.[latest.current_index];
-      return json({ status: latest.status, index: latest.current_index, total: 15, question: q?.question || "", category: q?.category || "", difficulty: q?.difficulty || "", submissions: { ayoub: !!latest.submissions?.ayoub, farhati: !!latest.submissions?.farhati }, results: latest.results || null });
+      return json({ status: latest.status, index: latest.current_index, total: 15, question: q?.question || "", options: q?.options || [], category: q?.category || "", difficulty: q?.difficulty || "", submissions: { ayoub: !!latest.submissions?.ayoub, farhati: !!latest.submissions?.farhati }, results: latest.results || null });
     }
 
     if (action === "submit") {
@@ -216,11 +250,11 @@ Deno.serve(async (req) => {
         const { data: latest } = await admin.from("ayfar_ai_quiz_sessions").select("*").eq("id",session.id).single();
         if (latest?.status === "active") {
           const currentQuestion = latest.questions[latest.current_index];
-          return json({ finished: false, index: latest.current_index, total: 15, question: currentQuestion.question, category: currentQuestion.category, difficulty: currentQuestion.difficulty });
+          return json({ finished: false, index: latest.current_index, total: 15, question: currentQuestion.question, options: currentQuestion.options || [], category: currentQuestion.category, difficulty: currentQuestion.difficulty });
         }
         return json({ error: "تعذر الانتقال؛ حدّث المسابقة وحاول مجدداً." }, 409);
       }
-      return json({ finished: false, index: nextIndex, total: 15, question: next.question, category: next.category, difficulty: next.difficulty });
+      return json({ finished: false, index: nextIndex, total: 15, question: next.question, options: next.options || [], category: next.category, difficulty: next.difficulty });
     }
     return json({ error: "إجراء غير معروف." }, 400);
   } catch (error) {
