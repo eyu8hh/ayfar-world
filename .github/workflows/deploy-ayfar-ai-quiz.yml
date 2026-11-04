@@ -2,12 +2,37 @@ name: Deploy AYFAR AI Quiz
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "js/games.js"
+      - "supabase/functions/ayfar-ai-quiz/**"
+      - "supabase/migrations/**"
+      - ".github/workflows/deploy-ayfar-ai-quiz.yml"
 
 permissions:
   contents: read
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Check game JavaScript syntax
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --check js/games.js
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Check AI Quiz Edge Function
+        run: deno check supabase/functions/ayfar-ai-quiz/index.ts
+
   deploy:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
