@@ -13,7 +13,7 @@ This document records the approved scope for the existing AYFAR WORLD project. I
 - Every multiple-choice item must have four distinct options, one unambiguous correct answer, a concise explanation, and one of three difficulty levels (سهل، متوسط، صعب).
 - Questions must be Arabic, factually defensible, non-duplicative (including normalized Arabic text), and have stable unique IDs.
 - Random selection must avoid repeating a question within the same match. Existing game scoring and per-question answer reveal behavior must remain unchanged.
-- Current implementation checkpoint: 557 source records contain 554 unique question texts; three legacy duplicates are excluded from the runtime pool without deleting their source records. Batches 01–10 have been validated together: the runtime pool contains 1238 unique questions (554 unique legacy questions plus 684 accepted additions in the three expansion categories). Remaining to reach 1500: 262 questions (79 language & literature, 91 life & nature, 92 arts & culture).
+- Current implementation checkpoint: complete. The runtime bank contains exactly 1500 unique valid questions: 554 unique legacy questions plus 946 accepted new questions. Category totals: اللغة والأدب 315, الحياة والطبيعة 315, الفنون والثقافة 316. All questions have four distinct options, one valid correct-answer index, an explanation, and a supported difficulty. No duplicate normalized Arabic question texts or duplicate IDs remain.
 - Do not label the bank as complete until a runtime count confirms exactly 1500 valid unique questions.
 
 ## 2. New games — design review before integration
