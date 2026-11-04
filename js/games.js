@@ -59,6 +59,7 @@ async function launchAcceptedChallenge(c){
  if(!c?.game_id||room?.id===c.game_id)return;
  const {data,error}=await client().from("ayfar_games").select("*").eq("id",c.game_id).maybeSingle();
  if(error||!data){if(error)console.warn("AYFAR accepted challenge:",error);return;}
+ if(room)cleanup();
  room=data;role=window.WorldStore.get().active==="farahati"?"farhati":window.WorldStore.get().active;
  try{localStorage.setItem(ROOM_KEY,room.id);localStorage.removeItem("ayfar_pending_challenge_v1")}catch(_){}
  outgoingChallenge=null;renderIncomingChallenge(null);watch();render();toast("تم قبول التحدي! لنبدأ اللعب ❤️");
@@ -101,6 +102,7 @@ async function initChallenges(profileRole){
 async function createChallenge(key,state){
  try{
   if(room&&["waiting","playing"].includes(room.status)&&room.state?.phase!=="finished"){toast("لديك مباراة نشطة بالفعل. أنهها أولاً.");return;}
+  if(room)cleanup();
   await currentUser();role=window.WorldStore.get().active==="farahati"?"farhati":window.WorldStore.get().active;
   const challenge=await rpc("ayfar_challenge_send",{p_game_key:key,p_state:state});
   outgoingChallenge=challenge;
@@ -123,6 +125,7 @@ async function acceptChallenge(id){
   await currentUser();role=window.WorldStore.get().active==="farahati"?"farhati":window.WorldStore.get().active;
   const game=await rpc("ayfar_challenge_accept",{p_challenge_id:id});
   if(!game)throw Error("انتهت صلاحية هذا التحدي. اطلب تحدياً جديداً.");
+  if(room)cleanup();
   room=game;incomingChallenge=null;renderIncomingChallenge(null);
   try{localStorage.setItem(ROOM_KEY,room.id)}catch(_){}
   watch();render();toast("قبلت التحدي! حظاً سعيداً لكما ❤️");
