@@ -25,7 +25,7 @@
     </section>`;
   document.body.appendChild(overlay);
   const $=s=>overlay.querySelector(s),feedback=t=>$("#calendar-feedback").textContent=t||"";
-  function dayEvents(date){return events.filter(e=>e.starts_at.slice(0,10)===date).sort((a,b)=>a.starts_at.localeCompare(b.starts_at));}
+  function dayEvents(date){return events.filter(e=>localDate(new Date(e.starts_at))===date).sort((a,b)=>a.starts_at.localeCompare(b.starts_at));}
   function render(){
     $("#calendar-month").textContent=monthLabel(cursor);
     const first=new Date(cursor.getFullYear(),cursor.getMonth(),1),offset=first.getDay(),days=new Date(cursor.getFullYear(),cursor.getMonth()+1,0).getDate(),prevDays=new Date(cursor.getFullYear(),cursor.getMonth(),0).getDate(),today=localDate(new Date());
@@ -42,7 +42,7 @@
     const chosen=dayEvents(selected),d=parseDate(selected);
     $("#calendar-day-title").textContent=new Intl.DateTimeFormat("ar-MA",{weekday:"long",day:"numeric",month:"long"}).format(d);
     $("#calendar-day-count").textContent=chosen.length+" مواعيد";
-    $("#calendar-events").innerHTML=chosen.length?chosen.map(e=>`<article class="calendar-event" data-event-id="${esc(e.id)}"><div class="calendar-event-main"><b>${esc(e.title)} · ${esc(e.category)}</b><time>${e.starts_at.slice(11,16)==="00:00"?"طوال اليوم":esc(e.starts_at.slice(11,16))}</time>${e.notes?`<p>${esc(e.notes)}</p>`:""}</div><button type="button" data-event-delete>حذف</button></article>`).join(""):'<div class="calendar-empty">لا توجد مواعيد في هذا اليوم.<br>أضيفا أول موعد من النموذج أدناه ♡</div>';
+    $("#calendar-events").innerHTML=chosen.length?chosen.map(e=>`<article class="calendar-event" data-event-id="${esc(e.id)}"><div class="calendar-event-main"><b>${esc(e.title)} · ${esc(e.category)}</b><time>${e.all_day?"طوال اليوم":esc(new Intl.DateTimeFormat("en-GB",{hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date(e.starts_at)))}</time>${e.notes?`<p>${esc(e.notes)}</p>`:""}</div><button type="button" data-event-delete>حذف</button></article>`).join(""):'<div class="calendar-empty">لا توجد مواعيد في هذا اليوم.<br>أضيفا أول موعد من النموذج أدناه ♡</div>';
     $("#calendar-event-date").value=selected;
   }
   async function load(){
@@ -70,11 +70,11 @@
   });
   $("#calendar-form").addEventListener("submit",async e=>{
     e.preventDefault();if(busy)return;
-    const title=$("#calendar-event-title").value.trim(),date=$("#calendar-event-date").value,time=$("#calendar-event-time").value||"00:00",category=$("#calendar-event-category").value,notes=$("#calendar-event-notes").value.trim();
+    const title=$("#calendar-event-title").value.trim(),date=$("#calendar-event-date").value,time=$("#calendar-event-time").value,category=$("#calendar-event-category").value,notes=$("#calendar-event-notes").value.trim();
     if(!title||!date){feedback("أكملا عنوان الموعد وتاريخه.");return;}
     if(!user){feedback("تعذر التحقق من الحساب. أغلقي النافذة وافتحيها مجدداً.");return;}
     busy=true;$("#calendar-save").disabled=true;feedback("جارٍ حفظ الموعد…");
-    const {error}=await supa().from("ayfar_shared_calendar").insert({title,starts_at:date+"T"+time+":00",category,notes,created_by:user.id});
+    const localStart=new Date(date+"T"+(time||"00:00")+":00");\n    const {error}=await supa().from("ayfar_shared_calendar").insert({title,starts_at:localStart.toISOString(),all_day:!time,category,notes,created_by:user.id});
     busy=false;$("#calendar-save").disabled=false;
     if(error){feedback("تعذر الحفظ: "+error.message);return;}
     selected=date;const d=parseDate(date);cursor=new Date(d.getFullYear(),d.getMonth(),1);$("#calendar-event-title").value="";$("#calendar-event-time").value="";$("#calendar-event-notes").value="";await load();feedback("أُضيف الموعد إلى تقويمكما ♡");
