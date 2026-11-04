@@ -214,3 +214,86 @@ button:active{filter:saturate(1.12)}
 .game-chat-form button{border:0;border-radius:12px;padding:0 13px;background:#70243f;color:#fff;font:inherit;font-weight:700}
 .game-chat-form button:disabled{opacity:.55}
 @media(max-width:520px){.game-chat-widget{left:10px;bottom:calc(10px + env(safe-area-inset-bottom))}.game-chat-panel{height:min(420px,calc(100dvh - 100px))}}
+
+
+/* AYFAR WORLD · premium game chat and direct challenge surfaces */
+.game-chat-widget{z-index:120;left:16px;bottom:calc(16px + env(safe-area-inset-bottom));gap:12px}
+.game-chat-toggle{min-height:54px;padding:0 18px 0 14px;gap:10px;border:1px solid rgba(255,255,255,.32);background:linear-gradient(120deg,#70243f 0%,#8f3859 58%,#47765a 145%);box-shadow:0 12px 30px rgba(76,25,47,.27);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease}
+.game-chat-toggle-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.16)}
+.game-chat-toggle svg,.game-chat-context svg,.game-chat-empty-icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.game-chat-toggle-label{font-size:13px;letter-spacing:.1px}
+.game-chat-toggle i{min-width:22px;text-align:center;background:rgba(255,255,255,.2);padding:3px 7px;font-variant-numeric:tabular-nums}
+.game-chat-toggle.is-open{filter:saturate(1.08)}
+.game-chat-panel{width:min(370px,calc(100vw - 32px));height:min(540px,calc(100dvh - 116px));border:1px solid rgba(222,190,202,.9);border-radius:25px;background:#fffdfd;box-shadow:0 24px 70px rgba(49,17,31,.27);animation:ayfar-chat-in .22s cubic-bezier(.2,.8,.2,1);direction:rtl}
+@keyframes ayfar-chat-in{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.game-chat-head{min-height:76px;padding:14px 16px;background:linear-gradient(115deg,#70243f 0%,#8e3c5b 62%,#47765a 150%);display:flex;align-items:center;justify-content:space-between;color:#fff}
+.game-chat-brand{display:flex;align-items:center;gap:11px}
+.game-chat-brand>span:last-child{display:flex;flex-direction:column;gap:5px}
+.game-chat-brand b{font-size:14px;letter-spacing:.1px}
+.game-chat-brand small{font-size:10px;color:#f6e5eb}
+.game-chat-brandmark{width:39px;height:39px;display:grid;place-items:center;border-radius:14px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.18);font-size:23px}
+.game-chat-online{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a9e2b4;margin-left:5px;box-shadow:0 0 0 3px rgba(169,226,180,.13)}
+.game-chat-close{width:34px;height:34px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:rgba(255,255,255,.13);color:#fff;font-size:23px;line-height:1;cursor:pointer}
+.game-chat-context{display:flex;align-items:center;justify-content:space-between;padding:9px 15px;border-bottom:1px solid #f0e4e8;background:#fffafb;color:#987985;font-size:10px}
+.game-chat-context span{display:flex;align-items:center;gap:5px}
+.game-chat-context svg{width:13px;height:13px;color:#bd6685}
+.game-chat-messages{padding:15px 13px;gap:13px;background:radial-gradient(ellipse at 0 0,rgba(244,222,230,.38),transparent 55%),linear-gradient(160deg,#fffafb,#f4f8f4);scroll-behavior:smooth}
+.game-chat-message-row{display:flex;align-items:flex-end;gap:7px;max-width:94%}
+.game-chat-message-row.mine{align-self:flex-start;flex-direction:row}
+.game-chat-message-row.theirs{align-self:flex-end;flex-direction:row-reverse}
+.game-chat-avatar{width:28px;height:28px;flex:0 0 28px;display:grid;place-items:center;border-radius:10px;font-size:14px;box-shadow:0 2px 7px rgba(65,35,47,.07)}
+.game-chat-avatar.ayoub{background:#f4e3ea}
+.game-chat-avatar.farahati{background:#e8f0e7}
+.game-chat-message{max-width:calc(100% - 35px);padding:9px 12px 10px;border:1px solid transparent;border-radius:16px;box-shadow:0 4px 12px rgba(66,35,49,.045)}
+.game-chat-message-row.mine .game-chat-message{background:#f7e6ec;border-color:#efd5df;border-bottom-right-radius:5px;color:#51283a}
+.game-chat-message-row.theirs .game-chat-message{background:#eaf2e9;border-color:#dbe8db;border-bottom-left-radius:5px;color:#294d37}
+.game-chat-meta{display:flex;align-items:center;gap:9px;font-size:10px;color:#815f6d}
+.game-chat-meta time{font-size:9px;opacity:.72;font-variant-numeric:tabular-nums}
+.game-chat-message p{margin:4px 0 0;font-size:13px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.game-chat-empty{margin:auto;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;flex-direction:column;color:#876c78}
+.game-chat-empty-icon{width:53px;height:53px;border-radius:18px;display:grid;place-items:center;background:#f5e5eb;color:#a94d70}
+.game-chat-empty-icon svg{width:25px;height:25px}
+.game-chat-empty b{font-size:13px;color:#653247}
+.game-chat-empty p{margin:0;font-size:11px;line-height:1.6}
+.game-chat-composer{padding:9px 12px 10px;border-top:1px solid #eddee4;background:rgba(255,255,255,.97)}
+.game-chat-quick{display:flex;gap:7px;margin:0 0 8px}
+.game-chat-quick button{width:29px;height:27px;padding:0;border:1px solid #f0e2e7;border-radius:9px;background:#fff8fa;font-size:14px;cursor:pointer;transition:transform .15s ease,background .15s ease}
+.game-chat-quick button:active{transform:scale(.92);background:#f4e0e8}
+.game-chat-form{display:flex;align-items:center;gap:8px;padding:5px;border:1px solid #ead8df;border-radius:16px;background:#fff;box-shadow:inset 0 1px 2px rgba(60,30,42,.025)}
+.game-chat-form:focus-within{border-color:#c77d98;box-shadow:0 0 0 3px rgba(199,125,152,.12)}
+.game-chat-form input{height:40px;padding:0 10px;border:0!important;background:transparent!important;box-shadow:none!important;font-size:12px;outline:0!important}
+.game-chat-form button{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;padding:0;border:0;border-radius:12px;background:linear-gradient(135deg,#c96d8d,#70243f);color:#fff;box-shadow:0 5px 12px rgba(112,36,63,.18)}
+.game-chat-form button svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.game-chat-footnote{display:block;margin:7px 3px 0;text-align:center;color:#a38a94;font-size:9px}
+#ayfar-challenge-layer{position:fixed;z-index:10020;inset:0;display:grid;place-items:center;padding:20px;background:rgba(34,13,24,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);direction:rtl}
+.challenge-invite-card{position:relative;width:min(410px,100%);padding:25px 23px 20px;border:1px solid rgba(255,255,255,.72);border-radius:28px;background:linear-gradient(145deg,#fffdfd,#fff5f7 65%,#f0f6ef);box-shadow:0 28px 90px rgba(29,9,20,.32);text-align:center;animation:ayfar-chat-in .24s ease}
+.challenge-invite-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.challenge-invite-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(135deg,#f5dce5,#e9f1e8);color:#8d3858;font-size:28px}
+.challenge-invite-kicker{font-size:9px;font-weight:800;letter-spacing:1.3px;color:#a36d81}
+.challenge-dismiss{width:32px;height:32px;border:1px solid #ead8df;border-radius:11px;background:#fff;color:#805a6a;font-size:21px}
+.challenge-invite-card>.eyebrow{color:#a14e6c}
+.challenge-invite-card h2{margin:8px 0;color:#51283a;font-size:23px}
+.challenge-invite-card p{color:#816c75;font-size:13px;line-height:1.8}
+.challenge-invite-card p b{color:#70243f}
+.challenge-invite-actions{display:grid;grid-template-columns:1.2fr 1fr;gap:9px;margin-top:20px}
+.challenge-invite-actions .primary,.challenge-invite-actions .secondary-action{min-height:48px;margin:0}
+.challenge-secure-note{margin-top:15px;color:#9a8790;font-size:10px}
+.challenge-waiting-card{text-align:center;max-width:480px;margin:30px auto;padding:28px 22px}
+.challenge-orbit{width:84px;height:84px;margin:0 auto 18px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,#fff 42%,#f6e2e9 44%,#f6e2e9 64%,#eaf2eb 66%);color:#a94d70;font-size:42px;animation:ayfar-orbit 2.6s ease-in-out infinite}
+@keyframes ayfar-orbit{50%{transform:scale(1.06);filter:saturate(1.15)}}
+.challenge-waiting-card h2{margin:9px 0;color:#51283a}
+.challenge-waiting-card p{color:#806a74;line-height:1.8}
+.challenge-waiting-status{display:flex;justify-content:center;align-items:center;gap:9px;margin:18px 0;padding:12px;border-radius:14px;background:#f6e8ed;color:#8e3c5b;font-size:12px;font-weight:800}
+.challenge-pulse{width:8px;height:8px;border-radius:50%;background:#c85f83;box-shadow:0 0 0 5px rgba(200,95,131,.13);animation:ayfar-pulse 1.4s infinite}
+@keyframes ayfar-pulse{50%{box-shadow:0 0 0 9px rgba(200,95,131,0)}}
+@media(max-width:520px){
+ .game-chat-widget{left:10px;bottom:calc(10px + env(safe-area-inset-bottom));gap:9px}
+ .game-chat-toggle{min-height:50px;padding:0 14px 0 11px}
+ .game-chat-panel{width:calc(100vw - 20px);height:min(68dvh,520px);max-height:calc(100dvh - 100px);border-radius:22px}
+ .game-chat-head{min-height:68px}
+ .game-chat-message-row{max-width:98%}
+ .challenge-invite-card{padding:22px 17px 18px;border-radius:24px}
+}
+@media(prefers-reduced-motion:reduce){.game-chat-panel,.challenge-orbit,.challenge-pulse{animation:none!important}}
+
+.challenge-mini-pill{margin-top:env(safe-area-inset-top);padding:12px 18px;border:1px solid #e5c5d1;border-radius:999px;background:linear-gradient(115deg,#70243f,#a94d70);color:#fff;font:inherit;font-size:12px;font-weight:800;box-shadow:0 10px 28px rgba(75,25,46,.22)}
