@@ -131,7 +131,6 @@ Deno.serve(async (req) => {
     const role = rawRole === "farahati" ? "farhati" : rawRole;
     if (!["ayoub", "farhati"].includes(role)) return json({ error: "الحساب غير مخوّل." }, 403);
     if (action === "create") {
-      if (role !== "ayoub") return json({ error: "أيوب فقط يمكنه بدء المسابقة الذكية." }, 403);
       const { data: existing } = await admin.from("ayfar_ai_quiz_sessions").select("*").eq("game_id", game.id).maybeSingle();
       if (existing) {
         const q = existing.questions?.[existing.current_index];
