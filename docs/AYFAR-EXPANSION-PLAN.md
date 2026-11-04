@@ -54,3 +54,13 @@ Both games must use the established two-player shared-match architecture and exi
 3. Present the two new game concepts with sample cases/rooms for review, then implement after approval.
 4. Run regression checks across existing games, login, messages, stars, and offline/PWA caching.
 
+
+
+## 6. Homepage information architecture (approved)
+Organize the existing homepage into clear, jump-to sections while preserving its current content and behavior:
+- **الرئيسية**: welcome, first-conversation counter, continue/resume match, unfinished matches.
+- **عالمنا**: Ayoub/Farahati/shared points, first-conversation entry, daily check-in.
+- **رسائلنا**: private messages.
+- **الألعاب**: all existing games, with unfinished matches remaining easy to resume or stop.
+- **خططنا**: the six new shared features (dream list, calendar, daily question, activity picker, shared goals, surprise box).
+Use compact horizontally scrollable section navigation on mobile, smooth scrolling, clear active state, and harmonized Ayoub/Farahati themes. On larger screens, show the planned features in a three-column grid. Planned feature tiles remain informational until each feature is implemented; do not present them as working controls prematurely.
