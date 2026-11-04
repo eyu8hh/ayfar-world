@@ -31,7 +31,7 @@ declare
   v_session public.ayfar_ai_quiz_sessions;
   v_answer text := left(btrim(coalesce(p_answer, '')), 240);
 begin
-  if p_role not in ('ayoub', 'farhati') then
+  if coalesce(p_role, '') not in ('ayoub', 'farhati') then
     raise exception 'دور اللاعب غير صالح';
   end if;
   if v_answer = '' then
