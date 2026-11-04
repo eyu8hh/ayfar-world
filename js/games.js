@@ -120,6 +120,7 @@ async function acceptChallenge(id){
  try{
   await currentUser();role=window.WorldStore.get().active==="farahati"?"farhati":window.WorldStore.get().active;
   const game=await rpc("ayfar_challenge_accept",{p_challenge_id:id});
+  if(!game)throw Error("انتهت صلاحية هذا التحدي. اطلب تحدياً جديداً.");
   room=game;incomingChallenge=null;renderIncomingChallenge(null);
   try{localStorage.setItem(ROOM_KEY,room.id)}catch(_){}
   watch();render();toast("قبلت التحدي! حظاً سعيداً لكما ❤️");
