@@ -332,3 +332,164 @@ button:active{filter:saturate(1.12)}
 .unfinished-match-score>span i{font-style:normal}
 .unfinished-match-updated{color:#9a8790;font-size:9px}
 @media(max-width:380px){.unfinished-match{padding:12px;grid-template-columns:38px minmax(0,1fr);gap:8px}.unfinished-match-icon{width:38px;height:38px}.unfinished-match-meta{align-items:flex-start;flex-direction:column}}
+
+
+/* AYFAR WORLD · Ayoub private luxury theme
+   Scoped to Ayoub's authenticated session only; Farahati keeps the original rose/green identity. */
+body.ayoub-theme{
+ --ink:#e7edf5;--muted:#aab7c8;--line:#34445a;--burgundy:#c5a46d;
+ --pink:#c5a46d;--green:#8da6a0;--green-soft:#263b3b;
+ --surface:#182437;--surface-rose:#202e42;
+ color:var(--ink);
+ background:
+  radial-gradient(ellipse at 8% 4%,rgba(197,164,109,.13),transparent 34rem),
+  radial-gradient(ellipse at 94% 38%,rgba(81,111,132,.18),transparent 30rem),
+  linear-gradient(145deg,#0b1422 0%,#111e30 54%,#172638 100%);
+ background-attachment:fixed;
+}
+body.ayoub-theme .brand,body.ayoub-theme .brand span b,
+body.ayoub-theme .heading>span,body.ayoub-theme .hero h2,
+body.ayoub-theme .heading h3,body.ayoub-theme .panel h2,
+body.ayoub-theme .date-number{color:#e7edf5}
+body.ayoub-theme .brand span small,body.ayoub-theme .hero p,
+body.ayoub-theme .heading .eyebrow{color:#aab7c8}
+body.ayoub-theme .eyebrow{color:#c5a46d}
+body.ayoub-theme header button,body.ayoub-theme .secondary-action{
+ color:#e8edf4;background:#1d2b40;border-color:#40516a
+}
+body.ayoub-theme .sync{background:#263b3b;color:#b9d2c8;border-color:#3d5c57}
+body.ayoub-theme .hero{
+ background:linear-gradient(115deg,#1d2b40 0%,#26364b 58%,#263b3b 125%);
+ border:1px solid #40516a;box-shadow:0 18px 42px rgba(0,0,0,.22)
+}
+body.ayoub-theme .heroheart{color:rgba(197,164,109,.10)}
+body.ayoub-theme .home-anniversary{
+ background:linear-gradient(120deg,#1b293d 0%,#202e42 58%,#263b3b 100%);
+ border-color:#4a5360;box-shadow:0 14px 34px rgba(0,0,0,.2)
+}
+body.ayoub-theme .home-anniversary:after{color:rgba(197,164,109,.07)}
+body.ayoub-theme .home-anniversary-head>span{
+ background:linear-gradient(145deg,#c5a46d,#8e7042);color:#101a28;
+ box-shadow:0 6px 16px rgba(0,0,0,.25)
+}
+body.ayoub-theme .home-anniversary-head h3{color:#f0e5d0}
+body.ayoub-theme .home-anniversary-head p,
+body.ayoub-theme .home-anniversary .date-count-grid small{color:#b7c2d0}
+body.ayoub-theme .home-anniversary .date-count-grid>div{
+ background:rgba(10,20,34,.42);border-color:#435168
+}
+body.ayoub-theme .home-anniversary .date-count-grid strong{color:#e4c58d}
+body.ayoub-theme .home-anniversary .date-status{color:#e4c58d!important}
+body.ayoub-theme .continue-card{
+ background:linear-gradient(115deg,#172438 0%,#26364b 60%,#665438 145%);
+ border:1px solid #596174;box-shadow:0 16px 36px rgba(0,0,0,.28)
+}
+body.ayoub-theme .continue-card .eyebrow{color:#e4c58d}
+body.ayoub-theme .continue-card p{color:#c4cfda}
+body.ayoub-theme .continue-card .primary{
+ color:#172132;background:linear-gradient(115deg,#e2c991,#b58e50)
+}
+body.ayoub-theme .unfinished-loading,body.ayoub-theme .unfinished-empty{
+ color:#aab7c8;background:#1a293d;border-color:#46566c
+}
+body.ayoub-theme .unfinished-empty>span{background:#2a3a50;color:#d5b77e}
+body.ayoub-theme .unfinished-empty b{color:#e7edf5}
+body.ayoub-theme .unfinished-match{
+ background:linear-gradient(135deg,#1a293d,#202f43 72%,#263b3b);
+ border-color:#40516a;box-shadow:0 10px 25px rgba(0,0,0,.2)
+}
+body.ayoub-theme .unfinished-match-icon{background:linear-gradient(135deg,#34445a,#514735);color:#e0c58f}
+body.ayoub-theme .unfinished-match-info>b{color:#f0e5d0}
+body.ayoub-theme .unfinished-match-info>small,
+body.ayoub-theme .unfinished-match-updated{color:#aab7c8}
+body.ayoub-theme .unfinished-match-state{background:#263b3b;color:#b9d2c8}
+body.ayoub-theme .unfinished-progress{background:#34445a}
+body.ayoub-theme .unfinished-progress>span{background:linear-gradient(90deg,#8e7042,#e2c991)}
+body.ayoub-theme .unfinished-match-score>span{background:#172438;border-color:#40516a;color:#c6d0dc}
+body.ayoub-theme .unfinished-match-score>span b{color:#e4c58d}
+body.ayoub-theme .unfinished-resume{background:linear-gradient(115deg,#e2c991,#b58e50);color:#172132;box-shadow:0 7px 16px rgba(0,0,0,.25)}
+body.ayoub-theme .unfinished-stop{background:#1b293d;border-color:#536075;color:#c4cfda}
+body.ayoub-theme .unfinished-stop:hover{background:#2a3548;border-color:#c5a46d;color:#f0e5d0}
+body.ayoub-theme .stats article{
+ background:linear-gradient(145deg,#1d2b40,#243349);border-color:#40516a;color:#e7edf5
+}
+body.ayoub-theme .stats article:nth-child(1),
+body.ayoub-theme .stats article:nth-child(2),
+body.ayoub-theme .stats article:nth-child(3){
+ background:linear-gradient(145deg,#1d2b40,#243349);border-color:#40516a
+}
+body.ayoub-theme .stats article>:first-child{color:#d7b979}
+body.ayoub-theme .stats small{color:#aab7c8}
+body.ayoub-theme .stats strong{color:#f0d59e}
+body.ayoub-theme .feature,body.ayoub-theme .special,
+body.ayoub-theme .rating,body.ayoub-theme .message-feature{
+ color:#e7edf5;background:linear-gradient(135deg,#1d2b40,#26364b);
+ border:1px solid #40516a;box-shadow:0 10px 26px rgba(0,0,0,.18)
+}
+body.ayoub-theme .feature span,body.ayoub-theme .special span,
+body.ayoub-theme .rating span,body.ayoub-theme .message-feature span{color:#d5b77e}
+body.ayoub-theme .feature small,body.ayoub-theme .feature em,
+body.ayoub-theme .message-feature small,body.ayoub-theme .message-feature em{color:#b2bfce}
+body.ayoub-theme .feature b,body.ayoub-theme .games button b{color:#edf1f6}
+body.ayoub-theme .games button,body.ayoub-theme .games button:nth-child(n){
+ color:#e7edf5;background:linear-gradient(145deg,#1b293d,#243349);
+ border-color:#40516a;box-shadow:0 8px 22px rgba(0,0,0,.18)
+}
+body.ayoub-theme .games button:before{background:linear-gradient(#e2c991,#718e88)}
+body.ayoub-theme .games button:after{background:rgba(197,164,109,.08)}
+body.ayoub-theme .games button small{color:#b0bdcc}
+body.ayoub-theme .games button em{color:#b8cdbf}
+body.ayoub-theme .primary{
+ color:#172132;background:linear-gradient(115deg,#e2c991 0%,#c5a46d 55%,#98733f 100%);
+ box-shadow:0 8px 20px rgba(0,0,0,.24)
+}
+body.ayoub-theme .panel{
+ background:#1a293d;border-color:#40516a;color:#e7edf5;
+ box-shadow:0 18px 48px rgba(0,0,0,.28)
+}
+body.ayoub-theme .panel p,body.ayoub-theme .panel .field{color:#b4c0ce}
+body.ayoub-theme .text{
+ color:#edf1f6;background:#111e30;border-color:#40516a
+}
+body.ayoub-theme .text::placeholder{color:#8292a6}
+body.ayoub-theme .notice{background:#263b3b;border-color:#405c56;color:#c1d8cd}
+body.ayoub-theme .question-card,body.ayoub-theme .score-strip{
+ background:linear-gradient(135deg,#243349,#263b3b);border-color:#46566c;color:#f0e5d0
+}
+body.ayoub-theme .character-choice,body.ayoub-theme .result-grid article{
+ background:#202f43;border-color:#40516a;color:#e7edf5
+}
+body.ayoub-theme .character-choice span,body.ayoub-theme .result-grid article strong{color:#e4c58d}
+body.ayoub-theme .secondary-action{color:#e4c58d;border-color:#58647a}
+body.ayoub-theme .message-bubble.sent{background:#344052;border-color:#4a5b70;color:#f0f2f5}
+body.ayoub-theme .message-bubble.received{background:#263b3b;border-color:#45645d;color:#e0eee8}
+body.ayoub-theme .message-form{border-color:#40516a}
+body.ayoub-theme .game-chat-toggle{background:linear-gradient(115deg,#26364b,#8e7042);color:#fff}
+body.ayoub-theme .game-chat-panel{background:#172438;border-color:#40516a}
+body.ayoub-theme .game-chat-head{background:linear-gradient(110deg,#172438,#665438)}
+body.ayoub-theme .game-chat-messages{background:linear-gradient(160deg,#1a293d,#202f43)}
+body.ayoub-theme .game-chat-message.mine{background:#344052;color:#f0f2f5}
+body.ayoub-theme .game-chat-message.theirs{background:#263b3b;color:#e0eee8}
+body.ayoub-theme .game-chat-form{background:#172438;border-color:#40516a}
+body.ayoub-theme .game-chat-form input{background:#111e30;color:#edf1f6;border-color:#40516a}
+body.ayoub-theme .game-chat-form button{background:#b58e50;color:#172132}
+body.ayoub-theme #toast{background:#c5a46d;color:#172132}
+body.ayoub-theme .love-card{background:#1a293d;border-color:#536075;color:#e7edf5}
+body.ayoub-theme .love-card h2{color:#f0d59e}
+body.ayoub-theme .love-card p,body.ayoub-theme .love-foot{color:#b4c0ce}
+body.ayoub-theme .envelope{background:linear-gradient(145deg,#26364b,#3d3b36);border-color:#796747;color:#f0d59e}
+body.ayoub-theme .letter-paper{background:repeating-linear-gradient(#f4efe4,#f4efe4 34px,#e1d6c2 35px);color:#273448;border-color:#c8b894}
+body.ayoub-theme .star-feature{background:linear-gradient(120deg,#3b3428,#252e3b);border-color:#796747}
+body.ayoub-theme .star-total{color:#e4c58d}
+body.ayoub-theme .star-history>div{background:#202f43;border-color:#40516a}
+body.ayoub-theme .star-history span{color:#e7edf5}
+body.ayoub-theme .date-count-grid>div{background:#202f43;border-color:#40516a}
+body.ayoub-theme .date-count-grid strong{color:#e4c58d}
+body.ayoub-theme .date-count-grid small,body.ayoub-theme .date-status{color:#b4c0ce!important}
+body.ayoub-theme .heart{background:#26364b;border-color:#536075;color:#c5a46d}
+body.ayoub-theme .heart.active{background:#665438;border-color:#c5a46d}
+@media(hover:hover){
+ body.ayoub-theme .games button:hover,body.ayoub-theme .stats article:hover{border-color:#c5a46d;box-shadow:0 18px 34px rgba(0,0,0,.28)}
+ body.ayoub-theme header button:hover,body.ayoub-theme .secondary-action:hover{background:#2a3a50;border-color:#c5a46d}
+ body.ayoub-theme .primary:hover{filter:brightness(1.07);box-shadow:0 12px 25px rgba(0,0,0,.3)}
+}
