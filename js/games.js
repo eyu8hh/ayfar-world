@@ -25,7 +25,7 @@ function show(html){$("#home").classList.add("hidden");$("#page").classList.remo
 function toast(t){const x=$("#toast");if(x){x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2200)}}
 async function currentUser(){const {data,error}=await client().auth.getUser();if(error||!data.user)throw Error("انتهت جلسة الدخول. سجّل الدخول مجدداً.");uid=data.user.id}
 async function rpc(n,a){const {data,error}=await client().rpc(n,a);if(error)throw error;return data}
-function shuffleOrder(n){return Array.from({length:n},(_,i)=>i).sort(()=>Math.random()-.5)}
+function shuffleOrder(n){const order=Array.from({length:n},(_,i)=>i);for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}return order}
 function questionIndex(s,key,len){const order=s.questionOrder?.[key];return order?.length?order[(s.round-1)%order.length]:(s.round-1)%len}
 function scoreRound(s,key){
  if(Number(s.scoredRound)===Number(s.round))return;
@@ -117,7 +117,7 @@ async function createChallenge(key,state){
 }
 async function start(key){await createChallenge(key,fresh(key));}
 async function startAiQuiz(){
- const state={...fresh("riddles"),total:15,aiQuiz:true,aiQuizSettings:{categories:["ثقافة عامة","علوم","تاريخ","جغرافيا","المغرب","رياضة","سينما","ألغاز"],difficulty:"متنوع",count:15}};
+ const state={...fresh("riddles"),total:15,aiQuiz:true,aiQuizSettings:{categories:["ثقافة عامة","علوم","تاريخ","جغرافيا","المغرب","سينما","ألغاز"],difficulty:"متنوع",count:15}};
  await createChallenge("riddles",state);
 }
 async function acceptChallenge(id){
