@@ -14,7 +14,7 @@ const prompts={
 
  riddles:[["له أوراق وليس نباتاً، وله غلاف وليس هدية","كتاب"],["يسير بلا قدمين ويبكي بلا عينين","سحاب"],["كلما أخذت منه كبر","حفرة"],["له أسنان ولا يعض","مشط"],["بيت بلا أبواب ولا نوافذ","بيضة"],["ما الكوكب المعروف بالكوكب الأحمر؟","المريخ"],["ما عاصمة اليابان؟","طوكيو"],["ما أكبر محيط في العالم؟","المحيط الهادئ"],["كم عدد أضلاع الشكل السداسي؟","6"],["ما الغاز الذي تمتصه النباتات من الهواء؟","ثاني أكسيد الكربون"],["من رسم لوحة الموناليزا؟","ليوناردو دافنشي"],["ما أسرع حيوان بري؟","الفهد"],["في أي قارة تقع دولة البرازيل؟","أمريكا الجنوبية"],["ما العنصر الكيميائي الذي رمزه O؟","الأكسجين"],["كم عدد أيام السنة الكبيسة؟","366"],["ما عاصمة أستراليا؟","كانبيرا"],["ما اللغة الرسمية في البرازيل؟","البرتغالية"],["ما الحيوان الذي يُلقب بسفينة الصحراء؟","الجمل"],["كم عدد الكواكب في المجموعة الشمسية؟","8"],["ما البحر الذي يفصل بين أوروبا وأفريقيا؟","البحر الأبيض المتوسط"],["ما العضو الذي يضخ الدم في جسم الإنسان؟","القلب"],["ما أكبر قارة من حيث المساحة؟","آسيا"],["ما اسم العملية التي تصنع بها النباتات غذاءها؟","البناء الضوئي"],["ما عاصمة مصر؟","القاهرة"],["كم دقيقة في الساعة؟","60"],["ما المعدن السائل في درجة حرارة الغرفة؟","الزئبق"],["ما الحيوان المعروف بتغيير لونه للتمويه؟","الحرباء"],["ما اسم أقرب نجم إلى الأرض؟","الشمس"],["في أي رياضة تُستخدم الكرة الصفراء والمضرب؟","التنس"],["ما عاصمة المغرب؟","الرباط"]]
 };
-let room=null,role=null,uid=null,channel=null,poll=null,clock=null,joinBox,speedExpiryPending=false,aiNextPending=false;let chatOpen=false,chatSending=false;
+let room=null,role=null,uid=null,channel=null,poll=null,clock=null,speedExpiryPending=false,aiNextPending=false;let chatOpen=false,chatSending=false;let challengeChannel=null,challengePoll=null,incomingChallenge=null,outgoingChallenge=null,challengeBusy=false;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const other=p=>p==="ayoub"?"farhati":"ayoub",label=p=>p==="ayoub"?"أيوب 🌙":"فرحتي 🌸";
 const norm=v=>String(v??"").normalize("NFKC").replace(/[ًٌٍَُِّْـٰ]/g,"").replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/[٠-٩۰-۹]/g,d=>String("٠١٢٣٤٥٦٧٨٩".indexOf(d)>=0?"٠١٢٣٤٥٦٧٨٩".indexOf(d):"۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/\s+/g," ").trim().toLocaleLowerCase("ar");
@@ -38,10 +38,106 @@ function scoreRound(s,key){
 }
 function fresh(key){const sizes={...Object.fromEntries(Object.keys(prompts).map(k=>[k,prompts[k].length])),...Object.fromEntries(["flags","geography"].map(k=>[k,window.AYFAR_KNOWLEDGE?.[k]?.length||0]))};sizes.riddles=window.AYFAR_KNOWLEDGE?.riddles?.length||prompts.riddles.length;const questionOrder={};for(const [k,n] of Object.entries(sizes))if(n)questionOrder[k]=shuffleOrder(n);return {key,phase:"ready",round:0,total:key==="thisorthat"||key==="predict"||key==="compatibility"||key==="riddles"||key==="flags"||key==="geography"||key==="mixed"?10:5,scores:{ayoub:0,farhati:0},answers:{},history:[],turn:"ayoub",questionIndex:0,questionOrder,scoredRound:0,found:[],diffIndex:Math.floor(Math.random()*12)}}
 const ROOM_KEY="ayfar_active_room_v1",LAST_GAME_KEY="ayfar_last_game_v1";function rememberGame(key,id){try{localStorage.setItem(LAST_GAME_KEY,JSON.stringify({key,id,at:Date.now()}))}catch(_){}}function cleanup(){chatOpen=false;chatSending=false;if(channel)client().removeChannel(channel);channel=null;if(poll)clearInterval(poll);poll=null;if(clock)clearInterval(clock);clock=null;speedExpiryPending=false;room=null;try{localStorage.removeItem(ROOM_KEY)}catch(_){}}
-async function start(key){try{cleanup();await currentUser();role=window.WorldStore.get().active==="farahati"?"farhati":window.WorldStore.get().active;room=await rpc("ayfar_game_create",{p_game_key:key,p_state:fresh(key)});rememberGame(key,room.id);try{localStorage.setItem(ROOM_KEY,room.id)}catch(_){}watch();render()}catch(e){show('<div class="panel"><h2>تعذر إنشاء المباراة</h2><p>'+esc(e.message)+'</p><button class="primary" id="gb">عودة</button></div>');$("#gb").onclick=()=>location.reload()}}
-async function startAiQuiz(){try{cleanup();await currentUser();role=window.WorldStore.get().active==="farhati"?"farhati":window.WorldStore.get().active;const state={...fresh("riddles"),total:15,aiQuiz:true,aiQuizSettings:{categories:["ثقافة عامة","علوم","تاريخ","جغرافيا","المغرب","رياضة","سينما","ألغاز"],difficulty:"متنوع",count:15}};room=await rpc("ayfar_game_create",{p_game_key:"riddles",p_state:state});rememberGame("riddles",room.id);try{localStorage.setItem(ROOM_KEY,room.id)}catch(_){}watch();render()}catch(e){show('<div class="panel"><h2>تعذر إنشاء المسابقة الذكية</h2><p>'+esc(e.message)+'</p><button class="primary" id="gb">عودة</button></div>');$("#gb").onclick=()=>location.reload()}}
-
-async function join(id){try{await currentUser();role=window.WorldStore.get().active==="farahati"?"farhati":window.WorldStore.get().active;room=await rpc("ayfar_game_join",{p_game_id:id});rememberGame(room.game_key,room.id);try{localStorage.setItem(ROOM_KEY,room.id)}catch(_){}watch();render()}catch(e){const n=$("#ayfar-join-error");if(n)n.textContent=e.message;else toast(e.message)}}
+function challengeGameName(key){return names[key]||"لعبتنا الخاصة";}
+function showChallengeWaiting(c){
+ if(document.querySelector("#challenge-waiting"))return;
+ show('<div class="panel challenge-waiting-card" id="challenge-waiting"><div class="challenge-orbit"><span>♡</span></div><small class="eyebrow">AYFAR · PRIVATE CHALLENGE</small><h2>أرسلت تحدياً إلى '+(role==="ayoub"?"فرحتي 🌸":"أيوب 🌙")+'</h2><p>اخترنا لعبة <b>'+esc(challengeGameName(c.game_key))+'</b>. سيبدأ اللعب تلقائياً عندما يقبل الطرف الآخر.</p><div class="challenge-waiting-status"><span class="challenge-pulse"></span> بانتظار القبول</div><button class="secondary-action" id="cancel-game-challenge">إلغاء التحدي</button></div>');
+ $("#cancel-game-challenge")?.addEventListener("click",cancelChallenge);
+}
+function renderIncomingChallenge(c){
+ let layer=document.getElementById("ayfar-challenge-layer");
+ if(!c){if(layer)layer.remove();return;}
+ if(!layer){layer=document.createElement("div");layer.id="ayfar-challenge-layer";document.body.appendChild(layer);}
+ layer.innerHTML='<section class="challenge-invite-card" role="dialog" aria-modal="true" aria-label="تحدٍّ جديد"><div class="challenge-invite-top"><span class="challenge-invite-icon">♡</span><span class="challenge-invite-kicker">AYFAR · NEW CHALLENGE</span><button type="button" class="challenge-dismiss" id="challenge-dismiss" aria-label="إغلاق">×</button></div><small class="eyebrow">تحدٍّ جديد من '+(role==="ayoub"?"فرحتي 🌸":"أيوب 🌙")+'</small><h2>هل أنت مستعد للعب؟</h2><p>تمت دعوتك إلى <b>'+esc(challengeGameName(c.game_key))+'</b>. اقبل التحدي لنبدأ معاً.</p><div class="challenge-invite-actions"><button class="primary" id="accept-game-challenge" '+(challengeBusy?'disabled':'')+'><span>✓</span> قبول التحدي</button><button class="secondary-action" id="reject-game-challenge" '+(challengeBusy?'disabled':'')+'>ليس الآن</button></div><div class="challenge-secure-note">مباراة خاصة بين حسابيكما فقط</div></section>';
+ $("#challenge-dismiss")?.addEventListener("click",()=>renderIncomingChallenge(null));
+ $("#accept-game-challenge")?.addEventListener("click",()=>acceptChallenge(c.id));
+ $("#reject-game-challenge")?.addEventListener("click",()=>rejectChallenge(c.id));
+}
+async function launchAcceptedChallenge(c){
+ if(!c?.game_id||room?.id===c.game_id)return;
+ const {data,error}=await client().from("ayfar_games").select("*").eq("id",c.game_id).maybeSingle();
+ if(error||!data){if(error)console.warn("AYFAR accepted challenge:",error);return;}
+ room=data;role=window.WorldStore.get().active==="farahati"?"farhati":window.WorldStore.get().active;
+ try{localStorage.setItem(ROOM_KEY,room.id);localStorage.removeItem("ayfar_pending_challenge_v1")}catch(_){}
+ outgoingChallenge=null;renderIncomingChallenge(null);watch();render();toast("تم قبول التحدي! لنبدأ اللعب ❤️");
+}
+async function refreshChallenges(){
+ if(!uid)return;
+ const {data,error}=await client().from("ayfar_game_challenges").select("*").or("from_user.eq."+uid+",to_user.eq."+uid).order("created_at",{ascending:false}).limit(20);
+ if(error){console.warn("AYFAR challenge sync:",error);return;}
+ const rows=data||[];
+ const pendingIncoming=rows.find(c=>c.to_user===uid&&c.status==="pending")||null;
+ const pendingOutgoing=rows.find(c=>c.from_user===uid&&c.status==="pending")||null;
+ const acceptedStored=(()=>{try{return localStorage.getItem("ayfar_pending_challenge_v1")}catch(_){return null}})();
+ incomingChallenge=pendingIncoming;
+ renderIncomingChallenge(incomingChallenge);
+ if(pendingOutgoing&&pendingOutgoing.id===acceptedStored){
+  outgoingChallenge=pendingOutgoing;
+  if(!room&&!document.querySelector("#challenge-waiting"))showChallengeWaiting(pendingOutgoing);
+ }
+ const accepted=rows.find(c=>c.id===acceptedStored&&c.from_user===uid&&c.status==="accepted"&&c.game_id);
+ if(accepted){await launchAcceptedChallenge(accepted);return;}
+ const ended=rows.find(c=>c.id===acceptedStored&&c.from_user===uid&&["rejected","cancelled","expired"].includes(c.status));
+ if(ended){
+  try{localStorage.removeItem("ayfar_pending_challenge_v1")}catch(_){}
+  outgoingChallenge=null;
+  if(document.querySelector("#challenge-waiting")){toast(ended.status==="rejected"?"تم رفض التحدي":"انتهى التحدي");location.reload();}
+ }
+}
+async function initChallenges(profileRole){
+ try{
+  await currentUser();
+  role=profileRole==="farahati"?"farhati":profileRole||window.WorldStore.get().active;
+  if(challengeChannel)client().removeChannel(challengeChannel);
+  challengeChannel=client().channel("ayfar-challenges-"+uid).on("postgres_changes",{event:"*",schema:"public",table:"ayfar_game_challenges"},()=>refreshChallenges()).subscribe();
+  if(challengePoll)clearInterval(challengePoll);
+  await refreshChallenges();
+  challengePoll=setInterval(refreshChallenges,4000);
+ }catch(e){console.warn("AYFAR challenge initialization:",e);}
+}
+async function createChallenge(key,state){
+ try{
+  if(room&&["waiting","playing"].includes(room.status)){toast("لديك مباراة نشطة بالفعل. أنهها أولاً.");return;}
+  await currentUser();role=window.WorldStore.get().active==="farahati"?"farhati":window.WorldStore.get().active;
+  const challenge=await rpc("ayfar_challenge_send",{p_game_key:key,p_state:state});
+  outgoingChallenge=challenge;
+  try{localStorage.setItem("ayfar_pending_challenge_v1",challenge.id)}catch(_){}
+  showChallengeWaiting(challenge);
+  await refreshChallenges();
+ }catch(e){
+  show('<div class="panel"><div class="bigheart">♡</div><h2>تعذر إرسال التحدي</h2><p>'+esc(e.message||"حدث خطأ غير متوقع")+'</p><button class="primary" id="challenge-return">العودة إلى عالمنا</button></div>');
+  $("#challenge-return")?.addEventListener("click",()=>location.reload());
+ }
+}
+async function start(key){await createChallenge(key,fresh(key));}
+async function startAiQuiz(){
+ const state={...fresh("riddles"),total:15,aiQuiz:true,aiQuizSettings:{categories:["ثقافة عامة","علوم","تاريخ","جغرافيا","المغرب","رياضة","سينما","ألغاز"],difficulty:"متنوع",count:15}};
+ await createChallenge("riddles",state);
+}
+async function acceptChallenge(id){
+ if(challengeBusy)return;challengeBusy=true;renderIncomingChallenge(incomingChallenge);
+ try{
+  await currentUser();role=window.WorldStore.get().active==="farahati"?"farhati":window.WorldStore.get().active;
+  const game=await rpc("ayfar_challenge_accept",{p_challenge_id:id});
+  room=game;incomingChallenge=null;renderIncomingChallenge(null);
+  try{localStorage.setItem(ROOM_KEY,room.id)}catch(_){}
+  watch();render();toast("قبلت التحدي! حظاً سعيداً لكما ❤️");
+ }catch(e){toast(e.message||"تعذر قبول التحدي");}
+ finally{challengeBusy=false;refreshChallenges();}
+}
+async function rejectChallenge(id){
+ if(challengeBusy)return;challengeBusy=true;
+ try{await rpc("ayfar_challenge_reject",{p_challenge_id:id});incomingChallenge=null;renderIncomingChallenge(null);toast("تم رفض التحدي");}
+ catch(e){toast(e.message||"تعذر رفض التحدي");}
+ finally{challengeBusy=false;refreshChallenges();}
+}
+async function cancelChallenge(){
+ if(!outgoingChallenge)return;
+ try{await rpc("ayfar_challenge_cancel",{p_challenge_id:outgoingChallenge.id);}
+ catch(e){toast(e.message||"تعذر إلغاء التحدي");return;}
+ try{localStorage.removeItem("ayfar_pending_challenge_v1")}catch(_){}
+ outgoingChallenge=null;location.reload();
+}
 async function restore(){try{const id=localStorage.getItem(ROOM_KEY);if(!id)return;await currentUser();const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();if(error)throw error;if(!data){localStorage.removeItem(ROOM_KEY);return}room=data;role=window.WorldStore.get().active==="farhati"?"farhati":"ayoub";watch();render()}catch(e){console.warn("AYFAR game restore:",e);toast("تعذر استعادة المباراة. تحقق من الاتصال ثم حدّث الصفحة.")}}
 function watch(){if(!room)return;if(channel)client().removeChannel(channel);channel=client().channel("ayfar-game-"+room.id).on("postgres_changes",{event:"UPDATE",schema:"public",table:"ayfar_games",filter:"id=eq."+room.id},p=>{if(p.new&&(!room||Number(p.new.version)>Number(room.version))){room=p.new;render()}}).subscribe();if(poll)clearInterval(poll);poll=setInterval(async()=>{if(!room)return;const {data}=await client().from("ayfar_games").select("*").eq("id",room.id).single();if(data&&Number(data.version)>Number(room.version)){room=data;render()}},3500)}
 async function save(mutator,status){if(!room)return;for(let attempt=0;attempt<3;attempt++){const base=room,s=JSON.parse(JSON.stringify(base.state||{}));mutator(s);try{room=await rpc("ayfar_game_update",{p_game_id:base.id,p_expected_version:base.version,p_state:s,p_status:status||null});render();return}catch(e){const {data}=await client().from("ayfar_games").select("*").eq("id",base.id).single();if(!data)break;room=data;if(Number(data.version)<=Number(base.version))break;}}render();toast("تعذر حفظ الحركة بعد عدة محاولات. تمت مزامنة آخر حالة؛ أعد المحاولة إن لم تظهر إجابتك.")}
