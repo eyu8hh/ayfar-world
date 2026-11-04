@@ -25,4 +25,4 @@ jobs:
         run: |
           test -n "$SUPABASE_ACCESS_TOKEN" || (echo "Missing SUPABASE_ACCESS_TOKEN GitHub secret" && exit 1)
           test -n "$SUPABASE_PROJECT_ID" || (echo "Missing SUPABASE_PROJECT_ID GitHub secret" && exit 1)
-          supabase functions deploy ayfar-ai-quiz --project-ref "$SUPABASE_PROJECT_ID"
+          supabase functions deploy ayfar-ai-quiz --project-ref "$SUPABASE_PROJECT_ID" --yes
