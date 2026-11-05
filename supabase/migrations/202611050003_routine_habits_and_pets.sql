@@ -130,11 +130,11 @@ begin
     raise exception 'Please wait a little before repeating this action';
   end if;
   update public.ayfar_pets set
-    hunger=least(100,hunger+case when p_action='feed' then 28 else 0 end),
-    thirst=least(100,thirst+case when p_action='water' then 30 else 0 end),
-    energy=least(100,energy+case when p_action='sleep' then 32 when p_action='play' then -14 else 0 end),
-    hygiene=least(100,hygiene+case when p_action='bath' then 32 when p_action='clean' then 18 else 0 end),
-    happiness=least(100,happiness+case when p_action='play' then 24 when p_action='gift' then 28 when p_action='cuddle' then 18 else 0 end),
+    hunger=greatest(0,least(100,hunger-floor(extract(epoch from (now()-updated_at))/3600*2)::integer+case when p_action='feed' then 28 else 0 end)),
+    thirst=greatest(0,least(100,thirst-floor(extract(epoch from (now()-updated_at))/3600*3)::integer+case when p_action='water' then 30 else 0 end)),
+    energy=greatest(0,least(100,energy-floor(extract(epoch from (now()-updated_at))/3600*2)::integer+case when p_action='sleep' then 32 when p_action='play' then -14 else 0 end)),
+    hygiene=greatest(0,least(100,hygiene-floor(extract(epoch from (now()-updated_at))/3600)::integer+case when p_action='bath' then 32 when p_action='clean' then 18 else 0 end)),
+    happiness=greatest(0,least(100,happiness-floor(extract(epoch from (now()-updated_at))/3600)::integer+case when p_action='play' then 24 when p_action='gift' then 28 when p_action='cuddle' then 18 else 0 end)),
     xp=xp+v_xp, level=least(1000,((xp+v_xp)/100)+1), updated_at=now()
   where owner_id=p_pet_owner returning * into p;
   if not found then raise exception 'Avatar not created yet'; end if;
