@@ -1028,3 +1028,89 @@ body.ayoub-theme .calendar-empty,body.ayoub-theme .calendar-form{background:#263
 body.ayoub-theme .calendar-form label{color:#d8c79f}
 body.ayoub-theme .calendar-form input,body.ayoub-theme .calendar-form select,body.ayoub-theme .calendar-form textarea{background:#202f43;border-color:#465872;color:#edf2f6}
 @media(max-width:380px){.calendar-dialog{padding:13px}.calendar-day{min-height:37px;border-radius:9px}.calendar-weekdays,.calendar-grid{gap:3px}.calendar-form-row{grid-template-columns:1fr}}
+
+
+/* AYFAR · interactive shared plans */
+.plan-card-action{cursor:pointer;text-align:inherit;font:inherit; -webkit-tap-highlight-color:transparent}
+.plan-card-action:focus-visible{outline:3px solid rgba(168,63,104,.45);outline-offset:4px}
+.plan-card-action:active{transform:scale(.975)}
+.plans-tool-dialog{width:min(100%,620px);max-height:min(91dvh,850px);overflow:auto;padding:19px;border:1px solid #efd6df;border-radius:26px;background:linear-gradient(155deg,#fffdfb,#fff5f7 58%,#f1f8f1);color:#482333;box-shadow:0 28px 90px rgba(20,5,13,.32);animation:plansPop .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes plansPop{from{opacity:0;transform:translateY(14px) scale(.975)}to{opacity:1;transform:translateY(0) scale(1)}}
+.plans-tool-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.plans-tool-head small{display:block;color:#a35470;font-size:10px;font-weight:900;letter-spacing:1.4px}
+.plans-tool-head h2{margin:5px 0;color:#70243f;font-size:22px}
+.plans-tool-head p{margin:0;color:#806a74;font-size:11px;line-height:1.8}
+.plans-tool-close{width:39px;height:39px;flex:0 0 39px;border:1px solid #ead5dd;border-radius:14px;background:#fff;color:#70243f;font-size:22px}
+.plans-tool-form{display:grid;gap:9px;margin:14px 0;padding:14px;border:1px solid #ead8de;border-radius:19px;background:rgba(255,255,255,.8)}
+.plans-tool-form label{font-size:11px;font-weight:900;color:#684354}
+.plans-tool-form input,.plans-tool-form textarea,.plans-tool-form select{width:100%;min-width:0;padding:11px 12px;border:1px solid #e6d3db;border-radius:12px;background:#fffdfc;color:#482333;font:inherit;font-size:13px;outline:none}
+.plans-tool-form textarea{min-height:75px;resize:vertical}
+.plans-tool-form input:focus,.plans-tool-form textarea:focus,.plans-tool-form select:focus{border-color:#c66c8b;box-shadow:0 0 0 3px #c66c8b22}
+.plans-tool-primary{border:0;border-radius:13px;padding:12px 15px;background:linear-gradient(110deg,#c96b8a,#70243f);color:#fff;font:inherit;font-size:12px;font-weight:900;box-shadow:0 8px 18px #70243f24}
+.plans-tool-feedback{min-height:18px;color:#a14c65;font-size:11px;line-height:1.7}
+.daily-question-card{position:relative;overflow:hidden;padding:20px;border:1px solid #f0d8df;border-radius:21px;background:linear-gradient(135deg,#fff0f5,#fff 65%,#eef7ef);box-shadow:0 12px 25px #70243f10}
+.daily-question-card:after{content:"♡";position:absolute;left:10px;bottom:-38px;color:#a83f6810;font-size:120px;pointer-events:none}
+.daily-question-card small{color:#a35470;font-size:10px;font-weight:900}
+.daily-question-card h3{position:relative;z-index:1;margin:8px 0 0;color:#70243f;font-size:19px;line-height:1.8}
+.daily-answers{display:grid;gap:9px;margin-top:13px}
+.daily-answer{padding:12px;border:1px solid #ead8df;border-radius:15px;background:#fff}
+.daily-answer b{display:block;margin-bottom:5px;color:#9b4967;font-size:10px}
+.daily-answer p{margin:0;color:#57414b;font-size:12px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
+.daily-waiting{padding:12px;border:1px dashed #dfc7d0;border-radius:14px;color:#8b6e7a;text-align:center;font-size:11px}
+.goals-summary{display:flex;gap:8px;margin:12px 0}
+.goals-summary span{flex:1;padding:10px 5px;border:1px solid #efdae2;border-radius:14px;background:#fff1f5;color:#8e3655;text-align:center;font-size:10px}
+.goals-summary b{display:block;font-size:19px}
+.shared-goals-list{display:grid;gap:10px;margin-top:13px}
+.shared-goal{padding:13px;border:1px solid #ead9df;border-radius:17px;background:linear-gradient(145deg,#fff,#fff7f8)}
+.shared-goal-top{display:flex;justify-content:space-between;align-items:flex-start;gap:9px}
+.shared-goal h3{margin:0;color:#51283a;font-size:13px;line-height:1.7;overflow-wrap:anywhere}
+.shared-goal p{margin:5px 0;color:#806f77;font-size:10px;line-height:1.7;white-space:pre-wrap}
+.shared-goal time{display:block;color:#9b7180;font-size:10px}
+.shared-goal-progress{display:flex;align-items:center;gap:10px;margin-top:10px}
+.shared-goal-progress input{flex:1;min-width:0;accent-color:#a83f68}
+.shared-goal-progress b{min-width:36px;color:#a83f68;font-size:12px;text-align:end}
+.shared-goal-actions{display:flex;justify-content:flex-end;margin-top:7px}
+.shared-goal-actions button{border:1px solid #efd4d7;border-radius:10px;background:#fff3f3;color:#a34d55;padding:6px 10px;font:inherit;font-size:10px}
+.plan-suggestions{display:grid;gap:9px;margin:14px 0}
+.plan-suggestion{padding:16px;border:1px solid #dedaf4;border-radius:18px;background:linear-gradient(135deg,#f2f0ff,#fff 75%);animation:plansPop .24s ease}
+.plan-suggestion small{color:#6d65a8;font-size:10px;font-weight:900}
+.plan-suggestion h3{margin:7px 0;color:#4d477e;font-size:17px}
+.plan-suggestion p{margin:0;color:#756f8e;font-size:11px;line-height:1.8}
+.plan-tool-row{display:flex;gap:8px;flex-wrap:wrap}
+.plan-tool-secondary{border:1px solid #dedaf4;border-radius:12px;background:#fff;color:#625a9f;padding:10px 13px;font:inherit;font-size:11px;font-weight:900}
+.plan-surprise-stage{display:grid;place-items:center;min-height:245px;padding:22px;border:1px solid #f1d9ce;border-radius:23px;background:radial-gradient(circle at 50% 15%,#fff 0,#fff4ed 56%,#fbe5db 100%);text-align:center}
+.plan-surprise-gift{display:grid;place-items:center;width:92px;height:92px;margin:0 auto 12px;border-radius:30px;background:linear-gradient(145deg,#f4a17e,#b85b43);color:#fff;font-size:45px;box-shadow:0 15px 30px #b85b4338;animation:giftFloat 2.6s ease-in-out infinite}
+@keyframes giftFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-7px) rotate(4deg)}}
+.plan-surprise-stage h3{margin:6px 0;color:#8f4939;font-size:18px}
+.plan-surprise-stage p{max-width:380px;margin:0 auto;color:#86675f;font-size:12px;line-height:1.9}
+.plan-tool-empty{padding:20px 10px;color:#907984;text-align:center;font-size:11px;line-height:1.8}
+body.ayoub-theme .plans-tool-dialog{background:linear-gradient(155deg,#202f43,#26374a 62%,#263b3a);border-color:#46566e;color:#e8edf4}
+body.ayoub-theme .plans-tool-head h2{color:#f0dfbd}
+body.ayoub-theme .plans-tool-head p{color:#bdc8d6}
+body.ayoub-theme .plans-tool-head small{color:#d8bc87}
+body.ayoub-theme .plans-tool-close{background:#29394e;border-color:#46566e;color:#e7edf5}
+body.ayoub-theme .plans-tool-form{background:#26364b;border-color:#46566e}
+body.ayoub-theme .plans-tool-form label{color:#e0cda5}
+body.ayoub-theme .plans-tool-form input,body.ayoub-theme .plans-tool-form textarea,body.ayoub-theme .plans-tool-form select{background:#1c2a3c;border-color:#4a5b73;color:#f0f2f5}
+body.ayoub-theme .daily-question-card{background:linear-gradient(135deg,#2b3b50,#26374b 65%,#263d3a);border-color:#46566e}
+body.ayoub-theme .daily-question-card h3{color:#f0dfbd}
+body.ayoub-theme .daily-answer,body.ayoub-theme .shared-goal{background:#26364b;border-color:#46566e}
+body.ayoub-theme .daily-answer p,body.ayoub-theme .shared-goal h3{color:#e8edf4}
+body.ayoub-theme .daily-answer b{color:#e2c991}
+body.ayoub-theme .daily-waiting{border-color:#53647a;color:#c3ceda}
+body.ayoub-theme .goals-summary span{background:#2b3b50;border-color:#46566e;color:#e2c991}
+body.ayoub-theme .shared-goal p,body.ayoub-theme .shared-goal time{color:#bdc8d6}
+body.ayoub-theme .shared-goal-progress b{color:#e2c991}
+body.ayoub-theme .shared-goal-actions button{background:#3a303a;border-color:#694b5a;color:#f0c5ce}
+body.ayoub-theme .plan-suggestion{background:linear-gradient(135deg,#2c3450,#26374b);border-color:#4d4a70}
+body.ayoub-theme .plan-suggestion h3{color:#e4dcff}
+body.ayoub-theme .plan-suggestion p{color:#c1bed7}
+body.ayoub-theme .plan-tool-secondary{background:#29394e;border-color:#465872;color:#e2d9ff}
+body.ayoub-theme .plan-surprise-stage{background:radial-gradient(circle at 50% 15%,#34465a,#26374b 60%,#3a3540);border-color:#6b5360}
+body.ayoub-theme .plan-surprise-stage h3{color:#f0dfbd}
+body.ayoub-theme .plan-surprise-stage p{color:#c6b9bd}
+body.ayoub-theme .plans-tool-feedback{color:#e3b5c3}
+@media(max-width:480px){.plans-tool-dialog{padding:15px;border-radius:22px}.plans-tool-head h2{font-size:20px}.daily-question-card{padding:16px}.daily-question-card h3{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.plans-tool-dialog,.plan-suggestion,.plan-surprise-gift{animation:none}}
+/* Use each device's high-quality native color emoji font; iPhone renders Apple Color Emoji. */
+.emoji,.emoji-inline{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-variant-emoji:emoji}
