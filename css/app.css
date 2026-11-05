@@ -1112,5 +1112,6 @@ body.ayoub-theme .plan-surprise-stage p{color:#c6b9bd}
 body.ayoub-theme .plans-tool-feedback{color:#e3b5c3}
 @media(max-width:480px){.plans-tool-dialog{padding:15px;border-radius:22px}.plans-tool-head h2{font-size:20px}.daily-question-card{padding:16px}.daily-question-card h3{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.plans-tool-dialog,.plan-suggestion,.plan-surprise-gift{animation:none}}
-/* Use each device's high-quality native color emoji font; iPhone renders Apple Color Emoji. */
+/* Native emoji artwork: Apple Color Emoji on iPhone, platform color emoji on Android. */
+body{font-variant-emoji:emoji}
 .emoji,.emoji-inline{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-variant-emoji:emoji}
