@@ -29,7 +29,7 @@ as $function$
   select case when lower(role)='ayoub' then 'ayoub'
               when lower(role) in ('farahati','farhati') then 'farahati'
               else null end
-  from public.profiles where id=p_user_id;
+  from public.profiles where id=p_user_id and p_user_id=auth.uid();
 $function$;
 
 create or replace function public.ayfar_is_routine_partner(p_user_id uuid)
