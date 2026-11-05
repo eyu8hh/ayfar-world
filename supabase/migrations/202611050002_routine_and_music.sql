@@ -22,46 +22,62 @@ create index if not exists ayfar_routine_status_visibility_idx
 
 alter table public.ayfar_routine_status enable row level security;
 
+create or replace function public.ayfar_routine_role(p_user_id uuid)
+returns text language sql stable security definer
+set search_path=public,auth
+as $
+  select case when lower(role)='ayoub' then 'ayoub'
+              when lower(role) in ('farahati','farhati') then 'farahati'
+              else null end
+  from public.profiles where id=p_user_id;
+$;
+
+create or replace function public.ayfar_is_routine_partner(p_user_id uuid)
+returns boolean language sql stable security definer
+set search_path=public,auth
+as $
+  select exists (
+    select 1 from public.profiles viewer
+    join public.profiles owner_profile on owner_profile.id=p_user_id
+    where viewer.id=auth.uid()
+      and (
+        (lower(viewer.role)='ayoub' and lower(owner_profile.role) in ('farahati','farhati'))
+        or (lower(viewer.role) in ('farahati','farhati') and lower(owner_profile.role)='ayoub')
+      )
+  );
+$;
+
+create or replace function public.ayfar_is_routine_pair_member()
+returns boolean language sql stable security definer
+set search_path=public,auth
+as $
+  select exists (
+    select 1 from public.profiles viewer
+    where viewer.id=auth.uid()
+      and (
+        (lower(viewer.role)='ayoub' and exists (select 1 from public.profiles partner where lower(partner.role) in ('farahati','farhati')))
+        or (lower(viewer.role) in ('farahati','farhati') and exists (select 1 from public.profiles partner where lower(partner.role)='ayoub'))
+      )
+  );
+$;
+
+revoke all on function public.ayfar_routine_role(uuid) from public,anon;
+revoke all on function public.ayfar_is_routine_partner(uuid) from public,anon;
+revoke all on function public.ayfar_is_routine_pair_member() from public,anon;
+grant execute on function public.ayfar_routine_role(uuid) to authenticated;
+grant execute on function public.ayfar_is_routine_partner(uuid) to authenticated;
+grant execute on function public.ayfar_is_routine_pair_member() to authenticated;
+
 drop policy if exists "AYFAR routine pair can read shared status" on public.ayfar_routine_status;
 create policy "AYFAR routine pair can read shared status"
 on public.ayfar_routine_status for select to authenticated
-using (
-  user_id = auth.uid()
-  or (
-    visibility = 'shared'
-    and exists (
-      select 1
-      from public.profiles viewer
-      join public.profiles owner_profile on owner_profile.id = ayfar_routine_status.user_id
-      where viewer.id = auth.uid()
-        and (
-          (lower(viewer.role) = 'ayoub' and lower(owner_profile.role) in ('farahati','farhati'))
-          or
-          (lower(viewer.role) in ('farahati','farhati') and lower(owner_profile.role) = 'ayoub')
-        )
-    )
-  )
-);
+using (user_id = auth.uid() or (visibility = 'shared' and public.ayfar_is_routine_partner(user_id)));
 
 drop policy if exists "AYFAR users manage own routine status" on public.ayfar_routine_status;
 create policy "AYFAR users manage own routine status"
 on public.ayfar_routine_status for all to authenticated
-using (
-  user_id = auth.uid()
-  and exists (
-    select 1 from public.profiles p
-    where p.id = auth.uid() and lower(p.role) in ('ayoub','farahati','farhati')
-      and case when lower(p.role) in ('farahati','farhati') then 'farahati' else 'ayoub' end = ayfar_routine_status.role
-  )
-)
-with check (
-  user_id = auth.uid()
-  and exists (
-    select 1 from public.profiles p
-    where p.id = auth.uid() and lower(p.role) in ('ayoub','farahati','farhati')
-      and case when lower(p.role) in ('farahati','farhati') then 'farahati' else 'ayoub' end = ayfar_routine_status.role
-  )
-);
+using (user_id = auth.uid() and role = public.ayfar_routine_role(auth.uid()))
+with check (user_id = auth.uid() and role = public.ayfar_routine_role(auth.uid()));
 
 grant select, insert, update, delete on public.ayfar_routine_status to authenticated;
 
@@ -84,47 +100,12 @@ alter table public.ayfar_shared_music enable row level security;
 drop policy if exists "AYFAR pair can read shared music" on public.ayfar_shared_music;
 create policy "AYFAR pair can read shared music"
 on public.ayfar_shared_music for select to authenticated
-using (
-  exists (
-    select 1
-    from public.profiles viewer
-    where viewer.id = auth.uid()
-      and (
-        (lower(viewer.role) = 'ayoub' and exists (
-          select 1 from public.profiles partner
-          where lower(partner.role) in ('farahati','farhati')
-        ))
-        or
-        (lower(viewer.role) in ('farahati','farhati') and exists (
-          select 1 from public.profiles partner
-          where lower(partner.role) = 'ayoub'
-        ))
-      )
-  )
-);
+using (public.ayfar_is_routine_pair_member());
 
 drop policy if exists "AYFAR pair can add shared music" on public.ayfar_shared_music;
 create policy "AYFAR pair can add shared music"
 on public.ayfar_shared_music for insert to authenticated
-with check (
-  added_by = auth.uid()
-  and exists (
-    select 1
-    from public.profiles viewer
-    where viewer.id = auth.uid()
-      and (
-        (lower(viewer.role) = 'ayoub' and exists (
-          select 1 from public.profiles partner
-          where lower(partner.role) in ('farahati','farhati')
-        ))
-        or
-        (lower(viewer.role) in ('farahati','farhati') and exists (
-          select 1 from public.profiles partner
-          where lower(partner.role) = 'ayoub'
-        ))
-      )
-  )
-);
+with check (added_by = auth.uid() and public.ayfar_is_routine_pair_member());
 
 drop policy if exists "AYFAR pair can remove shared music" on public.ayfar_shared_music;
 create policy "AYFAR pair can remove shared music"
