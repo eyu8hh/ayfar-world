@@ -58,5 +58,10 @@
     });
     el.addEventListener("submit",e=>{if(e.target.id==="routine-schedule-form"){e.preventDefault();submitSchedule(e.target)}if(e.target.id==="routine-habit-form"){e.preventDefault();submitHabit(e.target)}});
   }
+  let routineTouchStart=null;
+  if(el){
+    el.addEventListener("touchstart",event=>{const t=event.changedTouches?.[0];if(t)routineTouchStart={x:t.clientX,y:t.clientY}},{passive:true});
+    el.addEventListener("touchend",event=>{const t=event.changedTouches?.[0];if(!t||!routineTouchStart)return;const dx=t.clientX-routineTouchStart.x,dy=t.clientY-routineTouchStart.y;routineTouchStart=null;if(Math.abs(dx)>65&&Math.abs(dx)>Math.abs(dy)*1.25){tab=dx<0?"habits":"schedule";render()}},{passive:true});
+  }
   window.AYFAR_RoutinePlus={init};
 })();

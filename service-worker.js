@@ -1,4 +1,4 @@
-const CACHE="ayfar-world-shell-v80";
+const CACHE="ayfar-world-shell-v81";
 const FILES=["./","./index.html","./css/app.css","./js/supabase-config.js","./js/supabase-client.js","./js/seed.js","./js/storage.js","./js/app.js","./js/plans.js","./js/calendar.js","./js/activities.js","./js/routine.js","./js/routine-plus.js","./js/pets.js","./css/routine-plus.css","./js/knowledge-bank.js","./js/knowledge-bank-expansion.js","./js/ayfar-question-bank.js","./js/ayfar-question-bank-expansion.js","./js/games.js","./js/auth.js","./js/messages.js","./js/love-letters.js","./manifest.json","./assets/icons/icon.svg"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));

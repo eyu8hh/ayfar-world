@@ -11,3 +11,23 @@
 @keyframes pet-breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.03)}}
 body.ayoub-theme .routine-plus,body.ayoub-theme .pet-card{background:#202f43;border-color:#40516a}body.ayoub-theme .routine-plus-head h4,body.ayoub-theme .routine-plus-subtitle b,body.ayoub-theme .routine-schedule-card b,body.ayoub-theme .routine-habit-card b,body.ayoub-theme .pet-card-top h4,body.ayoub-theme .pet-stat b,body.ayoub-theme .pet-care>b{color:#eef2f7}body.ayoub-theme .routine-plus-tabs,body.ayoub-theme .routine-plus-form{background:#182437}body.ayoub-theme .routine-plus-tabs button.active{background:#314258;color:#f0c6d5}body.ayoub-theme .routine-schedule-card,body.ayoub-theme .routine-habit-card,body.ayoub-theme .pet-name-form input,body.ayoub-theme .pet-name-form select{background:#182437;border-color:#40516a}body.ayoub-theme .pet-rules{background:#29384b;color:#c1cad6}
 @media(max-width:380px){.pet-care-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.routine-plus-fields{grid-template-columns:1fr}}
+
+/* AYFAR horizontal page navigation */
+#home{overflow:hidden}
+.home-section-nav{position:relative;top:auto;touch-action:pan-x}
+#home-pages{display:flex;flex-direction:row;direction:rtl;gap:0;width:100%;height:calc(100dvh - 174px);min-height:480px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-x pan-y;border-radius:20px}
+#home-pages::-webkit-scrollbar{display:none}
+#home-pages>.home-section-anchor{flex:0 0 100%;width:100%;height:100%;min-width:0;overflow-y:auto;overflow-x:hidden;scroll-snap-align:start;scroll-snap-stop:always;scroll-margin:0;padding:6px 5px 28px;overscroll-behavior-y:contain;scrollbar-width:thin}
+.home-slide-controls{display:flex;align-items:center;justify-content:center;gap:20px;margin:12px auto 4px;color:var(--muted);font-size:11px}
+.home-slide-controls button{width:38px;height:36px;border:1px solid var(--line);border-radius:12px;background:var(--surface,#fff);color:var(--burgundy);font-size:17px}
+.home-slide-controls button:disabled{opacity:.3;cursor:default}
+#home-pages>.home-section-anchor:focus-visible{outline:2px solid var(--pink);outline-offset:-3px}
+.pets-carousel{display:flex;direction:rtl;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;padding:2px 1px 10px;touch-action:pan-x pan-y}
+.pets-carousel::-webkit-scrollbar{display:none}
+.pet-slide{flex:0 0 min(100%,420px);min-width:0;scroll-snap-align:center}
+.pet-slide .pet-card{height:100%}
+.pet-carousel-hint{display:flex;justify-content:space-between;padding:0 5px;color:var(--muted);font-size:9px}
+body.ayoub-theme .home-slide-controls button{background:#202f43;border-color:#40516a;color:#e4c98e}
+@media(max-width:520px){#home-pages{height:calc(100dvh - 158px);min-height:430px;border-radius:16px}.home-slide-controls{margin-top:9px}.pet-slide{flex-basis:88%}}
+@media(min-width:760px){#home-pages{height:calc(100dvh - 190px)}.pet-slide{flex-basis:48%}}
+@media(prefers-reduced-motion:reduce){#home-pages{scroll-behavior:auto}}
