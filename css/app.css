@@ -1247,3 +1247,5 @@ body.ayoub-theme .routine-check-row{color:#e1e8f0}
 body.ayoub-theme .routine-privacy-note{background:#29384b;color:#c1cad6}
 @media(min-width:650px){.routine-people{grid-template-columns:repeat(2,minmax(0,1fr))}.routine-music-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:380px){.routine-person{padding:10px 8px}.routine-form-row{grid-template-columns:1fr}.routine-intro{padding:16px}.routine-intro-art{flex-basis:58px;width:58px;height:58px;font-size:17px}}
+
+/* Routine planner and avatar companion styles are in routine-plus.css */
