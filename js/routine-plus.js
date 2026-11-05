@@ -1,6 +1,7 @@
 (()=> {
   const $=s=>document.querySelector(s), esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   let db=null,user=null,role="ayoub",tab="schedule",schedules=[],habits=[],checks=[],busy=false,channel=null,poll=null;
+  const dateKey=h=>{const d=new Date();if(h.frequency==="weekly"){const offset=(d.getDay()+6)%7;d.setDate(d.getDate()-offset)}return d.toISOString().slice(0,10)};
   const days=[["الأحد",0],["الإثنين",1],["الثلاثاء",2],["الأربعاء",3],["الخميس",4],["الجمعة",5],["السبت",6]];
   const root=()=>$("#routine-plus-app"),label=r=>r==="ayoub"?"أيوب 🌙":"فرحتي 🌸",dayNames=a=>(a||[]).map(n=>days.find(d=>d[1]===n)?.[0]).join("، ");
   function render(){
@@ -13,12 +14,12 @@
   }
   function renderHabits(){
     const today=new Date().toISOString().slice(0,10),my=habits.filter(h=>h.user_id===user.id),partner=habits.filter(h=>h.user_id!==user.id);
-    const card=h=>{const done=checks.some(c=>c.habit_id===h.id&&c.check_date===today);return '<article class="routine-habit-card '+(done?'done':'')+'"><button class="routine-habit-check" data-check-habit="'+h.id+'" data-checked="'+(done?'1':'0')+'">'+(done?'✓':esc(h.icon))+'</button><div><b>'+esc(h.title)+'</b><small>'+(h.frequency==="weekly"?"عادة أسبوعية":"عادة يومية")+' · '+(done?'أُنجزت اليوم':'بانتظار خطوة صغيرة')+'</small></div>'+(h.user_id===user.id?'<button class="routine-habit-delete" data-delete-habit="'+h.id+'">×</button>':'<span class="routine-shared-tag">لكما</span>')+'</article>'};
+    const card=h=>{const done=checks.some(c=>c.habit_id===h.id&&c.check_date===dateKey(h));return '<article class="routine-habit-card '+(done?'done':'')+'"><button class="routine-habit-check" data-check-habit="'+h.id+'" data-checked="'+(done?'1':'0')+'">'+(done?'✓':esc(h.icon))+'</button><div><b>'+esc(h.title)+'</b><small>'+(h.frequency==="weekly"?"عادة أسبوعية":"عادة يومية")+' · '+(done?'أُنجزت اليوم':'بانتظار خطوة صغيرة')+'</small></div>'+(h.user_id===user.id?'<button class="routine-habit-delete" data-delete-habit="'+h.id+'">×</button>':'<span class="routine-shared-tag">لكما</span>')+'</article>'};
     return '<section class="routine-plus-section"><div class="routine-plus-subtitle"><b>عادات أيوب</b><small>خطواتك الصغيرة يا أيوب</small></div>'+(my.length?my.map(card).join(""):'<div class="routine-plus-empty">أضف عادة تحب الالتزام بها.</div>')+(partner.length?'<div class="routine-plus-subtitle"><b>عادات فرحتي</b><small>يمكنك تشجيعها بالتأشير عند إنجازها معاً</small></div>'+partner.map(card).join(""):'')+'</section><form id="routine-habit-form" class="routine-plus-form"><b>أضف عادة جديدة</b><input class="routine-input" name="title" maxlength="80" required placeholder="مثلاً: شرب الماء، القراءة، المشي…"><div class="routine-plus-fields"><label>رمز العادة<input class="routine-input" name="icon" maxlength="8" value="🌱"></label><label>التكرار<select class="routine-select" name="frequency"><option value="daily">يومية</option><option value="weekly">أسبوعية</option></select></label></div><label class="routine-field-label">من يرى هذه العادة؟</label><select class="routine-select" name="visibility"><option value="shared">نشاركها معاً</option><option value="private">خاصة بي</option></select><button class="routine-plus-submit" type="submit" '+(busy?'disabled':'')+'>أضف العادة ♡</button><p class="routine-plus-feedback" id="routine-plus-feedback" role="status"></p></form>';
   }
   async function load(){
     if(!db||!user)return;
-    const [s,h,c]=await Promise.all([db.from("ayfar_routine_schedule").select("*").order("start_time"),db.from("ayfar_habits").select("*").order("created_at"),db.from("ayfar_habit_checkins").select("*").eq("check_date",new Date().toISOString().slice(0,10))]);
+    const now=new Date(),today=now.toISOString().slice(0,10),monday=new Date(now);monday.setDate(monday.getDate()-((monday.getDay()+6)%7));const weekStart=monday.toISOString().slice(0,10);const [s,h,c]=await Promise.all([db.from("ayfar_routine_schedule").select("*").order("start_time"),db.from("ayfar_habits").select("*").order("created_at"),db.from("ayfar_habit_checkins").select("*").in("check_date",[today,weekStart])]);
     if(s.error||h.error||c.error){const el=root();if(el)el.innerHTML='<div class="routine-plus-empty">تعذر تحميل الجدول والعادات: '+esc((s.error||h.error||c.error).message)+'</div>';return}
     schedules=s.data||[];habits=h.data||[];checks=c.data||[];render();
   }
@@ -37,8 +38,8 @@
   }
   async function toggleHabit(id,done){
     const h=habits.find(x=>x.id===id);if(!h)return;
-    if(done){const {error}=await db.from("ayfar_habit_checkins").delete().eq("habit_id",id).eq("check_date",new Date().toISOString().slice(0,10));if(error)alert(error.message)}
-    else{const {error}=await db.from("ayfar_habit_checkins").insert({habit_id:id,habit_owner:h.user_id,checked_by:user.id,check_date:new Date().toISOString().slice(0,10)});if(error)alert(error.message)}
+    if(done){const {error}=await db.from("ayfar_habit_checkins").delete().eq("habit_id",id).eq("check_date",dateKey(h));if(error)alert(error.message)}
+    else{const {error}=await db.from("ayfar_habit_checkins").insert({habit_id:id,habit_owner:h.user_id,checked_by:user.id,check_date:dateKey(h)});if(error)alert(error.message)}
     await load();
   }
   async function init(){
