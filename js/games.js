@@ -167,6 +167,7 @@ async function cancelChallenge(){
  outgoingChallenge=null;location.reload();
 }
 async function loadOpenGames(){
+ loadMatchHistory();
  const host=$("#unfinished-games");if(!host)return;
  host.innerHTML='<div class="unfinished-loading">نبحث عن مبارياتكما المحفوظة…</div>';
  try{
@@ -186,6 +187,25 @@ async function loadOpenGames(){
   host.querySelectorAll("[data-resume-game]").forEach(b=>b.addEventListener("click",()=>resumeGame(b.dataset.resumeGame)));
   host.querySelectorAll("[data-stop-game]").forEach(b=>b.addEventListener("click",()=>stopSavedGame(b.dataset.stopGame)));
  }catch(e){console.warn("AYFAR saved matches:",e);host.innerHTML='<div class="unfinished-empty"><b>تعذر تحميل المباريات</b><small>تحقق من الاتصال ثم أعد المحاولة.</small><button class="unfinished-resume" id="retry-open-games">إعادة المحاولة</button></div>';$("#retry-open-games")?.addEventListener("click",loadOpenGames);}
+}
+async function loadMatchHistory(){
+ const host=$("#match-history");if(!host)return;
+ host.innerHTML='<div class="unfinished-loading">نجهّز سجل مبارياتكما…</div>';
+ try{
+  await currentUser();
+  const {data,error}=await client().from("ayfar_games").select("*").or("host_id.eq."+uid+",guest_id.eq."+uid).in("status",["playing","waiting","cancelled"]).order("updated_at",{ascending:false}).limit(40);
+  if(error)throw error;
+  const rows=(data||[]).filter(x=>x.state?.phase==="finished"&&!x.state?.endedEarly).slice(0,12);
+  if(!rows.length){host.innerHTML='<div class="history-empty"><span>♡</span><b>لا توجد مباريات مكتملة بعد</b><small>ستظهر هنا نتائج مبارياتكما القادمة.</small></div>';return;}
+  host.innerHTML=rows.map(x=>{
+   const s=x.state||{},title=s.aiQuiz?"المسابقة الذكية":names[x.game_key]||"مباراة AYFAR";
+   const a=Number(s.scores?.ayoub||0),f=Number(s.scores?.farahati||0);
+   const winner=a>f?"أيوب 🌙":f>a?"فرحتي 🌸":"تعادل جميل ♡";
+   const date=x.updated_at?new Intl.DateTimeFormat("ar-MA",{dateStyle:"medium",timeStyle:"short"}).format(new Date(x.updated_at)):"";
+   const rounds=s.aiQuiz?Math.min(Number(s.aiIndex||0)+1,Number(s.total||15)):Math.min(Number(s.round||1)-1,Number(s.total||1));
+   return '<article class="history-match"><div class="history-match-icon">🏆</div><div class="history-match-main"><div class="history-match-title"><b>'+esc(title)+'</b><span>'+esc(winner)+'</span></div><div class="history-match-score"><span>🌙 أيوب <b>'+a+'</b></span><i>—</i><span>🌸 فرحتي <b>'+f+'</b></span></div><small>'+rounds+' جولة · '+esc(date)+'</small></div></article>';
+  }).join("");
+ }catch(e){console.warn("AYFAR match history:",e);host.innerHTML='<div class="history-empty"><b>تعذر تحميل سجل المباريات</b><small>تحقق من الاتصال ثم أعد تحميل الصفحة.</small></div>';}
 }
 async function resumeGame(id){
  try{
@@ -320,6 +340,6 @@ function bodyChoice(){document.querySelectorAll("[data-choice]").forEach(b=>b.on
 
 }
 
-window.AYFAR_Games={start,startAiQuiz,cleanup,restore,resume:restore,resumeGame,stopSavedGame,loadOpenGames,initChallenges};
+window.AYFAR_Games={start,startAiQuiz,cleanup,restore,resume:restore,resumeGame,stopSavedGame,loadOpenGames,loadMatchHistory,initChallenges};
 document.addEventListener("click",e=>{const ai=e.target.closest("[data-ai-quiz]");if(ai){e.preventDefault();e.stopImmediatePropagation();startAiQuiz();return}const b=e.target.closest("[data-game]");if(!b||!names[b.dataset.game])return;e.preventDefault();e.stopImmediatePropagation();start(b.dataset.game)},true);
 })();

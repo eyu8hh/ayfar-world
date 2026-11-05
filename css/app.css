@@ -1116,3 +1116,24 @@ body.ayoub-theme .plans-tool-feedback{color:#e3b5c3}
 /* Native emoji artwork: Apple Color Emoji on iPhone, platform color emoji on Android. */
 body{font-variant-emoji:emoji}
 .emoji,.emoji-inline{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-variant-emoji:emoji}
+
+/* AYFAR · completed match history */
+.history-section{margin:22px 0 30px}
+.history-empty{display:flex;flex-direction:column;align-items:center;gap:7px;padding:20px;border:1px dashed #e7cbd5;border-radius:18px;background:rgba(255,250,252,.78);text-align:center;color:#8d7180;font-size:12px}
+.history-empty>span{display:grid;place-items:center;width:40px;height:40px;border-radius:14px;background:#f6e6ec;color:#a94d70;font-size:24px}
+.history-empty b{color:#673449;font-size:13px}
+.history-empty small{font-size:11px;line-height:1.7}
+.history-match{display:grid;grid-template-columns:42px minmax(0,1fr);gap:11px;margin:9px 0;padding:13px;border:1px solid #e8dce1;border-radius:17px;background:linear-gradient(135deg,#fff,#f8faf6)}
+.history-match-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#f6e5eb,#e6f1e7);font-size:21px}
+.history-match-main{min-width:0}
+.history-match-title{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.history-match-title>b{color:#5c2b40;font-size:12px}
+.history-match-title>span{color:#548267;font-size:10px;font-weight:800;text-align:left}
+.history-match-score{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0 5px;color:#765c68;font-size:10px}
+.history-match-score b{color:#6d344d}
+.history-match-main>small{color:#927c86;font-size:10px}
+body.ayoub-theme .history-empty,body.ayoub-theme .history-match{background:#26374b;border-color:#46566e;color:#bdc8d6}
+body.ayoub-theme .history-empty b,body.ayoub-theme .history-match-title>b{color:#f0dfbd}
+body.ayoub-theme .history-match-title>span{color:#9ac5a8}
+body.ayoub-theme .history-match-score{color:#c6cfda}
+body.ayoub-theme .history-match-score b{color:#e2c991}
