@@ -1137,3 +1137,41 @@ body.ayoub-theme .history-empty b,body.ayoub-theme .history-match-title>b{color:
 body.ayoub-theme .history-match-title>span{color:#9ac5a8}
 body.ayoub-theme .history-match-score{color:#c6cfda}
 body.ayoub-theme .history-match-score b{color:#e2c991}
+
+/* AYFAR · polished final match screen */
+.final-result{text-align:center;padding:10px 0 4px}
+.final-result-medal{display:grid;place-items:center;width:76px;height:76px;margin:8px auto 12px;border-radius:25px;background:linear-gradient(145deg,#f8e6ec,#e7f1e8);font-size:38px;box-shadow:0 12px 28px rgba(91,43,63,.10)}
+.final-result-kicker{display:block;color:#a07889;font-size:9px;font-weight:900;letter-spacing:1.5px}
+.final-result>h2{margin:7px 0 3px;color:#632b44;font-size:23px}
+.final-result-winner{margin:8px 0 0!important;padding:0!important;background:none!important;border:0!important;color:#9b4564!important;font-size:18px!important;font-weight:900}
+.final-result-caption{margin:3px 0 15px!important;color:#8e7882!important;font-size:11px!important}
+.final-result-summary{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}
+.final-result-summary>div{padding:12px 8px;border:1px solid #eadce2;border-radius:15px;background:linear-gradient(145deg,#fff,#fbf5f7)}
+.final-result-summary small,.final-result-summary strong{display:block}
+.final-result-summary small{color:#927b86;font-size:10px}
+.final-result-summary strong{margin-top:5px;color:#69364c;font-size:16px}
+.final-highlight{display:flex;flex-direction:column;align-items:center;gap:3px;margin:12px 0;padding:15px;border:1px solid #dce9dc;border-radius:18px;background:linear-gradient(135deg,#f4f8f1,#fff8fa)}
+.final-highlight small{color:#66806b;font-size:11px}
+.final-highlight strong{color:#477454;font-size:34px;line-height:1.2}
+.final-highlight span{color:#8c7c83;font-size:10px}
+.final-result-scores{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.final-result-scores article{display:flex;flex-direction:column;align-items:center;gap:4px;padding:15px 8px;border:1px solid #eadde3;border-radius:18px;background:#fffafb}
+.final-result-scores article>span{font-size:24px}
+.final-result-scores article>small{color:#806b76;font-size:11px;font-weight:800}
+.final-result-scores article>strong{color:#70243f;font-size:27px;font-variant-numeric:tabular-nums}
+.final-result-scores article>em{color:#9a8790;font-size:9px;font-style:normal}
+.final-score-farahati{background:linear-gradient(145deg,#fffafd,#f3f8f1)!important}
+.final-result-note{margin:14px 0!important;color:#8a6c7a!important;font-size:12px!important}
+.final-result>.primary,.final-result>.secondary-action{width:100%;margin-top:8px}
+body.ayoub-theme .final-result>h2{color:#f1dfbd}
+body.ayoub-theme .final-result-winner{color:#e4a8be!important}
+body.ayoub-theme .final-result-caption,body.ayoub-theme .final-result-note{color:#c5b6c0!important}
+body.ayoub-theme .final-result-summary>div{background:#26374b;border-color:#46566e}
+body.ayoub-theme .final-result-summary small{color:#c3cbd5}
+body.ayoub-theme .final-result-summary strong{color:#f0dfbd}
+body.ayoub-theme .final-highlight{background:linear-gradient(135deg,#263d35,#30364a);border-color:#55765f}
+body.ayoub-theme .final-highlight strong{color:#a7d2ae}
+body.ayoub-theme .final-result-scores article{background:#26374b;border-color:#46566e}
+body.ayoub-theme .final-result-scores article>small{color:#c3cbd5}
+body.ayoub-theme .final-result-scores article>strong{color:#f0dfbd}
+body.ayoub-theme .final-result-scores article>em{color:#b9c2ce}
