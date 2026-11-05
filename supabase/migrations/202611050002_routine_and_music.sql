@@ -3,6 +3,7 @@
 
 create table if not exists public.ayfar_routine_status (
   user_id uuid primary key references auth.users(id) on delete cascade,
+  role text not null check (role in ('ayoub','farahati')),
   activity_key text not null default 'available' check (char_length(activity_key) between 1 and 80),
   activity_label text not null default 'متاح / متاحة الآن' check (char_length(activity_label) between 1 and 100),
   category text not null default 'social' check (char_length(category) between 1 and 40),
@@ -50,6 +51,7 @@ using (
   and exists (
     select 1 from public.profiles p
     where p.id = auth.uid() and lower(p.role) in ('ayoub','farahati','farhati')
+      and case when lower(p.role) in ('farahati','farhati') then 'farahati' else 'ayoub' end = ayfar_routine_status.role
   )
 )
 with check (
@@ -57,6 +59,7 @@ with check (
   and exists (
     select 1 from public.profiles p
     where p.id = auth.uid() and lower(p.role) in ('ayoub','farahati','farhati')
+      and case when lower(p.role) in ('farahati','farhati') then 'farahati' else 'ayoub' end = ayfar_routine_status.role
   )
 );
 
