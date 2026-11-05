@@ -1,6 +1,6 @@
 (()=> {
   const db=()=>window.ayfarSupabase, $=s=>document.querySelector(s);
-  let user=null,channel=null,rows=[],loading=false;
+  let user=null,channel=null,rows=[],loading=false,activeUserId=null;
   const esc=v=>String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const icons={daily_rating:"💗",star_change:"⭐",routine_status:"🌿",habit_checkin:"🌱",pet_care:"🐾",music_added:"🎧"};
   function ensureButton(){
@@ -30,7 +30,7 @@
     if(unread.length){const stamp=new Date().toISOString();const {error}=await db().from("ayfar_notifications").update({read_at:stamp}).in("id",unread);if(!error){rows=rows.map(x=>unread.includes(x.id)?{...x,read_at:stamp}:x);updateBadge();}}
   }
   async function init(){
-    ensureButton();const {data:{user:current}}=await db().auth.getUser();user=current;if(!user)return;
+    ensureButton();const {data:{user:current}}=await db().auth.getUser();if(!current)return;if(activeUserId!==current.id){if(channel)await db().removeChannel(channel);channel=null;rows=[];activeUserId=current.id;}user=current;
     await refresh();
     if(!channel)channel=db().channel("ayfar-notifications-"+user.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"ayfar_notifications",filter:"recipient_id=eq."+user.id},payload=>{
       rows=[payload.new,...rows].slice(0,60);updateBadge();
