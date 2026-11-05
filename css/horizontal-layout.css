@@ -1,0 +1,90 @@
+/* AYFAR WORLD — true horizontal content paging
+   Every long area is flowed into screen-width columns instead of vertical scrolling. */
+html,body{width:100%;height:100%;overflow:hidden}
+body{min-height:100dvh}
+.shell{height:100dvh;min-height:0;overflow:hidden;padding:clamp(8px,2vw,18px);display:flex;flex-direction:column}
+#home,#page{height:100%;min-height:0;overflow:hidden}
+#home{display:flex;flex-direction:column}
+#home-top{flex:0 0 auto;padding-bottom:6px}
+.home-section-nav{flex:0 0 auto;position:relative;top:auto;margin:0 0 7px;padding:6px 1px 8px;touch-action:pan-x}
+#home-pages{flex:1 1 auto;width:100%;height:auto;min-height:0;display:flex;flex-direction:row;direction:rtl;gap:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-x}
+#home-pages::-webkit-scrollbar{display:none}
+#home-pages>.home-section-anchor{position:relative;flex:0 0 100%;width:100%;height:100%;min-width:0;min-height:0;box-sizing:border-box;padding:7px 7px 12px;overflow-x:auto;overflow-y:hidden;column-width:calc(100vw - 64px);column-gap:18px;column-fill:auto;scroll-snap-align:start;scroll-snap-stop:always;scrollbar-width:none;overscroll-behavior-x:contain;overscroll-behavior-y:none;touch-action:pan-x}
+#home-pages>.home-section-anchor::-webkit-scrollbar{display:none}
+#home-pages>.home-section-anchor>*{break-inside:avoid-column;max-width:100%;margin-block:0 12px}
+.home-slide-controls{flex:0 0 auto;margin:7px auto 0;padding-bottom:env(safe-area-inset-bottom)}
+.home-slide-controls button{touch-action:manipulation}
+.home-section-nav button{touch-action:manipulation}
+
+/* Flatten tall card grids into the horizontal page flow. */
+#home-overview .unfinished-section,#home-overview .history-section,
+#home-overview #unfinished-games,#home-overview #match-history,
+#home-our-world .stats,#home-our-world .features,
+#home-games .games,#home-plans .planned-features{display:contents}
+#home-overview .heading,#home-overview .unfinished-match,#home-overview .history-match,
+#home-our-world .stats article,#home-our-world .features .feature,
+#home-games .games>button,#home-plans .plan-card{break-inside:avoid-column;margin-bottom:10px}
+#home-games .games>button{width:100%;min-height:132px}
+#home-plans .plan-card{min-height:150px}
+#home-overview .unfinished-empty,#home-overview .history-empty{break-inside:avoid-column}
+
+/* Routine: long forms and lists become their own swipeable horizontal page strips. */
+#home-routine #routine-app,#home-routine #routine-plus-app,
+#home-routine .routine-workspace{display:contents}
+#home-routine .routine-compose,#home-routine .routine-music-form,
+#home-routine .routine-music-list{
+  height:calc(100dvh - 245px);max-height:100%;min-height:230px;
+  box-sizing:border-box;column-width:calc(100vw - 82px);column-gap:16px;column-fill:auto;
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x
+}
+#home-routine .routine-compose::-webkit-scrollbar,
+#home-routine .routine-music-form::-webkit-scrollbar,
+#home-routine .routine-music-list::-webkit-scrollbar{display:none}
+#home-routine .routine-compose>*,
+#home-routine .routine-music-form>*,
+#home-routine .routine-music-list>*{break-inside:avoid-column}
+#home-routine .routine-activity-list,#home-routine .routine-mode-list,#home-routine .routine-mood-list{break-inside:avoid-column}
+#home-routine .routine-plus{height:calc(100dvh - 205px);max-height:100%;box-sizing:border-box;column-width:calc(100vw - 82px);column-gap:16px;column-fill:auto;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x}
+#home-routine .routine-plus::-webkit-scrollbar{display:none}
+#home-routine .routine-plus-head,#home-routine .routine-plus-tabs{break-inside:avoid-column}
+#home-routine .routine-plus-section{display:contents}
+#home-routine .routine-plus-section>*{break-inside:avoid-column}
+#home-routine .routine-plus-form{height:calc(100dvh - 285px);min-height:210px;box-sizing:border-box;column-width:calc(100vw - 112px);column-gap:14px;column-fill:auto;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+#home-routine .routine-plus-form>*{break-inside:avoid-column}
+
+/* Avatar card: retain the two-character carousel; page each character's details sideways. */
+#home-pets .pets-world{gap:9px}
+#home-pets .pets-carousel{height:calc(100dvh - 270px);min-height:250px;overflow-y:hidden;touch-action:pan-x}
+#home-pets .pet-slide{height:100%;flex-basis:100%;min-width:0}
+#home-pets .pet-slide .pet-card{height:100%;box-sizing:border-box;column-width:calc(100vw - 105px);column-gap:14px;column-fill:auto;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x}
+#home-pets .pet-slide .pet-card::-webkit-scrollbar{display:none}
+#home-pets .pet-card>*{break-inside:avoid-column}
+#home-pets .pet-stage{min-height:125px}
+#home-pets .pet-creature{font-size:62px}
+#home-pets .pet-care-grid button{min-height:48px}
+#home-pets .pet-carousel-hint,#home-pets .pet-rules{break-inside:avoid-column}
+
+/* Secondary screens (messages, games and detail panels) use the same page-turn pattern. */
+#page{display:flex;flex-direction:column}
+#page>header{flex:0 0 auto;padding-bottom:8px}
+#pagebody{flex:1 1 auto;width:100%;max-width:100%;height:100%;min-height:0;margin:0 auto;overflow:hidden}
+#pagebody>.panel{width:100%;height:100%;max-height:100%;box-sizing:border-box;overflow-x:auto;overflow-y:hidden;column-width:calc(100vw - 78px);column-gap:18px;column-fill:auto;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x}
+#pagebody>.panel::-webkit-scrollbar{display:none}
+#pagebody>.panel>*{break-inside:avoid-column}
+#pagebody>.panel>.game-screen-content{display:contents}
+#pagebody .message-list{max-height:none;height:calc(100dvh - 330px);min-height:130px;column-width:calc(100vw - 110px);column-gap:12px;column-fill:auto;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+#pagebody .message-list>*{break-inside:avoid-column}
+#pagebody .question-card,#pagebody .answer-actions,#pagebody .knowledge-options,#pagebody .result-grid{break-inside:avoid-column}
+#pagebody textarea{resize:none;max-height:115px}
+
+/* Keep small phones usable without reintroducing a vertical page scrollbar. */
+@media(max-width:380px){
+ .home-section-nav{gap:5px}
+ .home-section-nav button{padding:8px 11px;font-size:11px}
+ #home-pages>.home-section-anchor{column-width:calc(100vw - 42px);column-gap:12px}
+ #home-routine .routine-compose,#home-routine .routine-music-form{column-width:calc(100vw - 60px)}
+ #home-routine .routine-plus{column-width:calc(100vw - 60px)}
+ #home-pets .pet-slide .pet-card{column-width:calc(100vw - 82px)}
+ #pagebody>.panel{column-width:calc(100vw - 58px)}
+}
+@media(prefers-reduced-motion:reduce){#home-pages,#home-pages>.home-section-anchor{scroll-behavior:auto}}
