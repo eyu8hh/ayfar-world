@@ -39,7 +39,8 @@ for select to authenticated using (recipient_id=auth.uid());
 drop policy if exists "AYFAR users mark own notifications read" on public.ayfar_notifications;
 create policy "AYFAR users mark own notifications read" on public.ayfar_notifications
 for update to authenticated using (recipient_id=auth.uid()) with check (recipient_id=auth.uid());
-grant select,update on public.ayfar_notifications to authenticated;
+grant select on public.ayfar_notifications to authenticated;
+grant update(read_at) on public.ayfar_notifications to authenticated;
 
 create or replace function public.ayfar_send_notification(
   p_actor uuid,p_recipient uuid,p_type text,p_title text,p_body text,p_reference uuid default null
