@@ -9,7 +9,7 @@ body{min-height:100dvh}
 .home-section-nav{flex:0 0 auto;position:relative;top:auto;margin:0 0 7px;padding:6px 1px 8px;touch-action:pan-x}
 #home-pages{flex:1 1 auto;width:100%;height:calc(100dvh - 174px);min-height:0;display:flex;flex-direction:row;direction:rtl;gap:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-x pan-y;border-radius:20px}
 #home-pages::-webkit-scrollbar{display:none}
-#home-pages>.home-section-anchor{position:relative;flex:0 0 100%;width:100%;height:100%;min-width:0;min-height:0;box-sizing:border-box;padding:6px 5px 28px;overflow-x:hidden;overflow-y:auto;columns:auto;column-width:auto;column-count:auto;scroll-snap-align:start;scroll-snap-stop:always;overscroll-behavior-y:contain;overscroll-behavior-x:none;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:rgba(143,54,85,.35) transparent}
+#home-pages>.home-section-anchor{position:relative;flex:0 0 100%;width:100%;height:100%;min-width:0;min-height:0;box-sizing:border-box;padding:6px 5px 28px;overflow-x:hidden;overflow-y:auto;columns:auto;column-width:auto;column-count:auto;scroll-snap-align:start;scroll-snap-stop:always;overscroll-behavior-y:contain;overscroll-behavior-x:none;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;scrollbar-width:thin;scrollbar-color:rgba(143,54,85,.35) transparent}
 #home-pages>.home-section-anchor>*{break-inside:auto;max-width:100%}
 #home-pages>.home-section-anchor:focus-visible{outline:2px solid var(--pink);outline-offset:-3px}
 .home-slide-controls{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:20px;margin:9px auto 4px;padding-bottom:env(safe-area-inset-bottom);color:var(--muted);font-size:11px}
@@ -17,11 +17,6 @@ body{min-height:100dvh}
 .home-slide-controls button:disabled{opacity:.3;cursor:default}
 .home-section-nav button{touch-action:manipulation}
 
-/* Preserve the original grids and card groups; they flow down within their category. */
-#home-overview .unfinished-section,#home-overview .history-section,
-#home-overview #unfinished-games,#home-overview #match-history,
-#home-our-world .stats,#home-our-world .features,
-#home-games .games,#home-plans .planned-features{display:initial}
 #home-our-world .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
 #home-our-world .features,#home-games .games,#home-plans .planned-features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
 #home-games .games>button{width:100%;min-width:0}
