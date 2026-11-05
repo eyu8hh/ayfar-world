@@ -1,5 +1,4 @@
-/* AYFAR WORLD — horizontal category navigation + vertical content scrolling.
-   Each category is a normal vertical document inside a horizontally paged shell. */
+/* Independent vertical scrolling in each category; horizontal swipes change category only. */
 html,body{width:100%;height:100%;overflow:hidden}
 body{min-height:100dvh}
 .shell{height:100dvh;min-height:0;overflow:hidden;padding:clamp(8px,2vw,18px);display:flex;flex-direction:column}
@@ -7,48 +6,37 @@ body{min-height:100dvh}
 #home{display:flex;flex-direction:column}
 #home-top{flex:0 0 auto;padding-bottom:6px}
 .home-section-nav{flex:0 0 auto;position:relative;top:auto;margin:0 0 7px;padding:6px 1px 8px;touch-action:pan-x}
-#home-pages{flex:1 1 auto;width:100%;height:calc(100dvh - 174px);min-height:0;display:flex;flex-direction:row;direction:rtl;gap:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-x pan-y;border-radius:20px}
+#home-pages{flex:1 1 auto;width:100%;height:calc(100dvh - 174px);min-height:0;display:flex;flex-direction:row;direction:ltr;gap:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-y;border-radius:20px}
 #home-pages::-webkit-scrollbar{display:none}
-#home-pages>.home-section-anchor{position:relative;flex:0 0 100%;width:100%;height:100%;min-width:0;min-height:0;box-sizing:border-box;padding:6px 5px 28px;overflow-x:hidden;overflow-y:auto;columns:auto;column-width:auto;column-count:auto;scroll-snap-align:start;scroll-snap-stop:always;overscroll-behavior-y:contain;overscroll-behavior-x:none;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;scrollbar-width:thin;scrollbar-color:rgba(143,54,85,.35) transparent}
-#home-pages>.home-section-anchor>*{break-inside:auto;max-width:100%}
+#home-pages>.home-section-anchor{position:relative;direction:rtl;flex:0 0 100%;width:100%;height:100%;min-width:0;min-height:0;box-sizing:border-box;padding:6px 5px 28px;overflow-x:hidden;overflow-y:auto;scroll-snap-align:start;scroll-snap-stop:always;overscroll-behavior-y:contain;overscroll-behavior-x:none;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:rgba(143,54,85,.35) transparent}
+#home-pages>.home-section-anchor>*{max-width:100%}
 #home-pages>.home-section-anchor:focus-visible{outline:2px solid var(--pink);outline-offset:-3px}
 .home-slide-controls{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:20px;margin:9px auto 4px;padding-bottom:env(safe-area-inset-bottom);color:var(--muted);font-size:11px}
 .home-slide-controls button{width:38px;height:36px;border:1px solid var(--line);border-radius:12px;background:var(--surface,#fff);color:var(--burgundy);font-size:17px;touch-action:manipulation}
 .home-slide-controls button:disabled{opacity:.3;cursor:default}
 .home-section-nav button{touch-action:manipulation}
-
 #home-our-world .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
 #home-our-world .features,#home-games .games,#home-plans .planned-features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
 #home-games .games>button{width:100%;min-width:0}
 #home-plans .plan-card{min-width:0}
 #home-routine .routine-plus-section{display:block}
-
-/* Pet cards keep their own horizontal character carousel, not horizontal text columns. */
 #home-pets .pets-carousel{height:auto;max-height:none;overflow-x:auto;overflow-y:hidden;touch-action:pan-x pan-y}
 #home-pets .pet-slide{height:auto;min-width:0}
-#home-pets .pet-slide .pet-card{height:auto;max-height:none;overflow:visible;columns:auto;column-width:auto;column-count:auto;touch-action:auto}
-#home-pets .pet-card>*{break-inside:auto}
-
-/* Detail screens and game panels also scroll vertically through their full content. */
+#home-pets .pet-slide .pet-card{height:auto;max-height:none;overflow:visible}
 #page{display:flex;flex-direction:column}
 #page>header{flex:0 0 auto;padding-bottom:8px}
 #pagebody{flex:1 1 auto;width:100%;max-width:100%;height:100%;min-height:0;margin:0 auto;overflow:hidden}
-#pagebody>.panel{width:100%;height:100%;max-height:none;min-height:0;box-sizing:border-box;overflow-x:hidden;overflow-y:auto;columns:auto;column-width:auto;column-count:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y;scrollbar-width:thin}
-#pagebody>.panel>*{break-inside:auto}
+#pagebody>.panel{width:100%;height:100%;max-height:none;min-height:0;box-sizing:border-box;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y;scrollbar-width:thin}
 #pagebody>.panel>.game-screen-content{display:block}
-#pagebody .message-list{height:auto;max-height:55vh;min-height:0;overflow-x:hidden;overflow-y:auto;columns:auto;column-width:auto;column-count:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}
-#pagebody .message-list>*{break-inside:auto}
+#pagebody .message-list{height:auto;max-height:55vh;min-height:0;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 #pagebody textarea{resize:vertical;max-height:none}
-
-@media(max-width:520px){
- #home-pages{height:calc(100dvh - 158px);min-height:0;border-radius:16px}
- .home-slide-controls{margin-top:9px}
-}
-@media(max-width:380px){
- .home-section-nav{gap:5px}
- .home-section-nav button{padding:8px 11px;font-size:11px}
- #home-our-world .stats{gap:7px}
- #home-our-world .stats article{padding:11px 8px}
-}
+.daily-rating-result{margin:18px 0;padding:16px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#fff5f7,#f3f8f3)}
+.daily-rating-result>b{display:block;color:var(--burgundy);margin-bottom:8px}
+.daily-rating-hearts{font-size:25px;letter-spacing:4px;color:#b64e70}
+.daily-rating-hearts span{color:#d9cbd0}
+.daily-rating-result p{margin:8px 0;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
+.daily-rating-result small{color:var(--muted);font-size:10px}
+@media(max-width:520px){#home-pages{height:calc(100dvh - 158px);min-height:0;border-radius:16px}.home-slide-controls{margin-top:9px}}
+@media(max-width:380px){.home-section-nav{gap:5px}.home-section-nav button{padding:8px 11px;font-size:11px}#home-our-world .stats{gap:7px}#home-our-world .stats article{padding:11px 8px}}
 @media(min-width:760px){#home-pages{height:calc(100dvh - 190px)}}
 @media(prefers-reduced-motion:reduce){#home-pages{scroll-behavior:auto}}
