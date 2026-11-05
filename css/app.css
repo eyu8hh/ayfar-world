@@ -1175,3 +1175,75 @@ body.ayoub-theme .final-result-scores article{background:#26374b;border-color:#4
 body.ayoub-theme .final-result-scores article>small{color:#c3cbd5}
 body.ayoub-theme .final-result-scores article>strong{color:#f0dfbd}
 body.ayoub-theme .final-result-scores article>em{color:#b9c2ce}
+
+
+/* AYFAR · shared daily routine, mood and YouTube music */
+#home-routine{padding-top:12px}
+.routine-intro{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 16px;padding:20px;border:1px solid #efd5df;border-radius:24px;background:linear-gradient(125deg,#fff0f4 0%,#fffaf5 58%,#edf5ed 100%)}
+.routine-intro h3{margin:5px 0 7px;color:#70243f;font-size:21px}
+.routine-intro p{margin:0;color:#806b74;font-size:12px;line-height:1.8}
+.routine-intro-art{display:grid;place-items:center;flex:0 0 72px;width:72px;height:72px;border-radius:23px;background:linear-gradient(145deg,#8f3655,#bd6b83);color:#fff;font-size:21px;box-shadow:0 10px 24px #8f365526}
+.routine-loading,.routine-empty{padding:22px;text-align:center;color:var(--muted);font-size:13px;line-height:1.8}
+.routine-workspace{display:flex;flex-direction:column;gap:16px}
+.routine-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:5px;border-radius:16px;background:var(--surface-2,#f6eef1)}
+.routine-tabs button{border:0;border-radius:12px;background:transparent;color:var(--muted);padding:11px 8px;font:inherit;font-size:13px;font-weight:800}
+.routine-tabs button.active{background:var(--surface,#fff);color:var(--burgundy,#8f3655);box-shadow:0 3px 12px #49203312}
+.routine-section-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 10px}
+.routine-section-title h4{margin:0;font-size:15px;color:var(--text)}
+.routine-section-title small{font-size:10px;color:var(--muted)}
+.routine-people{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.routine-person{min-width:0;padding:13px 11px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.routine-person-head{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.routine-avatar{display:grid;place-items:center;width:31px;height:31px;flex:0 0 31px;border-radius:12px;background:#f6e4eb;font-size:17px}
+.routine-person.farahati .routine-avatar{background:#eaf2e8}
+.routine-person-head b{font-size:12px;color:var(--text)}
+.routine-person-head small{display:block;margin-top:2px;font-size:9px;color:var(--muted)}
+.routine-activity-icon{font-size:24px;line-height:1.3}
+.routine-person h5{margin:5px 0 4px;font-size:13px;line-height:1.5;color:var(--text);overflow-wrap:anywhere}
+.routine-person p{margin:0;font-size:10px;line-height:1.7;color:var(--muted);overflow-wrap:anywhere}
+.routine-mood{display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:5px 8px;border-radius:999px;background:#f8eff2;color:#815269;font-size:10px}
+.routine-private{padding:12px 8px;text-align:center;color:var(--muted);font-size:11px;line-height:1.7}
+.routine-compose,.routine-music-form{padding:15px;border:1px solid var(--line);border-radius:19px;background:var(--surface)}
+.routine-compose h4,.routine-music-form h4{margin:0 0 5px;font-size:15px;color:var(--text)}
+.routine-compose>p,.routine-music-form>p{margin:0 0 13px;font-size:11px;line-height:1.7;color:var(--muted)}
+.routine-field-label{display:block;margin:13px 0 8px;font-size:11px;font-weight:900;color:var(--text)}
+.routine-mode-list,.routine-activity-list,.routine-mood-list{display:flex;flex-wrap:wrap;gap:7px}
+.routine-mode-list button,.routine-activity-list button,.routine-mood-list button{border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text);padding:8px 10px;font:inherit;font-size:10px;font-weight:700}
+.routine-mode-list button.active,.routine-activity-list button.selected,.routine-mood-list button.selected{border-color:#b35f7b;background:#f8e9ef;color:#762b48}
+.routine-activity-list button{border-radius:12px;padding:9px 10px}
+.routine-form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.routine-input,.routine-select{width:100%;min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);padding:11px;font:inherit;font-size:12px;outline:none}
+.routine-input:focus,.routine-select:focus{border-color:#b35f7b}
+.routine-note{min-height:66px;resize:vertical}
+.routine-check-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:10px 0;font-size:11px;color:var(--text)}
+.routine-check-row input{accent-color:#8f3655;width:17px;height:17px}
+.routine-actions{display:flex;gap:8px;margin-top:13px}
+.routine-actions button,.routine-primary{flex:1;min-height:43px;border:0;border-radius:13px;padding:10px 12px;background:linear-gradient(120deg,#8f3655,#b65b78);color:#fff;font:inherit;font-size:12px;font-weight:900}
+.routine-actions button.secondary{border:1px solid var(--line);background:var(--surface);color:var(--text)}
+.routine-feedback{min-height:18px;margin-top:8px;font-size:11px;color:var(--muted)}
+.routine-duration-note{margin-top:8px;font-size:10px;line-height:1.6;color:var(--muted)}
+.routine-music-form{margin-bottom:14px}
+.routine-music-list{display:flex;flex-direction:column;gap:12px}
+.routine-music-item{overflow:hidden;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.routine-music-item iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:#17121a}
+.routine-music-copy{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px}
+.routine-music-copy b{display:block;font-size:12px;color:var(--text);overflow-wrap:anywhere}
+.routine-music-copy small{display:block;margin-top:4px;font-size:10px;color:var(--muted)}
+.routine-music-copy a{color:#9b4565;font-size:10px;font-weight:800;text-decoration:none;white-space:nowrap}
+.routine-music-remove{margin:0 12px 12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--muted);padding:6px 9px;font:inherit;font-size:10px}
+.routine-music-empty{padding:20px;border:1px dashed var(--line);border-radius:16px;text-align:center;color:var(--muted);font-size:12px;line-height:1.8}
+.routine-privacy-note{padding:10px 12px;border-radius:13px;background:#f4f0f2;color:#786b72;font-size:10px;line-height:1.8}
+body.ayoub-theme .routine-intro{border-color:#34465c;background:linear-gradient(125deg,#202f43,#29384b 58%,#243b36)}
+body.ayoub-theme .routine-intro h3{color:#f3d9e3}
+body.ayoub-theme .routine-intro p{color:#c1cad6}
+body.ayoub-theme .routine-intro-art{background:linear-gradient(145deg,#355b4a,#567e69)}
+body.ayoub-theme .routine-tabs{background:#202f43}
+body.ayoub-theme .routine-tabs button.active{background:#314258;color:#f0c6d5}
+body.ayoub-theme .routine-person,body.ayoub-theme .routine-compose,body.ayoub-theme .routine-music-form,body.ayoub-theme .routine-music-item{background:#202f43;border-color:#40516a}
+body.ayoub-theme .routine-person-head b,body.ayoub-theme .routine-person h5,body.ayoub-theme .routine-compose h4,body.ayoub-theme .routine-music-form h4,body.ayoub-theme .routine-music-copy b{color:#eef2f7}
+body.ayoub-theme .routine-mode-list button,body.ayoub-theme .routine-activity-list button,body.ayoub-theme .routine-mood-list button,body.ayoub-theme .routine-input,body.ayoub-theme .routine-select{background:#182437;border-color:#40516a;color:#dbe3ed}
+body.ayoub-theme .routine-mode-list button.active,body.ayoub-theme .routine-activity-list button.selected,body.ayoub-theme .routine-mood-list button.selected{background:#493044;border-color:#bd7792;color:#f5d9e5}
+body.ayoub-theme .routine-check-row{color:#e1e8f0}
+body.ayoub-theme .routine-privacy-note{background:#29384b;color:#c1cad6}
+@media(min-width:650px){.routine-people{grid-template-columns:repeat(2,minmax(0,1fr))}.routine-music-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:380px){.routine-person{padding:10px 8px}.routine-form-row{grid-template-columns:1fr}.routine-intro{padding:16px}.routine-intro-art{flex-basis:58px;width:58px;height:58px;font-size:17px}}
