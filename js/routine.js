@@ -28,8 +28,8 @@
     return "منذ "+Math.floor(hrs/24)+" يوم";
   }
   function personCard(who,label,avatar){
-    const item=statuses.find(s=>s.user_id===who);
-    const mine=who===user?.id;
+    const item=statuses.find(s=>s.role===who);
+    const mine=who===role;
     if(!item)return '<article class="routine-person '+(who==="ayoub"?"ayoub":"farahati")+'"><div class="routine-person-head"><span class="routine-avatar">'+avatar+'</span><div><b>'+label+'</b><small>'+(mine?"مساحتك اليومية":"مساحة الطرف الآخر")+'</small></div></div><div class="routine-private">لم يشارك '+(mine?"حالة حالية بعد":"حالة حالية الآن")+' ♡</div></article>';
     const expired=item.expires_at&&new Date(item.expires_at).getTime()<Date.now();
     const activity=activityById(item.activity_key);
@@ -86,7 +86,7 @@
     if(busy||!user)return;
     const customActivity=$("#routine-custom-activity")?.value.trim()||"",activity=customActivity?["custom","✍️",customActivity]:activityById(draftActivity),duration=Number($("#routine-duration")?.value||0),visibility=$("#routine-visibility")?.value||"shared";
     const now=new Date(),expires=duration?new Date(now.getTime()+duration*60000).toISOString():null;
-    const payload={user_id:user.id,activity_key:activity[0],activity_label:activity[2],category:activeMode,mood:draftMood,note:$("#routine-note")?.value.trim()||"",visibility,share_mood:!!$("#routine-share-mood")?.checked,duration_minutes:duration,started_at:now.toISOString(),expires_at:expires};
+    const payload={user_id:user.id,role,activity_key:activity[0],activity_label:activity[2],category:activeMode,mood:draftMood,note:$("#routine-note")?.value.trim()||"",visibility,share_mood:!!$("#routine-share-mood")?.checked,duration_minutes:duration,started_at:now.toISOString(),expires_at:expires};
     busy=true;render();const feedback=$("#routine-feedback");if(feedback)feedback.textContent="جارٍ حفظ حالتك…";
     const {error}=await supa().from("ayfar_routine_status").upsert(payload,{onConflict:"user_id"});
     busy=false;
@@ -97,7 +97,7 @@
     if(busy||!user)return;
     const now=new Date().toISOString();
     busy=true;
-    const {error}=await supa().from("ayfar_routine_status").upsert({user_id:user.id,activity_key:"available",activity_label:"متاح / متاحة الآن",category:"social",mood:draftMood,note:"",visibility:"shared",share_mood:true,duration_minutes:0,started_at:now,expires_at:null},{onConflict:"user_id"});
+    const {error}=await supa().from("ayfar_routine_status").upsert({user_id:user.id,role,activity_key:"available",activity_label:"متاح / متاحة الآن",category:"social",mood:draftMood,note:"",visibility:"shared",share_mood:true,duration_minutes:0,started_at:now,expires_at:null},{onConflict:"user_id"});
     busy=false;
     if(error){const f=$("#routine-feedback");if(f)f.textContent="تعذر تحديث الحالة: "+error.message;return;}
     await loadAll();
@@ -126,7 +126,7 @@
     if(error||!data?.user)return;
     user=data.user;
     const {data:profile}=await supa().from("profiles").select("role").eq("id",user.id).single();
-    role=String(profile?.role||activeRole||"ayoub").toLowerCase()==="farahati"||String(profile?.role||activeRole||"").toLowerCase()==="farhati"?"farahati":"ayoub";
+    const profileRole=String(profile?.role||activeRole||"ayoub").toLowerCase();role=profileRole==="farahati"||profileRole==="farhati"?"farahati":"ayoub";
     await loadAll();
     if(!channel){
       channel=supa().channel("ayfar-routine-and-music")
