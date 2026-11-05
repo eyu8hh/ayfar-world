@@ -25,17 +25,17 @@ alter table public.ayfar_routine_status enable row level security;
 create or replace function public.ayfar_routine_role(p_user_id uuid)
 returns text language sql stable security definer
 set search_path=public,auth
-as $
+as $function$
   select case when lower(role)='ayoub' then 'ayoub'
               when lower(role) in ('farahati','farhati') then 'farahati'
               else null end
   from public.profiles where id=p_user_id;
-$;
+$function$;
 
 create or replace function public.ayfar_is_routine_partner(p_user_id uuid)
 returns boolean language sql stable security definer
 set search_path=public,auth
-as $
+as $function$
   select exists (
     select 1 from public.profiles viewer
     join public.profiles owner_profile on owner_profile.id=p_user_id
@@ -45,12 +45,12 @@ as $
         or (lower(viewer.role) in ('farahati','farhati') and lower(owner_profile.role)='ayoub')
       )
   );
-$;
+$function$;
 
 create or replace function public.ayfar_is_routine_pair_member()
 returns boolean language sql stable security definer
 set search_path=public,auth
-as $
+as $function$
   select exists (
     select 1 from public.profiles viewer
     where viewer.id=auth.uid()
@@ -59,7 +59,7 @@ as $
         or (lower(viewer.role) in ('farahati','farhati') and exists (select 1 from public.profiles partner where lower(partner.role)='ayoub'))
       )
   );
-$;
+$function$;
 
 revoke all on function public.ayfar_routine_role(uuid) from public,anon;
 revoke all on function public.ayfar_is_routine_partner(uuid) from public,anon;
@@ -110,24 +110,7 @@ with check (added_by = auth.uid() and public.ayfar_is_routine_pair_member());
 drop policy if exists "AYFAR pair can remove shared music" on public.ayfar_shared_music;
 create policy "AYFAR pair can remove shared music"
 on public.ayfar_shared_music for delete to authenticated
-using (
-  exists (
-    select 1
-    from public.profiles viewer
-    where viewer.id = auth.uid()
-      and (
-        (lower(viewer.role) = 'ayoub' and exists (
-          select 1 from public.profiles partner
-          where lower(partner.role) in ('farahati','farhati')
-        ))
-        or
-        (lower(viewer.role) in ('farahati','farhati') and exists (
-          select 1 from public.profiles partner
-          where lower(partner.role) = 'ayoub'
-        ))
-      )
-  )
-);
+using (public.ayfar_is_routine_pair_member());
 
 grant select, insert, delete on public.ayfar_shared_music to authenticated;
 
