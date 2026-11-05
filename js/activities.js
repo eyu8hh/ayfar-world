@@ -184,21 +184,23 @@
     selectedActivity=null;selectedMood="الكل";
     a$(".plans-tool-content").innerHTML='<div class="plans-tool-form"><label for="activity-mood">ما المزاج الذي يناسبكما؟</label><select id="activity-mood"><option>الكل</option><option>خفيفة</option><option>حديث</option><option>إبداع</option><option>عن بُعد</option></select><button class="plans-tool-primary" type="button" data-pick-activity>اقترحوا لنا فكرة ♡</button></div><div class="plan-suggestions" data-suggestion><div class="plan-tool-empty">اختارا المزاج، ثم اكشفا فكرة اليوم.</div></div><div class="plans-tool-feedback" data-feedback></div>';
     a$("#activity-mood").addEventListener("change",e=>selectedMood=e.target.value);
-    a$("[data-pick-activity]").addEventListener("click",()=>{
+    const pickActivity=()=>{
       const pool=activities.filter(x=>selectedMood==="الكل"||x.kind===selectedMood).filter(x=>x.title!==selectedActivity?.title);
       const item=pool[Math.floor(Math.random()*pool.length)]||activities[0];selectedActivity=item;
       a$("[data-suggestion]").innerHTML='<article class="plan-suggestion"><small>فكرة من '+esc(item.kind)+'</small><h3>'+esc(item.title)+'</h3><p>'+esc(item.desc)+'</p></article><div class="plan-tool-row"><button type="button" class="plan-tool-secondary" data-pick-activity>فكرة أخرى ↻</button><button type="button" class="plan-tool-secondary" data-activity-done>سنجرّبها ♡</button></div>';
-      a$("[data-pick-activity]").addEventListener("click",()=>a$("[data-pick-activity]").click());
+      a$("[data-pick-activity]").addEventListener("click",pickActivity);
       a$("[data-activity-done]").addEventListener("click",()=>setFeedback(activity,"اتفقنا! نتمنى لكما وقتاً جميلاً معاً ♡"));
-    });
+    };
+    a$("[data-pick-activity]").addEventListener("click",pickActivity);
   }
   function openSurprise(){
     revealedSurprise=null;
-    s$(".plans-tool-content").innerHTML='<div class="plan-surprise-stage"><div><div class="plan-surprise-gift">🎁</div><small>هناك شيء لطيف ينتظركما</small><h3>هل أنتما مستعدان؟</h3><p>لا تعرفان ما الذي يخفيه الصندوق. افتحاه معاً واكتشفا مفاجأة صغيرة.</p><button class="plans-tool-primary" type="button" data-reveal-surprise>افتحا الصندوق ✨</button></div></div><div class="plans-tool-feedback" data-feedback></div>';
-    s$("[data-reveal-surprise]").addEventListener("click",()=>{
+    const reveal=()=>{
       const pool=surprises.filter(x=>x[0]!==revealedSurprise?.[0]);revealedSurprise=pool[Math.floor(Math.random()*pool.length)]||surprises[0];
       s$(".plans-tool-content").innerHTML='<div class="plan-surprise-stage"><div><div class="plan-surprise-gift">💝</div><small>مفاجأتكما لهذا اليوم</small><h3>'+esc(revealedSurprise[0])+'</h3><p>'+esc(revealedSurprise[1])+'</p><button class="plans-tool-primary" type="button" data-reveal-surprise>مفاجأة أخرى ↻</button></div></div><div class="plans-tool-feedback" data-feedback></div>';
-      s$("[data-reveal-surprise]").addEventListener("click",()=>s$("[data-reveal-surprise]").click());
-    });
+      s$("[data-reveal-surprise]").addEventListener("click",reveal);
+    };
+    s$(".plans-tool-content").innerHTML='<div class="plan-surprise-stage"><div><div class="plan-surprise-gift">🎁</div><small>هناك شيء لطيف ينتظركما</small><h3>هل أنتما مستعدان؟</h3><p>لا تعرفان ما الذي يخفيه الصندوق. افتحاه معاً واكتشفا مفاجأة صغيرة.</p><button class="plans-tool-primary" type="button" data-reveal-surprise>افتحا الصندوق ✨</button></div></div><div class="plans-tool-feedback" data-feedback></div>';
+    s$("[data-reveal-surprise]").addEventListener("click",reveal);
   }
 })();
