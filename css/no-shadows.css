@@ -1,0 +1,23 @@
+/* AYFAR WORLD — remove decorative shadows for a clearer interface.
+   Keeps layout, colors, borders, and interaction states unchanged. */
+*,
+*::before,
+*::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Remove the remaining icon/envelope drop-shadow filters without
+   changing other intentional filters (for example disabled heart states). */
+.plans-intro-art b .bi,
+.plan-icon .bi,
+.envelope span {
+  filter: none !important;
+}
+
+/* Avoid frosted-glass blur behind the login and letter overlay. */
+.loginbox,
+#love-overlay {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
