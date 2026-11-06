@@ -1,0 +1,98 @@
+/* AYFAR WORLD — lightweight 3D depth layer.
+   CSS-only: no WebGL, canvas, libraries, or extra runtime cost. */
+:root{
+  --ayfar-perspective:1100px;
+  --ayfar-3d-ease:cubic-bezier(.2,.75,.25,1);
+}
+#home-pages{perspective:var(--ayfar-perspective);perspective-origin:50% 42%}
+#home-pages>.home-section-anchor{transform-style:preserve-3d}
+#home-pages>.home-section-anchor>*{transform:translateZ(0);backface-visibility:hidden}
+#home-overview .hero,
+#home-overview .home-anniversary,
+#home-overview .continue-card,
+#home-our-world .stats article,
+#home-our-world .feature,
+#home-messages .message-feature,
+#home-games .games>button,
+#home-plans .plan-card,
+#home-routine .routine-intro{
+  position:relative;
+  transform:perspective(900px) translateZ(0) rotateX(0deg);
+  transform-style:preserve-3d;
+  transition:transform .32s var(--ayfar-3d-ease),border-color .28s ease,background .28s ease;
+}
+#home-overview .hero{
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse at 12% 10%,rgba(255,255,255,.82),transparent 34%),
+    linear-gradient(118deg,#f1cfdb 0%,#fae9ee 53%,#e4efe6 100%);
+}
+#home-overview .hero:before{
+  content:"";position:absolute;inset:9px;border:1px solid rgba(255,255,255,.56);
+  border-radius:21px;pointer-events:none;transform:translateZ(12px);
+}
+#home-overview .heroheart{transform:translateZ(20px) rotate(-12deg);opacity:.72}
+#home-overview .hero>div:first-child{transform:translateZ(24px)}
+#home-overview .home-anniversary{transform:perspective(900px) translateZ(8px)}
+#home-overview .home-anniversary-head>span{transform:translateZ(16px)}
+#home-overview .continue-card{transform:perspective(900px) translateZ(12px)}
+#home-our-world .stats article{transform:perspective(850px) rotateX(2deg) translateZ(5px)}
+#home-our-world .stats article:nth-child(2){transform:perspective(850px) rotateX(2deg) translateZ(9px)}
+#home-our-world .feature,
+#home-messages .message-feature{transform:perspective(850px) rotateX(2deg) translateZ(8px)}
+#home-games .games>button{
+  overflow:hidden;
+  transform:perspective(850px) rotateX(2deg) translateZ(5px);
+  background-image:linear-gradient(145deg,rgba(255,255,255,.68),rgba(255,255,255,0) 62%);
+}
+#home-games .games>button:after{
+  content:"";position:absolute;inset:1px;border:1px solid rgba(255,255,255,.7);
+  border-radius:inherit;pointer-events:none;transform:translateZ(7px)
+}
+#home-plans .plan-card{transform:perspective(850px) rotateX(2deg) translateZ(6px)}
+#home-plans .plan-icon{transform:translateZ(12px);transition:transform .3s var(--ayfar-3d-ease)}
+#home-routine .routine-intro{transform:perspective(850px) rotateX(2deg) translateZ(7px)}
+.home-section-nav button.active{transform:translateZ(7px)}
+.home-slide-controls button{transition:transform .22s var(--ayfar-3d-ease),background .22s ease}
+.glow{transform:translateZ(-20px);transform-origin:center;animation:ayfarGlowDrift 18s ease-in-out infinite alternate}
+.glow.g2{animation-delay:-9s;animation-duration:22s}
+@keyframes ayfarGlowDrift{
+  from{translate:0 -7px;scale:1}
+  to{translate:0 11px;scale:1.06}
+}
+@media(hover:hover) and (pointer:fine){
+  #home-overview .hero:hover{transform:perspective(900px) rotateX(1.2deg) translateY(-2px) translateZ(12px)}
+  #home-overview .home-anniversary:hover,
+  #home-overview .continue-card:hover{transform:perspective(900px) rotateX(1deg) translateY(-2px) translateZ(15px)}
+  #home-our-world .stats article:hover,
+  #home-our-world .feature:hover,
+  #home-messages .message-feature:hover,
+  #home-games .games>button:hover,
+  #home-plans .plan-card:hover,
+  #home-routine .routine-intro:hover{
+    transform:perspective(850px) rotateX(0deg) rotateY(-1deg) translateY(-3px) translateZ(13px);
+  }
+  #home-plans .plan-card:hover .plan-icon{transform:translateZ(20px) rotate(-4deg)}
+}
+#home-overview .hero:active,
+#home-overview .home-anniversary:active,
+#home-overview .continue-card:active,
+#home-our-world .stats article:active,
+#home-our-world .feature:active,
+#home-messages .message-feature:active,
+#home-games .games>button:active,
+#home-plans .plan-card:active{
+  transform:perspective(850px) scale(.985) translateZ(2px);
+}
+@media(max-width:520px){
+  :root{--ayfar-perspective:760px}
+  #home-overview .hero{transform:perspective(760px) rotateX(1deg) translateZ(5px)}
+  #home-games .games>button,#home-plans .plan-card{transform:perspective(760px) rotateX(1deg) translateZ(3px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .glow{animation:none!important}
+  #home-overview .hero,#home-overview .home-anniversary,#home-overview .continue-card,
+  #home-our-world .stats article,#home-our-world .feature,#home-messages .message-feature,
+  #home-games .games>button,#home-plans .plan-card,#home-routine .routine-intro,
+  .home-section-nav button.active{transform:none!important;will-change:auto}
+}
