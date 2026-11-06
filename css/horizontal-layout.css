@@ -65,3 +65,15 @@ body.ayoub-theme #notification-bell{background:#202f43;border-color:#40516a;colo
 body.ayoub-theme .notification-item{background:#202f43;border-color:#40516a}
 body.ayoub-theme .notification-item.unread{background:linear-gradient(120deg,#342638,#243344);border-color:#796747}
 body.ayoub-theme .notification-copy b,body.ayoub-theme .notification-heading h2{color:#e4c58d}
+
+
+/* RTL category pager: clear directional feedback and reliable touch gestures. */
+#home-pages{touch-action:pan-y pinch-zoom;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain}
+#home-pages>.home-section-anchor{scroll-snap-align:start;scroll-snap-stop:always}
+.home-section-nav button{transition:color .18s ease,background-color .18s ease,border-color .18s ease,transform .18s ease}
+.home-section-nav button:active{transform:scale(.96)}
+.home-section-nav button.active{position:relative}
+.home-section-nav button.active::after{content:"";position:absolute;inset-inline:12px;bottom:3px;height:2px;border-radius:2px;background:rgba(255,255,255,.82)}
+.home-slide-controls button{transition:transform .18s ease,opacity .18s ease,border-color .18s ease}
+.home-slide-controls button:not(:disabled):active{transform:scale(.93)}
+@media(prefers-reduced-motion:reduce){#home-pages{scroll-behavior:auto}}
