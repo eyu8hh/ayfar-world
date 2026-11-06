@@ -4,9 +4,38 @@
   let originalFormMarkup="";
   let recoveryActive=false;
 
-  function show(message){
+  function show(message,kind="info"){
     const box=$("#auth-error");
-    if(box) box.textContent=message;
+    if(!box) return;
+    box.textContent=message;
+    box.classList.toggle("is-error",kind==="error");
+    box.classList.toggle("is-success",kind==="success");
+    box.setAttribute("aria-live",kind==="error"?"assertive":"polite");
+  }
+
+  function setLoginBusy(busy){
+    const form=$(formSelector),button=$("#auth-submit");
+    if(form) form.classList.toggle("is-loading",busy);
+    if(button){
+      button.disabled=busy;
+      if(busy) button.setAttribute("aria-busy","true");
+      else button.removeAttribute("aria-busy");
+    }
+    form?.querySelectorAll("input").forEach(input=>{input.disabled=busy;});
+  }
+
+  function friendlyLoginError(error){
+    const message=String(error?.message||"");
+    const lower=message.toLowerCase();
+    if(lower.includes("failed to fetch")||lower.includes("networkerror")||lower.includes("load failed"))
+      return "تعذر الوصول إلى خدمة الدخول حالياً. تحقق من اتصال الخدمة ثم حاول مجدداً بعد لحظات.";
+    if(lower.includes("invalid login credentials"))
+      return "البريد الإلكتروني أو كلمة المرور غير صحيحين. تحقق منهما وحاول مرة أخرى.";
+    if(lower.includes("email not confirmed"))
+      return "هذا البريد يحتاج إلى تأكيد قبل تسجيل الدخول.";
+    if(lower.includes("too many requests")||lower.includes("rate limit"))
+      return "محاولات الدخول كثيرة خلال وقت قصير. انتظر قليلاً ثم أعد المحاولة.";
+    return message||"حدث خطأ غير متوقع أثناء تسجيل الدخول. حاول مرة أخرى.";
   }
 
   function restoreLogin(message=""){
@@ -42,8 +71,8 @@
     const button=$("#auth-submit");
     if(!email||!password){show("يرجى إدخال البريد الإلكتروني وكلمة المرور أولاً.");return;}
     if(!window.ayfarSupabase){show("لم يتم تحميل خدمة الدخول. تحقق من الإنترنت ثم أعد فتح الموقع.");return;}
-    button.disabled=true;
-    show("جارٍ التحقق من الحساب...");
+    setLoginBusy(true);
+    show("جارٍ التحقق من بيانات الحساب والاتصال الآمن...", "info");
     try{
       const result=await window.ayfarSupabase.auth.signInWithPassword({email,password});
       if(result.error) throw result.error;
@@ -53,14 +82,14 @@
       if(!profileResult.data) throw new Error("تم تسجيل الدخول، لكن لا يوجد ملف profiles لهذا المعرّف: "+userId);
       const role=String(profileResult.data.role||"").trim().toLowerCase();
       if(role!=="ayoub"&&role!=="farahati") throw new Error("معرّف الحساب: "+userId+" | الدور الذي وصل للتطبيق: ["+role+"]");
-      show("تم التحقق بنجاح. جارٍ فتح عالمنا...");
+      show("تم التحقق بنجاح. جارٍ فتح عالمنا...", "success");
       if(typeof window.AYFAR_enter!=="function") throw new Error("تم تسجيل الدخول، لكن واجهة العالم لم تجهز بعد. أعد تحميل الصفحة.");
       window.AYFAR_enter(role);
     }catch(error){
-      show(error?.message||"حدث خطأ غير معروف أثناء تسجيل الدخول.");
+      show(friendlyLoginError(error), "error");
       try{await window.ayfarSupabase.auth.signOut();}catch(_){}
     }finally{
-      if(button) button.disabled=false;
+      setLoginBusy(false);
     }
   }
 
