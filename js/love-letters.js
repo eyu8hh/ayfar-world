@@ -12,16 +12,39 @@ async function checkDailyLetter(){
 }
 function showEnvelope(){
  if(document.getElementById("love-overlay"))return;
- const overlay=document.createElement("div");overlay.id="love-overlay";
- overlay.innerHTML='<div class="love-card"><div class="love-sparkle">✦　♡　✦</div><small>JUST FOR YOU · FROM AYOUB</small><h2>رسالة صغيرة تنتظركِ يا فرحتي</h2><p>هناك كلمات اختارها أيوب لتصلكِ اليوم...</p><button id="open-love-envelope" class="envelope"><span>💌</span><b>افتحي ظرفكِ</b></button><div class="love-foot">رسالة واحدة في اليوم، لأن بعض الكلمات تستحق وقتها ♡</div></div>';
+ const overlay=document.createElement("div");
+ overlay.id="love-overlay";
+ overlay.setAttribute("role","presentation");
+ overlay.innerHTML='<div class="love-card" role="dialog" aria-modal="true" aria-labelledby="daily-letter-title"><div class="love-sparkle" aria-hidden="true">✦　♡　✦</div><small>JUST FOR YOU · FROM AYOUB</small><h2 id="daily-letter-title">رسالة صغيرة تنتظركِ يا فرحتي</h2><p>هناك كلمات اختارها أيوب لتصلكِ اليوم...</p><button id="open-love-envelope" class="envelope" type="button"><span aria-hidden="true">💌</span><b>افتحي ظرفكِ</b></button><div class="love-foot">رسالة واحدة في اليوم، لأن بعض الكلمات تستحق وقتها ♡</div></div>';
  document.body.appendChild(overlay);
- $("#open-love-envelope").onclick=async()=>{
-  const {data,error}=await client().rpc("open_daily_love_letter",{p_letter_id:activeLetter.letter_id});
-  if(error||!data){overlay.remove();return}
-  overlay.querySelector(".love-card").innerHTML='<div class="love-sparkle">♡</div><small>FROM AYOUB 🌙</small><h2>إلى فرحتي 🌸</h2><article class="letter-paper">'+esc(activeLetter.letter_body).replace(/\n/g,"<br>")+'</article><p class="love-foot">احتفظي بهذه الكلمات، وغدًا حكاية أخرى ♡</p><button id="close-love-letter" class="primary">أكملت القراءة</button>';
-  $("#close-love-letter").onclick=()=>overlay.remove();
- };
+ const button=$("#open-love-envelope");
+ button?.addEventListener("click",async()=>{
+  if(button.disabled)return;
+  button.disabled=true;
+  button.setAttribute("aria-busy","true");
+  const card=overlay.querySelector(".love-card");
+  card?.classList.add("is-opening");
+  button.querySelector("b").textContent="نفتح رسالتكِ...";
+  const foot=overlay.querySelector(".love-foot");
+  if(foot){foot.setAttribute("role","status");foot.setAttribute("aria-live","polite");foot.textContent="لحظة صغيرة... كلمات أيوب في طريقها إليكِ ♡";}
+  try{
+   const {data,error}=await client().rpc("open_daily_love_letter",{p_letter_id:activeLetter.letter_id});
+   if(error)throw error;
+   if(!data)throw new Error("يبدو أن رسالة اليوم فُتحت من قبل. حدّثي الصفحة للتحقق من الرسالة التالية.");
+   card?.classList.remove("is-opening");
+   card?.classList.add("is-revealing");
+   card.innerHTML='<div class="love-sparkle" aria-hidden="true">♡</div><small>FROM AYOUB 🌙</small><h2>إلى فرحتي 🌸</h2><article class="letter-paper">'+esc(activeLetter.letter_body).replace(/\\n/g,"<br>")+'</article><p class="love-foot">احتفظي بهذه الكلمات، وغدًا حكاية أخرى ♡</p><button id="close-love-letter" class="primary" type="button">أكملت القراءة</button>';
+   $("#close-love-letter")?.addEventListener("click",()=>overlay.remove());
+  }catch(error){
+   card?.classList.remove("is-opening");
+   button.disabled=false;
+   button.removeAttribute("aria-busy");
+   button.querySelector("b").textContent="إعادة المحاولة";
+   if(foot){foot.textContent=error?.message||"تعذر فتح الرسالة. حاولي مرة أخرى.";foot.classList.add("is-error");}
+  }
+ });
 }
+
 async function renderStars(){
  const {data:wallet,error}=await client().from("ayfar_star_wallet").select("balance").eq("id",1).single();
  if(error){page('<div class="panel"><h2>تعذر تحميل النجوم</h2><p>'+esc(error.message)+'</p></div>');return}
