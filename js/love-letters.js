@@ -33,7 +33,7 @@ function showEnvelope(){
    if(!data)throw new Error("يبدو أن رسالة اليوم فُتحت من قبل. حدّثي الصفحة للتحقق من الرسالة التالية.");
    card?.classList.remove("is-opening");
    card?.classList.add("is-revealing");
-   card.innerHTML='<div class="love-sparkle" aria-hidden="true">♡</div><small>FROM AYOUB 🌙</small><h2>إلى فرحتي 🌸</h2><article class="letter-paper">'+esc(activeLetter.letter_body).replace(/\\n/g,"<br>")+'</article><p class="love-foot">احتفظي بهذه الكلمات، وغدًا حكاية أخرى ♡</p><button id="close-love-letter" class="primary" type="button">أكملت القراءة</button>';
+   card.innerHTML='<div class="love-sparkle" aria-hidden="true">♡</div><small>FROM AYOUB 🌙</small><h2>إلى فرحتي 🌸</h2><article class="letter-paper">'+esc(activeLetter.letter_body).replace(/\n/g,"<br>")+'</article><p class="love-foot">احتفظي بهذه الكلمات، وغدًا حكاية أخرى ♡</p><button id="close-love-letter" class="primary" type="button">أكملت القراءة</button>';
    $("#close-love-letter")?.addEventListener("click",()=>overlay.remove());
   }catch(error){
    card?.classList.remove("is-opening");
