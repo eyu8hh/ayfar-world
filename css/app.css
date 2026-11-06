@@ -1292,7 +1292,7 @@ button,.primary,.secondary-action{min-height:44px;touch-action:manipulation}
 input,textarea,select{min-height:46px}
 .login{padding:clamp(8px,3vh,28px) 0}
 .loginbox{
-  position:relative;isolation:isolate;overflow:hidden;
+  position:relative;isolation:isolate;overflow:hidden;backdrop-filter:none;
   border:1px solid rgba(217,141,167,.38);
   background:linear-gradient(155deg,rgba(255,255,255,.98),rgba(255,247,248,.96) 62%,rgba(242,247,241,.96));
   box-shadow:0 22px 64px rgba(72,35,51,.12),inset 0 1px 0 #fff;
@@ -1344,7 +1344,7 @@ input,textarea,select{min-height:46px}
   padding:8px;margin:0 -2px 17px;border:1px solid rgba(234,216,222,.85);
   border-radius:17px;background:rgba(255,253,251,.9);
   box-shadow:0 8px 24px rgba(72,35,51,.06);
-  scrollbar-width:none;backdrop-filter:blur(10px);
+  scrollbar-width:none;background:rgba(255,253,251,.97);
 }
 .home-section-nav::-webkit-scrollbar{display:none}
 .home-section-nav button{
@@ -1401,6 +1401,7 @@ input,textarea,select{min-height:46px}
 .envelope:active{transform:scale(.985)}
 .envelope:disabled{opacity:.8;cursor:wait}
 .love-foot[role="status"]{padding:9px 11px;border-radius:12px;background:#f8eff2}
+.love-foot.is-error{background:#fff0ef;color:#a13d42}
 .game-screen{animation:ayfarGameEnter .3s var(--ayfar-ease) both}
 .game-screen-content{animation:ayfarFadeUp .28s var(--ayfar-ease) both}
 .question-card{animation:ayfarQuestionIn .28s var(--ayfar-ease) both}
