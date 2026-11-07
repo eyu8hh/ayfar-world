@@ -12,6 +12,9 @@ test("who-knows game collects both answers in one view and supports peer semanti
   expect(games).toContain('data-who-judge="yes"');
   expect(games).toContain('data-who-judge="no"');
   expect(games).toContain("whoJudgments");
+  expect(games).toContain('id="actual-choice"');
+  expect(games).toContain('id="prediction"');
+  expect(games).toContain("canonicalRole");
 });
 
 test("game chat reactions are stored in the shared match state", async () => {
