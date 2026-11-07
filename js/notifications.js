@@ -42,8 +42,6 @@
       if(target.matches("button"))target.click();
       else target.scrollIntoView({behavior:"smooth",block:"start"});
     }
-    if(eventType==="routine_status"||eventType==="habit_checkin"||eventType==="music_added")window.AYFAR_Routine?.init?.();
-    if(eventType==="pet_care")window.AYFAR_Pets?.init?.();
   }
   async function openCenter(){
     await refresh();
