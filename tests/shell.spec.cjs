@@ -58,7 +58,6 @@ test("plan actions are native buttons and retain their action hooks", async ({ p
   await page.goto("/");
   const cards = page.locator("#home-plans .plan-card-action");
   await expect(cards).toHaveCount(6);
-  await expect(cards).toHaveJSProperty("length", 6).catch(() => {});
   await expect(cards.first()).toHaveAttribute("type", "button");
   await expect(cards.nth(1)).toHaveAttribute("data-open-calendar", "");
   await expect(cards.nth(2)).toHaveAttribute("data-plan-open", "daily");

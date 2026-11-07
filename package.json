@@ -12,7 +12,7 @@
     "qa": "npm run check:js && npm run validate:html && npm run lint:css && npm run test:e2e",
     "impeccable:help": "impeccable --help",
     "playwright:cli": "playwright-cli --help",
-    "design:audit": "impeccable audit"
+    "design:audit": "impeccable detect ."
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
