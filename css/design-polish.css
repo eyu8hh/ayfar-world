@@ -19,6 +19,7 @@ body{color:var(--ayfar-ink)}
 }
 :where(button,.primary,.secondary-action,input,textarea,select){font-family:inherit}
 :where(button,.primary,.secondary-action){min-height:44px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button,.primary,.secondary-action{transition-property:transform,opacity!important;transition-duration:160ms!important;transition-timing-function:var(--ayfar-ease-out)!important}
 :where(button,.primary,.secondary-action):active{transform:scale(.97)}
 :where(button,input,textarea,select):focus-visible{outline:2px solid rgba(112,36,63,.72);outline-offset:3px}
 .primary,.secondary-action,button{transition:transform var(--ayfar-fast) var(--ayfar-ease-out),background-color var(--ayfar-fast) ease,border-color var(--ayfar-fast) ease,color var(--ayfar-fast) ease,opacity var(--ayfar-fast) ease}
@@ -60,7 +61,7 @@ body{color:var(--ayfar-ink)}
   flex:0 0 auto;min-height:44px;padding:0 14px;
   border:1px solid #e7d7de;border-radius:13px;
   background:#fffdfb;color:#705564;font-size:12px;font-weight:700;
-  transition:background-color var(--ayfar-fast) ease,border-color var(--ayfar-fast) ease,color var(--ayfar-fast) ease,transform var(--ayfar-fast) var(--ayfar-ease-out);
+  transition:transform var(--ayfar-fast) var(--ayfar-ease-out),opacity var(--ayfar-fast) ease;
 }
 .home-section-nav button.active{border-color:#70243f;background:#70243f;color:#fff;transform:none;outline:none}
 #home-pages>.home-section-anchor{padding:9px 6px calc(28px + env(safe-area-inset-bottom))}
@@ -77,7 +78,7 @@ body{color:var(--ayfar-ink)}
 #home-our-world .stats article,#home-our-world .feature,#home-messages .message-feature,
 #home-games .games>button,#home-plans .plan-card,#home-routine .routine-intro{
   box-shadow:none;border-color:#e7d6dd;
-  transition:transform var(--ayfar-ui) var(--ayfar-ease-out),border-color var(--ayfar-fast) ease,background-color var(--ayfar-fast) ease;
+  transition:transform var(--ayfar-ui) var(--ayfar-ease-out),opacity var(--ayfar-fast) ease;
 }
 #home-games .games{gap:10px}
 #home-games .games>button{
@@ -265,10 +266,10 @@ body{color:var(--ayfar-ink)}
 #home-overview .continue-card .primary{
   transition-duration:220ms;
 }
-#home-plans .plan-icon{transition-duration:220ms}
+#home-plans .plan-icon{transition:transform 220ms var(--ayfar-ease-out)}
 .home-section-nav button{transition-duration:180ms}
 .home-slide-controls button{transition-duration:180ms}
-.unfinished-progress>span,.game-progress-track>span{transition-duration:220ms}
+.unfinished-progress>span,.game-progress-track>span{transition:transform 220ms var(--ayfar-ease-out);transform-origin:right center}
 .game-screen{animation-duration:220ms}
 .love-card.is-opening,.love-card.is-revealing{animation:none;transform:none;opacity:1}
 .glow,.challenge-orbit,.challenge-pulse,.plan-surprise-gift{animation:none!important}
@@ -277,8 +278,8 @@ body{color:var(--ayfar-ink)}
 @media(hover:hover) and (pointer:fine){
   .home-section-nav button:not(.active):hover{border-color:#c995a8;background:#fff7fa;color:#70243f}
   #home-games .games>button:hover{transform:perspective(900px) translateY(-2px) translateZ(5px);border-color:#d7b2c1}
-  .message-bubble:hover{border-color:#d4b1bf}
-  .star-history>div:hover{border-color:#d8bac6}
+  .message-bubble:hover{opacity:.98}
+  .star-history>div:hover{opacity:.98}
 }
 @media(max-width:520px){
   .shell{padding-inline:12px}
