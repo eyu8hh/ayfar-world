@@ -116,10 +116,7 @@
     const closeButton=e.target.closest("[data-plan-close]");if(closeButton){const wrap=closeButton.closest(".dreams-overlay");for(const [id,node] of overlays)if(node===wrap)close(id);return;}
     if(e.target.classList.contains("dreams-overlay")){for(const [id,node] of overlays)if(node===e.target)close(id);}
   });
-  document.addEventListener("keydown",e=>{
-    if(e.key==="Escape"){for(const [id,node] of overlays)if(!node.hidden)close(id);}
-    if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-plan-open]")){e.preventDefault();open(e.target.dataset.planOpen);}
-  });
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){for(const [id,node] of overlays)if(!node.hidden)close(id);}});
   document.querySelectorAll("[data-plan-open]").forEach(el=>el.addEventListener("click",()=>open(el.dataset.planOpen)));
   function setFeedback(root,msg){const el=root.querySelector("[data-feedback]");if(el)el.textContent=msg||"";}
   async function loadAnswers(date){
