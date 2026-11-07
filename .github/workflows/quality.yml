@@ -52,9 +52,6 @@ jobs:
           fetch-depth: 1
       - name: Playwright and axe-core
         run: npm run test:e2e
-      - name: Capture before/after 390x844 with Playwright
-        if: success()
-        run: node tools/capture-design-comparison.mjs
       - name: Lighthouse mobile audit
         if: success()
         run: |
