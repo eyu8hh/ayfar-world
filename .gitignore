@@ -1,0 +1,25 @@
+# Project-scoped agent skills are intentionally tracked in .agents/skills/.
+# Keep other personal/global skill installations out of this public repository.
+.claude/skills/
+.codex/skills/
+.cursor/skills/
+.gemini/skills/
+.opencode/skills/
+.windsurf/skills/
+.pi/skills/
+.qoder/skills/
+.trae/skills/
+.trae-cn/skills/
+.vibe/skills/
+.hermes/skills/
+
+# Local browser automation state and generated evidence
+.playwright/
+.playwright-cli/
+playwright-report/
+test-results/
+visual-checks/
+artifacts/
+
+# Local development dependencies
+node_modules/
