@@ -433,6 +433,7 @@ body:not(.ayoub-theme){background:var(--ayfar-paper);color:var(--ayfar-ink)}
 #home-overview .continue-card h3,
 #home-overview .continue-card p{color:#fff}
 #home-overview .continue-card p{opacity:.88}
+#home-overview .continue-card .eyebrow{color:#fff}
 #home-overview .continue-card .primary{
   border:1px solid #fff;
   background:#fff;
