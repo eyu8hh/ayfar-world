@@ -370,3 +370,201 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 .game-chat-reaction span{font-size:.7rem;min-width:7px}
 .notification-open{display:inline-flex;align-items:center;gap:7px;margin-top:9px;padding:7px 12px;border:1px solid rgba(112,36,63,.18);border-radius:999px;background:#fff8fa;color:#70243f;font:inherit;font-size:.82rem;font-weight:700;cursor:pointer}
 .notification-open:focus-visible,.game-chat-reaction:focus-visible{outline:3px solid #a64d70;outline-offset:2px}
+
+
+/* AYFAR WORLD — editorial refinement v2.
+   Keep the existing product structure; replace stacked 3D decoration with
+   a calmer, tactile two-dimensional system and clear burgundy/rose/green roles. */
+:root{
+  --ayfar-paper:#fbf7f2;
+  --ayfar-paper-edge:#e7d9cf;
+  --ayfar-ink:#482b38;
+  --ayfar-muted:#6d5963;
+  --ayfar-line:#ead8de;
+  --ayfar-burgundy:#70243f;
+  --ayfar-rose:#d98da7;
+  --ayfar-green:#426d55;
+  --ayfar-surface:#fffdfb;
+  --ayfar-surface-rose:#fff4f7;
+  --ayfar-surface-green:#f0f5ef;
+  --ayfar-radius-card:18px;
+  --ayfar-fast:140ms;
+  --ayfar-ui:190ms;
+}
+html{scrollbar-color:#b98298 #f4ecef}
+body:not(.ayoub-theme){background:var(--ayfar-paper);color:var(--ayfar-ink)}
+::selection{background:#e8b9c8;color:#482333}
+#login .loginbox{background:#fffdfb;border-color:#e8d5dd;box-shadow:none}
+#login .primary{background:var(--ayfar-burgundy);border-color:var(--ayfar-burgundy)}
+#login .text{border-color:#e4d3da;background:#fff}
+#login .text:focus{border-color:#a65d79}
+#home-top .brand{color:var(--ayfar-burgundy)}
+#home-top>button{background:#fffdfb;border-color:var(--ayfar-line)}
+.home-section-nav button{border-color:var(--ayfar-line);background:#fffdfb;color:#634653}
+.home-section-nav button.active{background:var(--ayfar-burgundy);border-color:var(--ayfar-burgundy);color:#fff}
+#home-overview .hero{
+  min-height:178px;
+  border:1px solid #70243f;
+  border-radius:22px;
+  background:var(--ayfar-burgundy);
+  color:#fff;
+  box-shadow:none;
+}
+#home-overview .hero h2{color:#fff;font-size:clamp(23px,5.8vw,30px);line-height:1.4}
+#home-overview .hero p{color:#f5e6eb;line-height:1.9}
+#home-overview .hero .eyebrow{color:#f2cbd8}
+#home-overview .heroheart{color:#f5dbe4;opacity:.22}
+#home-overview .home-anniversary{
+  border:1px solid #e6d3d9;
+  border-radius:18px;
+  background:#fffaf7;
+  box-shadow:none;
+}
+#home-overview .home-anniversary-head>span{background:#f8e8ee;color:var(--ayfar-burgundy)}
+#home-overview .continue-card{
+  border:1px solid #426d55;
+  border-radius:18px;
+  background:var(--ayfar-green);
+  box-shadow:none;
+}
+#home-overview .continue-card h3,
+#home-overview .continue-card p{color:#fff}
+#home-overview .continue-card p{opacity:.88}
+#home-overview .continue-card .primary{
+  border:1px solid #fff;
+  background:#fff;
+  color:#31563f;
+}
+#home-our-world .stats article{
+  border:1px solid var(--ayfar-line);
+  border-radius:16px;
+  background:var(--ayfar-surface);
+  color:var(--ayfar-burgundy);
+  box-shadow:none;
+}
+#home-our-world .stats small{color:#66515c}
+#home-our-world .feature.special{background:var(--ayfar-surface-rose);border:1px solid #e9cbd7}
+#home-our-world .feature.rating{background:var(--ayfar-surface-green);border:1px solid #d5e4d7}
+#home-messages .message-feature{background:#fff7f9;border:1px solid #e9cbd7}
+#home-games .games{gap:10px}
+#home-games .games>button{
+  min-height:150px;
+  padding:15px 13px;
+  border:1px solid var(--ayfar-line);
+  border-radius:16px;
+  background:#fffdfb;
+  color:var(--ayfar-ink);
+  box-shadow:none;
+}
+#home-games .games>button:nth-child(4n+1){background:#fff7f9}
+#home-games .games>button:nth-child(4n+2){background:#f3f7f2}
+#home-games .games>button:nth-child(4n+3){background:#fffaf1}
+#home-games .games>button:nth-child(4n){background:#f8f4f6}
+#home-games .games>button b{color:var(--ayfar-burgundy);line-height:1.6}
+#home-games .games>button small{color:#66515c;line-height:1.7}
+#home-games .games>button em{color:#315b43}
+#home-plans .plan-card{
+  border:1px solid var(--plan-border,#ead8de);
+  border-radius:17px;
+  background:var(--plan-surface,#fffdfb);
+  box-shadow:none;
+}
+#home-plans .plan-dreams{--plan-surface:#fff4f7;--plan-border:#e9cbd7;--plan-ink:#85304d}
+#home-plans .plan-calendar{--plan-surface:#f0f5ef;--plan-border:#d4e3d6;--plan-ink:#285f4b}
+#home-plans .plan-question{--plan-surface:#fff8eb;--plan-border:#eadfbd;--plan-ink:#76500f}
+#home-plans .plan-activity{--plan-surface:#f7f3f8;--plan-border:#e1d6e7;--plan-ink:#665075}
+#home-plans .plan-goals{--plan-surface:#eff6f6;--plan-border:#d1e3e4;--plan-ink:#245c65}
+#home-plans .plan-surprise{--plan-surface:#fff4ef;--plan-border:#ecd6ca;--plan-ink:#8b402f}
+#home-plans .plan-icon{color:var(--plan-ink)}
+#home-routine .routine-intro{border:1px solid #d5e4d7;border-radius:18px;background:var(--ayfar-surface-green)}
+#pagebody>.panel{border-color:var(--ayfar-line);background:#fffdfb;box-shadow:none}
+#pagebody .primary{background:var(--ayfar-burgundy);border-color:var(--ayfar-burgundy)}
+#pagebody .secondary-action{border-color:var(--ayfar-line)}
+#home-pages{
+  perspective:none!important;
+  transform-style:flat!important;
+}
+#home-pages>.home-section-anchor{
+  transform:none!important;
+  transform-style:flat!important;
+  isolation:auto;
+  background:transparent;
+}
+#home-pages>.home-section-anchor:before{display:none!important}
+#home-pages>.home-section-anchor>*{transform:none!important;backface-visibility:visible}
+#home-overview .hero,
+#home-overview .home-anniversary,
+#home-overview .continue-card,
+#home-our-world .stats article,
+#home-our-world .feature,
+#home-messages .message-feature,
+#home-games .games>button,
+#home-plans .plan-card,
+#home-routine .routine-intro,
+#home-overview .continue-card .primary{
+  transform:none!important;
+  transform-style:flat;
+  transition:transform var(--ayfar-fast) var(--ayfar-ease-out),border-color var(--ayfar-fast) ease,background-color var(--ayfar-fast) ease,opacity var(--ayfar-fast) ease;
+}
+#home-games .games>button:active,
+#home-plans .plan-card:active,
+#home-our-world .feature:active,
+#home-messages .message-feature:active{transform:scale(.985)!important}
+:where(button,a,input,textarea,select):focus-visible{outline:2px solid #a65d79;outline-offset:3px}
+@media(hover:hover) and (pointer:fine){
+  #home-overview .hero:hover,
+  #home-overview .home-anniversary:hover,
+  #home-overview .continue-card:hover,
+  #home-our-world .stats article:hover,
+  #home-our-world .feature:hover,
+  #home-messages .message-feature:hover,
+  #home-games .games>button:hover,
+  #home-plans .plan-card:hover,
+  #home-routine .routine-intro:hover{
+    transform:translateY(-2px)!important;
+    border-color:#c995a8;
+  }
+}
+@media(max-width:520px){
+  #home-overview .hero{min-height:170px;padding:22px 19px}
+  #home-games .games{gap:8px}
+  #home-games .games>button{min-height:148px;padding:13px 11px}
+  #home-plans .plan-card{min-height:156px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  #home-overview .hero,
+  #home-overview .home-anniversary,
+  #home-overview .continue-card,
+  #home-our-world .stats article,
+  #home-our-world .feature,
+  #home-messages .message-feature,
+  #home-games .games>button,
+  #home-plans .plan-card,
+  #home-routine .routine-intro,
+  .home-section-nav button,
+  .home-slide-controls button{transform:none!important;transition:none!important;animation:none!important}
+}
+body.ayoub-theme{background:#172438;color:#eef2f7}
+body.ayoub-theme #home-overview .hero{background:#3b2534;border-color:#69475a}
+body.ayoub-theme #home-overview .home-anniversary,
+body.ayoub-theme #home-overview .continue-card,
+body.ayoub-theme #home-our-world .stats article,
+body.ayoub-theme #home-our-world .feature,
+body.ayoub-theme #home-messages .message-feature,
+body.ayoub-theme #home-games .games>button,
+body.ayoub-theme #home-plans .plan-card,
+body.ayoub-theme #home-routine .routine-intro,
+body.ayoub-theme #pagebody>.panel{
+  background:#202f43;
+  border-color:#40516a;
+  color:#eef2f7;
+}
+body.ayoub-theme #home-overview .hero h2,
+body.ayoub-theme #home-overview .continue-card h3,
+body.ayoub-theme #home-overview .continue-card p,
+body.ayoub-theme #home-our-world .stats small,
+body.ayoub-theme #home-games .games>button b,
+body.ayoub-theme #home-games .games>button small,
+body.ayoub-theme #home-games .games>button em{color:#eef2f7}
+body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color:#70243f;border-color:#f7e7ed}
