@@ -28,7 +28,7 @@ jobs:
         with:
           deno-version: v2.x
       - name: Check AI Quiz Edge Function
-        run: deno check --node-modules-dir=auto supabase/functions/ayfar-ai-quiz/index.ts
+        run: deno check --node-modules-dir=none supabase/functions/ayfar-ai-quiz/index.ts
 
   deploy:
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
