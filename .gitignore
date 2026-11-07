@@ -1,0 +1,23 @@
+# Local-only AI coding skills and runtime tools (never publish with GitHub Pages)
+.agents/skills/
+.claude/skills/
+.codex/skills/
+.cursor/skills/
+.gemini/skills/
+.opencode/skills/
+.windsurf/skills/
+.pi/skills/
+.qoder/skills/
+.trae/skills/
+.trae-cn/skills/
+.vibe/skills/
+.hermes/skills/
+
+# Local browser automation state and generated evidence
+.playwright-cli/
+playwright-report/
+test-results/
+visual-checks/
+
+# Local development dependencies
+node_modules/
