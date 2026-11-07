@@ -508,7 +508,7 @@ body:not(.ayoub-theme){background:var(--ayfar-paper);color:var(--ayfar-ink)}
 #home-overview .continue-card .primary{
   transform:none!important;
   transform-style:flat;
-  transition:transform var(--ayfar-fast) var(--ayfar-ease-out),border-color var(--ayfar-fast) ease,background-color var(--ayfar-fast) ease,opacity var(--ayfar-fast) ease;
+  transition:transform var(--ayfar-fast) var(--ayfar-ease-out),opacity var(--ayfar-fast) ease;
 }
 #home-games .games>button:active,
 #home-plans .plan-card:active,
@@ -520,7 +520,7 @@ body:not(.ayoub-theme){background:var(--ayfar-paper);color:var(--ayfar-ink)}
 #page>header button,
 #pagebody .primary,
 #pagebody .secondary-action{
-  transition:transform var(--duration-quick) var(--ease-smooth-out),background-color var(--duration-quick) ease,border-color var(--duration-quick) ease,color var(--duration-quick) ease;
+  transition:transform var(--duration-quick) var(--ease-smooth-out),opacity var(--duration-quick) ease;
 }
 :where(button,.primary,.secondary-action):active{transform:scale(.97)}
 :where(button,a,input,textarea,select):focus-visible{outline:2px solid #a65d79;outline-offset:3px}
