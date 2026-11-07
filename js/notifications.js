@@ -19,15 +19,40 @@
     rows=data||[];updateBadge();
   }
   function formatDate(value){return new Intl.DateTimeFormat("ar-MA",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(value));}
+  async function openNotification(id,eventType){
+    const item=rows.find(row=>row.id===id);
+    if(item&&!item.read_at){
+      const stamp=new Date().toISOString();
+      const {error}=await db().from("ayfar_notifications").update({read_at:stamp}).eq("id",id);
+      if(!error){rows=rows.map(row=>row.id===id?{...row,read_at:stamp}:row);updateBadge();}
+    }
+    const home=$("#home"),page=$("#page");
+    if(page)page.classList.add("hidden");
+    if(home)home.classList.remove("hidden");
+    const targets={
+      star_change:"#star-wallet",
+      daily_rating:"#rating",
+      routine_status:"#home-routine",
+      habit_checkin:"#home-routine",
+      pet_care:"#home-pets",
+      music_added:"#home-routine"
+    };
+    const target=document.querySelector(targets[eventType]||"#home-overview");
+    if(target){
+      if(target.matches("button"))target.click();
+      else target.scrollIntoView({behavior:"smooth",block:"start"});
+    }
+    if(eventType==="routine_status"||eventType==="habit_checkin"||eventType==="music_added")window.AYFAR_Routine?.init?.();
+    if(eventType==="pet_care")window.AYFAR_Pets?.init?.();
+  }
   async function openCenter(){
     await refresh();
     const body=$("#pagebody"),home=$("#home"),page=$("#page");if(!body||!home||!page)return;
-    const list=rows.length?rows.map(n=>'<article class="notification-item '+(n.read_at?"read":"unread")+'"><span class="notification-icon">'+(icons[n.event_type]||"♡")+'</span><div class="notification-copy"><b>'+esc(n.title)+'</b><p>'+esc(n.body)+'</p><small>'+formatDate(n.created_at)+'</small></div>'+(n.read_at?"":'<span class="notification-dot"></span>')+'</article>').join(""):'<div class="notification-empty"><span>♡</span><b>لا توجد إشعارات بعد</b><p>عندما تقوم فرحتي أو أيوب بنشاط مشترك، ستجدان تفاصيله هنا.</p></div>';
+    const list=rows.length?rows.map(n=>'<article class="notification-item '+(n.read_at?"read":"unread")+'" data-notification-id="'+esc(n.id)+'"><span class="notification-icon">'+(icons[n.event_type]||"♡")+'</span><div class="notification-copy"><b>'+esc(n.title)+'</b><p>'+esc(n.body)+'</p><small>'+formatDate(n.created_at)+'</small></div>'+(n.read_at?"":'<span class="notification-dot"></span>')+'<button type="button" class="notification-open" data-notification-open="'+esc(n.id)+'" data-event-type="'+esc(n.event_type)+'">عرض النشاط <span aria-hidden="true">↗</span></button></article>').join(""):'<div class="notification-empty"><span>♡</span><b>لا توجد إشعارات بعد</b><p>عندما تقوم فرحتي أو أيوب بنشاط مشترك، ستجدان تفاصيله هنا.</p></div>';
     home.classList.add("hidden");page.classList.remove("hidden");
     body.innerHTML='<section class="panel notifications-panel"><div class="notification-heading"><div><small class="eyebrow">OUR SHARED ACTIVITY</small><h2>إشعارات عالمنا</h2><p>كل جديد بينكما في مكان واحد.</p></div><span>🔔</span></div><div class="notification-list">'+list+'</div><button type="button" class="secondary-action" id="notifications-back">العودة إلى عالمنا</button></section>';
-    $("#notifications-back").onclick=()=>{$("#back").click();};
-    const unread=rows.filter(x=>!x.read_at).map(x=>x.id);
-    if(unread.length){const stamp=new Date().toISOString();const {error}=await db().from("ayfar_notifications").update({read_at:stamp}).in("id",unread);if(!error){rows=rows.map(x=>unread.includes(x.id)?{...x,read_at:stamp}:x);updateBadge();}}
+    $("#notifications-back").onclick=()=>{page.classList.add("hidden");home.classList.remove("hidden");};
+    body.querySelectorAll("[data-notification-open]").forEach(button=>button.addEventListener("click",()=>openNotification(button.dataset.notificationOpen,button.dataset.eventType)));
   }
   async function init(){
     ensureButton();const {data:{user:current}}=await db().auth.getUser();if(!current)return;if(activeUserId!==current.id){if(channel)await db().removeChannel(channel);channel=null;rows=[];activeUserId=current.id;}user=current;
