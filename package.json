@@ -9,7 +9,10 @@
     "validate:html": "html-validate index.html",
     "lint:css": "stylelint css/design-polish.css --config .stylelintrc.json",
     "test:e2e": "playwright test",
-    "qa": "npm run check:js && npm run validate:html && npm run lint:css && npm run test:e2e"
+    "qa": "npm run check:js && npm run validate:html && npm run lint:css && npm run test:e2e",
+    "impeccable:help": "impeccable --help",
+    "playwright:cli": "playwright-cli --help",
+    "design:audit": "impeccable audit"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
@@ -17,6 +20,7 @@
     "@playwright/test": "1.65.0",
     "html-validate": "11.19.0",
     "lighthouse": "13.6.0",
-    "stylelint": "18.0.0"
+    "stylelint": "18.0.0",
+    "impeccable": "4.6.0"
   }
 }

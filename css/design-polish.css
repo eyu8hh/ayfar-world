@@ -328,3 +328,19 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
   background-image:none;
   border-radius:22px;
 }
+
+
+/* Higher contrast for small copy and category accents on pale surfaces. */
+:root{--muted:#6d5963;--ayfar-muted:#6d5963}
+#home-overview .hero p,#home-our-world .stats small,#home-our-world .feature em,#home-games .games>button small,#home-games .games>button em,#home-plans .plan-card-copy>small,#home-plans .plan-card-bottom>span,#home-routine .routine-intro p,.quote,footer{color:#66515c}
+#home-our-world .feature small{color:#793c55}
+#home-games .games>button em{color:#315b43}
+#home-plans .plan-card{--plan-ink:#85304d}
+#home-plans .plan-calendar{--plan-ink:#285f4b}
+#home-plans .plan-question{--plan-ink:#76500f}
+#home-plans .plan-activity{--plan-ink:#514a85}
+#home-plans .plan-goals{--plan-ink:#245c65}
+#home-plans .plan-surprise{--plan-ink:#8b402f}
+#home-plans .plan-card-copy>small,#home-plans .plan-card-bottom>span{color:#66545d}
+#home-plans .plan-card-action{appearance:none;-webkit-appearance:none;width:100%;font-family:inherit;color:inherit;cursor:pointer;text-align:inherit}
+#home-plans .plan-card-action:focus-visible{outline:3px solid rgba(112,36,63,.5);outline-offset:3px}
