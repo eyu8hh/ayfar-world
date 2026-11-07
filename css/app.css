@@ -40,7 +40,7 @@ button:disabled{cursor:not-allowed;opacity:.58}
 :where(button,input,textarea):focus-visible{outline:3px solid rgba(105,36,62,.28);outline-offset:3px}
 .shell{max-width:1080px;padding:clamp(14px,2.4vw,26px)}
 .loginbox{border-color:rgba(234,216,222,.9);background:rgba(255,253,251,.94);backdrop-filter:blur(12px)}
-.logo{box-shadow:inset 0 0 0 1px rgba(105,36,62,.06);background:linear-gradient(145deg,#f8e6ec,#f0cfda)}
+.logo{box-shadow:none;background:linear-gradient(145deg,#f8e6ec,#f0cfda)}
 .login h1{letter-spacing:2.5px}
 header{min-height:54px}
 header button,.secondary-action{min-height:42px}
@@ -72,9 +72,7 @@ header button,.secondary-action{min-height:42px}
 .games button small{line-height:1.6}
 .games button em{font-weight:700;color:#50745c}
 .panel{border-color:rgba(234,216,222,.9);box-shadow:var(--shadow-card)}
-.primary{min-height:46px;padding:12px 22px;background:linear-gradient(112deg,#cf7896 0%,#8a3656 58%,#69243e 100%);box-shadow:0 7px 16px rgba(105,36,62,.16)}
-.primary:active,.secondary-action:active{transform:translateY(1px)}
-.text{min-height:45px;border-color:#e5d3da;background:#fffdfc;color:var(--ink)}
+.primary{min-height:46px;padding:12px 22px;background:linear-gradient(112deg,#cf7896 0%,#8a3656 58%,#69243e 100%);box-shadow:none;border-color:#e5d3da;background:#fffdfc;color:var(--ink)}
 .text:focus{border-color:#bd7891;box-shadow:0 0 0 3px rgba(189,120,145,.12);outline:0}
 .question-card{box-shadow:inset 0 1px rgba(255,255,255,.75)}
 .answer-actions button{min-height:52px}
@@ -88,7 +86,7 @@ header button,.secondary-action{min-height:42px}
   .games button:hover,.stats article:hover{transform:translateY(-3px);box-shadow:var(--shadow-card);border-color:#dfb8c6}
   .feature:hover{transform:translateY(-2px);box-shadow:var(--shadow-card)}
   header button:hover,.secondary-action:hover{background:#f9edf1;border-color:#dcb7c5}
-  .primary:hover{box-shadow:0 10px 22px rgba(105,36,62,.23);filter:saturate(1.06)}
+  .primary:hover{box-shadow:none;filter:saturate(1.06)}
 }
 @media(max-width:520px){
   .shell{padding:12px}
@@ -1294,7 +1292,7 @@ input,textarea,select{min-height:46px}
 .login .primary{
   width:100%;min-height:52px;margin-top:9px;border-radius:16px;
   background:linear-gradient(110deg,#70243f,#8d3b5b 62%,#47765c);
-  color:#fff;box-shadow:0 10px 22px rgba(105,36,62,.2);
+  color:#fff;box-shadow:none;
   font-weight:800;letter-spacing:.1px;
 }
 .login .primary:not(:disabled):active{transform:translateY(1px) scale(.99)}
@@ -1328,7 +1326,7 @@ input,textarea,select{min-height:46px}
 }
 .home-section-nav button.active{
   color:#fff;background:linear-gradient(110deg,var(--burgundy),#8a3b59);
-  box-shadow:0 5px 13px rgba(105,36,62,.16);
+  box-shadow:none;
 }
 #home-overview .hero{
   min-height:190px;padding:clamp(22px,5vw,34px);
@@ -1364,7 +1362,7 @@ input,textarea,select{min-height:46px}
   position:relative;min-height:170px;border-radius:22px;
   border:1px solid #e7b8c8;
   background:linear-gradient(145deg,#f9e5eb,#fff8f4 58%,#edf4ee);
-  box-shadow:0 12px 28px rgba(105,36,62,.1),inset 0 1px 0 #fff;
+  box-shadow:none;
   cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;
 }
 .envelope:before{
@@ -1401,9 +1399,5 @@ input,textarea,select{min-height:46px}
 }
 @media(hover:hover){
   .games button:hover,.feature:hover,.continue-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-card)}
-  .envelope:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(105,36,62,.15)}
-}
-@media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .envelope:hover{transform:translateY(-2px);box-shadow:none;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
