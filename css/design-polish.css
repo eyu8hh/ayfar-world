@@ -630,3 +630,5 @@ body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color
 /* Impeccable body-copy floor: preserve existing hierarchy, never shrink below 13px. */
 #home p{font-size:13px!important}
 #login p{font-size:12px!important}
+
+#home .sync{font-size:12px!important}
