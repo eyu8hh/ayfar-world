@@ -76,7 +76,8 @@ test("login screen does not overflow horizontally at 390px", async ({ page }) =>
 test("static navigation uses native controls with explicit button types", async ({ page }) => {
   await stubExternalServices(page);
   await page.goto("/");
-  await expect(page.locator("button:not([type])")).toHaveCount(0);
+  const implicitButtons = await page.locator("button:not([type])").evaluateAll(nodes => nodes.map(node => ({ html: node.outerHTML, parent: node.parentElement?.outerHTML.slice(0, 500) })));
+  expect(implicitButtons, JSON.stringify(implicitButtons)).toEqual([]);
   await expect(page.locator('[role="button"]')).toHaveCount(0);
   await expect(page.locator(".home-slide-controls")).toHaveJSProperty("tagName", "NAV");
 });
