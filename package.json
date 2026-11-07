@@ -1,0 +1,22 @@
+{
+  "name": "ayfar-world",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local quality and browser-testing toolchain for AYFAR WORLD",
+  "scripts": {
+    "serve": "node tools/serve.mjs",
+    "check:js": "node tools/check-js.mjs",
+    "validate:html": "html-validate index.html",
+    "lint:css": "stylelint css/design-polish.css --config .stylelintrc.json",
+    "test:e2e": "playwright test",
+    "qa": "npm run check:js && npm run validate:html && npm run lint:css && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/cli": "0.1.21",
+    "@playwright/test": "1.65.0",
+    "html-validate": "11.19.0",
+    "lighthouse": "13.6.0",
+    "stylelint": "18.0.0"
+  }
+}

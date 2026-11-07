@@ -1,0 +1,65 @@
+name: AYFAR quality checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [design/polish-v1]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install local QA tools
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: JavaScript syntax
+        run: npm run check:js
+      - name: HTML validation
+        run: npm run validate:html
+      - name: CSS lint
+        run: npm run lint:css
+      - name: Playwright and axe-core
+        run: npm run test:e2e
+      - name: Lighthouse mobile audit
+        if: success()
+        run: |
+          mkdir -p artifacts
+          node tools/serve.mjs > /tmp/ayfar-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          CHROME_PATH="$(node -e "process.stdout.write(require('playwright').chromium.executablePath())")"
+          npx lighthouse http://127.0.0.1:4173/ \
+            --chrome-path="$CHROME_PATH" \
+            --form-factor=mobile \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --chrome-flags="--headless --no-sandbox" \
+            --output=json \
+            --output-path=artifacts/lighthouse-mobile.json
+      - name: Upload QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ayfar-quality-evidence
+          path: |
+            playwright-report/
+            test-results/
+            artifacts/
+          if-no-files-found: ignore
+          retention-days: 14

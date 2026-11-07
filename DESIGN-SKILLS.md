@@ -1,20 +1,38 @@
-# AYFAR WORLD — project-local design and browser skills
+# AYFAR WORLD — project-scoped design and QA skills
 
-These skills are installed under `.agents/skills/` for this repository only. They do not change the PWA runtime or add frontend dependencies by themselves.
+The project-specific skill set is tracked under `.agents/skills/`. It is separate from the PWA runtime: no skill file is loaded by the public website, and no React/GSAP runtime is added by installing these references.
 
-## Installed
-- **Impeccable** — already present at `.agents/skills/impeccable/`; use for audit, critique, polish and responsive/accessibility checks.
-- **Taste Skill** — `.agents/skills/design-taste-frontend/`. Use its craft guidance selectively; the AYFAR compatibility override preserves the existing Arabic RTL private-app identity and the intended vertical scroll inside each category.
-- **Designlang / extract-design** — `.agents/skills/extract-design/`. Use to extract design tokens and language from an existing live website, then compare against AYFAR's committed design rather than blindly importing another site's palette.
-- **React Bits** — `.agents/skills/react-bits/`, including the live component catalog and fetch script. It targets React; AYFAR is vanilla HTML/CSS/JS, so do not migrate frameworks or paste React components into the app. Use as a source of interaction ideas or for a separately approved React surface.
-- **GSAP** — `.agents/skills/gsap-core/`, `gsap-timeline/`, `gsap-scrolltrigger/`, and `gsap-performance/`. GSAP is framework-agnostic; add the runtime library only when a concrete interaction justifies it, respecting reduced-motion and low-end Android performance.
-- **Transitions.dev** — `.agents/skills/transitions-dev/` and `transitions-polish/`. Use CSS-first patterns for purposeful transitions; preserve native scroll gestures and avoid competing scroll listeners.
-- **Playwright CLI** — `.agents/skills/playwright-cli/`. This is the agent guidance. The CLI executable itself still needs Node.js 18+ and `npm install -g @playwright/cli@latest`; then `playwright-cli install --skills=agents` can install the CLI's own skill layout. This repository commit does not perform a global install.
+## Skills available
 
-## AYFAR rules
-1. Preserve all current features, Supabase data, role permissions and navigation.
-2. Arabic RTL and mobile-first are mandatory; test narrow Android and iPhone widths.
-3. Category navigation is horizontal; content inside every category must remain vertically scrollable.
-4. Prefer existing vanilla CSS/JS. Do not add React, Tailwind, Three.js or GSAP packages without a concrete use case.
-5. Keep animation light, interruptible, and reduced under `prefers-reduced-motion`.
-6. Verify the real deployed page where possible: login, horizontal section navigation, vertical category scrolling, and core interactions on mobile viewports.
+- **Frontend Design** — AYFAR-adapted visual hierarchy, typography, purposeful layouts, and finishing quality.
+- **Theme Factory** — AYFAR palette tokens; do not replace the burgundy/rose/green identity with unrelated presets.
+- **Impeccable** — audit, critique, polish, responsive design, and accessibility workflow. Read its SKILL.md and references before a design pass.
+- **Taste Skill** — visual craft adapted for Arabic RTL; preserve horizontal section navigation and vertical scrolling inside sections.
+- **Extract Design** — extract design language from reference websites, then compare rather than blindly importing.
+- **GSAP** — core, timelines, ScrollTrigger, and performance references. Do not add a runtime dependency without a concrete need.
+- **Playwright CLI** — browser-agent command reference; use `npx playwright cli` after `npm install`.
+- **React Bits** — React-only catalog, for interaction inspiration. AYFAR remains vanilla HTML/CSS/JS.
+- **Transitions.dev** — transition and motion QA references; prefer CSS-first, short, interruptible motion.
+
+## QA toolchain
+
+```sh
+npm install
+npx playwright install chromium
+npm run qa
+```
+
+GitHub Actions installs the pinned local QA tools, runs static checks and browser tests, then stores a mobile Lighthouse report as an artifact. This workflow does not deploy Supabase functions or change secrets.
+
+## AYFAR non-negotiable constraints
+
+1. Preserve every working feature, user record, Supabase policy, role, session, and synchronization path.
+2. Arabic RTL and mobile-first are mandatory. Verify 390×844 and narrow 360px widths.
+3. Section navigation stays horizontal; content inside each section remains vertically scrollable.
+4. Preserve the burgundy, rose/pink, and green palette and all original files under `assets/brand/`.
+5. Prefer existing vanilla CSS/JS. No React, Tailwind, Three.js, or GSAP dependency without an approved concrete need.
+6. Keep motion short, interruptible, transform/opacity-first, and reduced under `prefers-reduced-motion`.
+7. Never use real account credentials in browser tests. Mock the public Supabase SDK boundary for shell-only checks.
+8. Never clear localStorage, IndexedDB, cookies, or service-worker state as a test shortcut.
+9. Do not treat static/syntax checks as proof of two-device synchronization.
+10. Never claim a skill command or browser test was run unless the corresponding tool actually ran.
