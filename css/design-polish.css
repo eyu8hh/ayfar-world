@@ -264,7 +264,9 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 #home-our-world .stats article,#home-our-world .feature,#home-messages .message-feature,
 #home-games .games>button,#home-plans .plan-card,#home-routine .routine-intro,
 #home-overview .continue-card .primary{
+  transition-property:transform,opacity;
   transition-duration:220ms;
+  transition-timing-function:var(--ayfar-ease-out);
 }
 #home-plans .plan-icon{transition:transform 220ms var(--ayfar-ease-out)}
 .home-section-nav button{transition-duration:180ms}
