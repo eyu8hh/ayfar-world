@@ -269,7 +269,7 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 #home-plans .plan-icon{transition:transform 220ms var(--ayfar-ease-out)}
 .home-section-nav button{transition-duration:180ms}
 .home-slide-controls button{transition-duration:180ms}
-.unfinished-progress>span,.game-progress-track>span{transition:transform 220ms var(--ayfar-ease-out);transform-origin:right center}
+.unfinished-progress>span,.game-progress-track>span{width:100%;transition:transform 220ms var(--ayfar-ease-out);transform-origin:right center}
 .game-screen{animation-duration:220ms}
 .love-card.is-opening,.love-card.is-revealing{animation:none;transform:none;opacity:1}
 .glow,.challenge-orbit,.challenge-pulse,.plan-surprise-gift{animation:none!important}
