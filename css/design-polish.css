@@ -91,7 +91,7 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 #home-games .games>button:nth-child(4n){background:linear-gradient(145deg,#fffdfc,#f7f0f6)}
 #home-games .games>button b{font-size:13px;line-height:1.6}
 #home-games .games>button small{font-size:11px;line-height:1.65;color:#796a72}
-#home-games .games>button em{padding-top:10px;font-size:10px}
+#home-games .games>button em{padding-top:10px;font-size:12px}
 .home-slide-controls{gap:14px;margin-bottom:calc(4px + env(safe-area-inset-bottom))}
 .home-slide-controls button{width:44px;height:44px;min-width:44px;border-radius:13px}
 .home-slide-controls button:not(:disabled):active{transform:scale(.97)}
