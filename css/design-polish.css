@@ -43,7 +43,7 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 #login .auth-form{margin-top:22px}
 #login .field{margin:15px 0 7px;color:#674655;font-size:13px;font-weight:700}
 #login .text{min-height:52px;padding:13px 15px;border:1px solid #e5d4db;border-radius:14px;background:#fff;color:var(--ayfar-ink);font-size:16px}
-#login .text::placeholder{color:#927d86;opacity:1}
+#login .text::placeholder{color:#6d5862;opacity:1}
 #login .primary{width:100%;min-height:52px;margin-top:17px;border:1px solid #70243f;border-radius:15px;background:linear-gradient(115deg,#70243f,#8e3c5a);color:#fff}
 #auth-error:empty{display:none}
 #login .local{margin-top:18px;color:#47765c;font-size:11px}
