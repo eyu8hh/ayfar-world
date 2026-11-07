@@ -25,8 +25,8 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 0
   --ink:#482333;--muted:#806a74;--line:#ead8de;--burgundy:#69243e;
   --pink:#d98da7;--green:#426d55;--green-soft:#e9f1ea;
   --surface:#fffdfb;--surface-rose:#fff5f7;
-  --shadow-soft:0 10px 28px rgba(82,35,55,.07);
-  --shadow-card:0 15px 38px rgba(82,35,55,.09);
+  --shadow-soft:0 10px 28px rgba(30,25,28,.07);
+  --shadow-card:0 15px 38px rgba(30,25,28,.09);
 }
 body{
   background:
@@ -64,7 +64,7 @@ header button,.secondary-action{min-height:42px}
 .games button{
   position:relative;min-height:150px;border-color:rgba(234,216,222,.9);
   background:linear-gradient(150deg,#fffefd,#fff9f8);
-  box-shadow:0 7px 20px rgba(82,35,55,.045);
+  box-shadow:0 7px 20px rgba(30,25,28,.045);
   padding:17px;align-items:flex-start;
 }
 
@@ -78,8 +78,8 @@ header button,.secondary-action{min-height:42px}
 .text:focus{border-color:#bd7891;box-shadow:0 0 0 3px rgba(189,120,145,.12);outline:0}
 .question-card{box-shadow:inset 0 1px rgba(255,255,255,.75)}
 .answer-actions button{min-height:52px}
-.character-choice,.result-grid article{box-shadow:0 5px 15px rgba(82,35,55,.035)}
-.message-bubble{box-shadow:0 4px 12px rgba(82,35,55,.045)}
+.character-choice,.result-grid article{box-shadow:0 5px 15px rgba(30,25,28,.035)}
+.message-bubble{box-shadow:0 4px 12px rgba(30,25,28,.045)}
 #toast{z-index:10001;box-shadow:0 10px 28px rgba(40,12,25,.2);transition:opacity .2s ease,transform .2s ease}
 #love-overlay{backdrop-filter:blur(7px)}
 .love-card{box-shadow:0 28px 90px rgba(22,6,17,.34)}
@@ -161,10 +161,10 @@ html{scroll-behavior:smooth}
 .text:focus-visible{border-color:#b95c7d;box-shadow:0 0 0 4px rgba(200,95,131,.16)}
 button:active{filter:saturate(1.12)}
 @media(hover:hover){
- .games button:hover{transform:translateY(-5px) scale(1.012);border-color:#d39aae;box-shadow:0 16px 30px rgba(82,35,55,.12)}
+ .games button:hover{transform:translateY(-5px) scale(1.012);border-color:#d39aae;box-shadow:0 16px 30px rgba(30,25,28,.12)}
  .games button:hover:after{transform:scale(1.35)}
  .feature:hover{filter:saturate(1.08)}
- .secondary-action:hover{transform:translateY(-2px);box-shadow:0 7px 15px rgba(82,35,55,.08)}
+ .secondary-action:hover{transform:translateY(-2px);box-shadow:0 7px 15px rgba(30,25,28,.08)}
 }
 @media(hover:none){
  .games button:active,.feature:active{transform:scale(.985)}
@@ -177,7 +177,7 @@ button:active{filter:saturate(1.12)}
 
 /* AYFAR WORLD · home dashboard / phase 03 */
 .continue-wrap{margin:18px 0 22px}
-.continue-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 21px;border:1px solid #d9b0bf;border-radius:23px;background:linear-gradient(112deg,#70243f 0%,#8e3c5b 52%,#47765a 140%);box-shadow:0 16px 34px rgba(82,35,55,.17);color:#fff}
+.continue-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 21px;border:1px solid #d9b0bf;border-radius:23px;background:linear-gradient(112deg,#70243f 0%,#8e3c5b 52%,#47765a 140%);box-shadow:0 16px 34px rgba(30,25,28,.17);color:#fff}
 .continue-card .eyebrow{color:#f4cbd8;letter-spacing:1.4px}
 .continue-card h3{margin:5px 0;color:#fff;font-size:20px}
 .continue-card p{margin:0;color:#f6e8ed;font-size:12px;line-height:1.6}
