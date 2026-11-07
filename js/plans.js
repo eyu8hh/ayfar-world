@@ -82,10 +82,7 @@
     if(event.target.closest("[data-dream-toggle]")){toggle(item);return;}
     if(event.target.closest("[data-dream-delete]")){remove(item);return;}
   });
-  document.addEventListener("keydown",event=>{
-    if(event.key==="Escape"&&!overlay.hidden)close();
-    if((event.key==="Enter"||event.key===" ")&&event.target.matches("[data-open-dreams]")){event.preventDefault();open();}
-  });
+  document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!overlay.hidden)close();});
   document.querySelectorAll("[data-open-dreams]").forEach(button=>button.addEventListener("click",open));
   $("#dream-cancel").addEventListener("click",()=>setForm());
   $("#dreams-form").addEventListener("submit",async event=>{

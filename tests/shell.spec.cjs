@@ -53,6 +53,16 @@ test("all seven home sections remain in the document", async ({ page }) => {
   }
 });
 
+test("plan actions are native buttons and retain their action hooks", async ({ page }) => {
+  await stubExternalServices(page);
+  await page.goto("/");
+  const cards = page.locator("#home-plans .plan-card-action");
+  await expect(cards).toHaveCount(6);
+  await expect(cards.first()).toHaveAttribute("type", "button");
+  await expect(cards.nth(1)).toHaveAttribute("data-open-calendar", "");
+  await expect(cards.nth(2)).toHaveAttribute("data-plan-open", "daily");
+});
+
 test("login screen does not overflow horizontally at 390px", async ({ page }) => {
   await stubExternalServices(page);
   await page.goto("/");
@@ -61,4 +71,12 @@ test("login screen does not overflow horizontally at 390px", async ({ page }) =>
     clientWidth: document.documentElement.clientWidth
   }));
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
+});
+
+test("static navigation uses native controls with explicit button types", async ({ page }) => {
+  await stubExternalServices(page);
+  await page.goto("/");
+  await expect(page.locator("button:not([type])")).toHaveCount(0);
+  await expect(page.locator('[role="button"]')).toHaveCount(0);
+  await expect(page.locator(".home-slide-controls")).toHaveJSProperty("tagName", "NAV");
 });

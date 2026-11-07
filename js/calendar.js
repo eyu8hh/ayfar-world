@@ -60,7 +60,7 @@
   }
   function close(){overlay.hidden=true;document.body.style.overflow="";if(channel&&supa()){supa().removeChannel(channel);channel=null;}}
   document.querySelectorAll("[data-open-calendar]").forEach(el=>el.addEventListener("click",open));
-  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!overlay.hidden)close();if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-open-calendar]")){e.preventDefault();open();}});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!overlay.hidden)close();});
   overlay.addEventListener("click",async e=>{
     if(e.target===overlay||e.target.closest("[data-calendar-close]")){close();return;}
     if(e.target.closest("[data-month-prev]")){cursor=new Date(cursor.getFullYear(),cursor.getMonth()-1,1);render();return;}

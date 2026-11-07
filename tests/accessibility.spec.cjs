@@ -11,9 +11,14 @@ test("axe-core scans the login experience and records WCAG findings", async ({ p
     })
   );
   await page.goto("/");
-  const results = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-    .analyze();
+  const scan = () => new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+  const loginResults = await scan();
+  await testInfo.attach("ayfar-login.png", { body: await page.screenshot({ fullPage: true }), contentType: "image/png" });
+  await page.locator("#login").evaluate(el => el.classList.add("hidden"));
+  await page.locator("#home").evaluate(el => el.classList.remove("hidden"));
+  const homeResults = await scan();
+  await testInfo.attach("ayfar-home.png", { body: await page.screenshot({ fullPage: true }), contentType: "image/png" });
+  const results = { passes: [...loginResults.passes, ...homeResults.passes], incomplete: [...loginResults.incomplete, ...homeResults.incomplete], violations: [...loginResults.violations, ...homeResults.violations] };
   await testInfo.attach("axe-login-results.json", {
     body: JSON.stringify({
       passes: results.passes.length,
@@ -28,5 +33,5 @@ test("axe-core scans the login experience and records WCAG findings", async ({ p
     contentType: "application/json"
   });
   console.log(`axe-core: ${results.violations.length} violation(s), ${results.incomplete.length} incomplete check(s)`);
-  expect(results).toHaveProperty("violations");
+  expect(results.violations).toEqual([]);
 });
