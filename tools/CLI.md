@@ -13,9 +13,9 @@ The detector reports design-quality findings; it does not modify source files.
 
 ## Playwright CLI
 ```sh
-npx playwright-cli --help
-npx playwright-cli open http://127.0.0.1:4173/
-npx playwright-cli screenshot
+npx playwright cli --help
+npx playwright cli open http://127.0.0.1:4173/
+npx playwright cli screenshot
 ```
 
 For repeatable project tests:
