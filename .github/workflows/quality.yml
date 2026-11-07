@@ -74,6 +74,23 @@ jobs:
             --chrome-flags="--headless --no-sandbox" \
             --output=json \
             --output-path=artifacts/lighthouse-mobile.json
+      - name: Install designlang Chromium for extraction
+        if: success()
+        continue-on-error: true
+        run: npx --yes designlang install-browser --with-deps
+      - name: Extract AYFAR design tokens only (no apply/clone)
+        if: success()
+        continue-on-error: true
+        run: |
+          mkdir -p artifacts/designlang
+          npx --yes designlang https://eyu8hh.github.io/ayfar-world/ \
+            --out artifacts/designlang \
+            --width 390 \
+            --height 844 \
+            --no-prompts \
+            --no-design-md \
+            --no-history \
+            --quiet
       - name: Upload QA evidence
         if: always()
         uses: actions/upload-artifact@v4
