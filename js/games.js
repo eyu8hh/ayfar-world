@@ -107,7 +107,7 @@ async function createChallenge(key,state){
  try{
   // Detach this tab from the current room; the server-side match remains resumable.
   if(room)cleanup();
-  await currentUser();role=window.WorldStore.get().active==="farahati"?"farahati":window.WorldStore.get().active;
+  await currentUser();role=canonicalRole(window.WorldStore.get().active);
   const challenge=await rpc("ayfar_challenge_send",{p_game_key:key,p_state:state});
   outgoingChallenge=challenge;
   try{localStorage.setItem("ayfar_pending_challenge_v1",challenge.id)}catch(_){}
@@ -144,7 +144,7 @@ async function startAiQuiz(){
 async function acceptChallenge(id){
  if(challengeBusy)return;challengeBusy=true;renderIncomingChallenge(incomingChallenge);
  try{
-  await currentUser();role=window.WorldStore.get().active==="farahati"?"farahati":window.WorldStore.get().active;
+  await currentUser();role=canonicalRole(window.WorldStore.get().active);
   const game=await rpc("ayfar_challenge_accept",{p_challenge_id:id});
   if(!game)throw Error("انتهت صلاحية هذا التحدي. اطلب تحدياً جديداً.");
   if(room)cleanup();
@@ -232,7 +232,7 @@ async function stopSavedGame(id){
   toast("تم إيقاف المباراة");loadOpenGames();
  }catch(e){toast(e.message||"تعذر إيقاف المباراة");}
 }
-async function restore(){try{const id=localStorage.getItem(ROOM_KEY);if(!id)return;await currentUser();const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();if(error)throw error;if(!data){localStorage.removeItem(ROOM_KEY);return}room=data;role=window.WorldStore.get().active==="farahati"?"farahati":"ayoub";watch();render()}catch(e){console.warn("AYFAR game restore:",e);toast("تعذر استعادة المباراة. تحقق من الاتصال ثم حدّث الصفحة.")}}
+async function restore(){try{const id=localStorage.getItem(ROOM_KEY);if(!id)return;await currentUser();const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();if(error)throw error;if(!data){localStorage.removeItem(ROOM_KEY);return}room=data;role=canonicalRole(window.WorldStore.get().active);watch();render()}catch(e){console.warn("AYFAR game restore:",e);toast("تعذر استعادة المباراة. تحقق من الاتصال ثم حدّث الصفحة.")}}
 function watch(){if(!room)return;const roomId=room.id;if(channel)client().removeChannel(channel);channel=client().channel("ayfar-game-"+roomId).on("postgres_changes",{event:"UPDATE",schema:"public",table:"ayfar_games",filter:"id=eq."+roomId},p=>{if(room?.id===roomId&&p.new?.id===roomId&&Number(p.new.version)>Number(room.version)){room=p.new;render()}}).subscribe();if(poll)clearInterval(poll);poll=setInterval(async()=>{if(!room||room.id!==roomId)return;const {data,error}=await client().from("ayfar_games").select("*").eq("id",roomId).single();if(error||!data||room?.id!==roomId||data.id!==roomId)return;if(Number(data.version)>Number(room.version)){room=data;render()}},3500)}
 async function save(mutator,status){if(!room)return;const roomId=room.id;for(let attempt=0;attempt<3;attempt++){if(!room||room.id!==roomId)return;const base=room,s=normalizeParticipantKeys(JSON.parse(JSON.stringify(base.state||{})));mutator(s);try{const updated=await rpc("ayfar_game_update",{p_game_id:base.id,p_expected_version:base.version,p_state:s,p_status:status||null});if(room?.id===roomId&&Number(updated.version)>=Number(room.version))room=updated;render();return}catch(e){const {data}=await client().from("ayfar_games").select("*").eq("id",base.id).single();if(!data)break;if(room?.id===roomId&&Number(data.version)>=Number(room.version))room=data;if(Number(data.version)<=Number(base.version))break;}}if(room?.id===roomId){render();toast("تعذر حفظ الحركة بعد عدة محاولات. تمت مزامنة آخر حالة؛ أعد المحاولة إن لم تظهر إجابتك.")}}
 function shell(inner){
