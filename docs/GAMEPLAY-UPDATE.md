@@ -16,7 +16,7 @@ Before testing multiple simultaneous active matches against the live Supabase pr
 
 `supabase/migrations/202611070001_allow_multiple_active_games.sql`
 
-This migration replaces only the two challenge RPC functions to remove the active-match restriction. It does not alter tables, RLS policies, roles, accounts, existing game rows, or stored messages. It must be run in the Supabase SQL Editor by the project owner; this repository change does not apply it remotely.
+This migration replaces the two challenge RPC functions to remove the active-match restriction and tightens the existing star-change RPC so a non-empty reason is required server-side. It does not alter tables, RLS policies, roles, accounts, existing game rows, or stored messages. It must be run in the Supabase SQL Editor by the project owner; this repository change does not apply it remotely.
 
 ## Safety and verification
 
