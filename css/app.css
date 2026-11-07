@@ -1243,7 +1243,7 @@ body.ayoub-theme .routine-privacy-note{background:#29384b;color:#c1cad6}
   left:24px;top:50%;transform:translateY(-50%);font-size:0;color:transparent;
   border:2px solid #c8a35a;border-radius:22px;overflow:hidden;
   background:url("../assets/brand/farah-profile.jpg") center/cover no-repeat;
-  box-shadow:0 8px 24px rgba(68,24,41,.22)
+  box-shadow:none
 }
 body.ayoub-theme .heroheart{
   background-image:url("../assets/brand/ayoub-profile.jpg")
