@@ -68,3 +68,27 @@ end;
 $$;
 
 
+
+
+-- Require an explicit reason for every new star balance change.
+-- The existing history timestamps and actor attribution are preserved.
+create or replace function public.change_ayfar_stars(p_delta bigint,p_reason text default null)
+returns bigint language plpgsql security definer set search_path=public
+as $$
+declare new_balance bigint;
+begin
+  if not exists(select 1 from public.profiles where id=auth.uid() and role in ('farhati','farahati')) then
+    raise exception 'فقط فرحتي تستطيع تغيير رصيد النجوم';
+  end if;
+  if p_delta=0 then raise exception 'يجب أن يكون التغيير أكبر أو أقل من صفر'; end if;
+  if nullif(trim(coalesce(p_reason,'')),'') is null then
+    raise exception 'يجب كتابة سبب إضافة النجوم أو خصمها';
+  end if;
+  update public.ayfar_star_wallet set balance=balance+p_delta,updated_at=now()
+  where id=1 and balance+p_delta>=0 returning balance into new_balance;
+  if new_balance is null then raise exception 'الرصيد لا يسمح بهذا الخصم'; end if;
+  insert into public.ayfar_star_history(delta,balance_after,reason,changed_by)
+  values(p_delta,new_balance,left(trim(p_reason),160),auth.uid());
+  return new_balance;
+end $$;
+grant execute on function public.change_ayfar_stars(bigint,text) to authenticated;
