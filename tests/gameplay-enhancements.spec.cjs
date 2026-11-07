@@ -50,3 +50,13 @@ test("notifications offer a contextual action and mark read on selection", async
   expect(notifications).toContain('daily_rating:"#rating"');
   expect(notifications).toContain('pet_care:"#home-pets"');
 });
+
+test("daily letter PNG uses the approved paper-and-wax-seal design without envelope branding", async () => {
+  const letters = read("js/love-letters.js");
+  const exportCode = letters.slice(letters.indexOf("async function saveDailyLetterImage"), letters.indexOf("async function checkDailyLetter"));
+  expect(exportCode).toContain('ctx.strokeRect(82,82,width-164,height-164)');
+  expect(exportCode).toContain('const seal=ctx.createRadialGradient');
+  expect(exportCode).toContain('ctx.fillText("بكل الحب، أيوب"');
+  expect(exportCode).not.toContain("GHUSEIN");
+  expect(exportCode).not.toContain("💌");
+});
