@@ -167,7 +167,7 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 .game-live-mark i{box-shadow:none}
 .game-progress-wrap{margin:15px 0 4px}
 .game-progress-track{height:7px}
-.game-progress-track>span{transition:width 220ms var(--ayfar-ease-out)}
+.game-progress-track>span{width:100%;transform-origin:right center;transition:transform 220ms var(--ayfar-ease-out)}
 .game-scoreboard{gap:7px;margin:15px 0 17px}
 .game-player-score{padding:9px 8px;border-radius:14px;background:#fffafc;box-shadow:none}
 .game-player-score.ayoub{border-color:#e8cad5}
@@ -310,7 +310,7 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important}
-  :where(button,.primary,.secondary-action){transition:opacity 120ms ease,color 120ms ease,background-color 120ms ease,border-color 120ms ease!important}
+  :where(button,.primary,.secondary-action){transition:opacity 120ms ease!important}
   :where(button,.primary,.secondary-action):active{transform:none!important}
   #home-overview .hero,#home-overview .home-anniversary,#home-overview .continue-card,
   #home-our-world .stats article,#home-our-world .feature,#home-messages .message-feature,
