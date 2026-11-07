@@ -611,7 +611,7 @@ body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color
   font-size:12px!important;
   line-height:1.55;
 }
-#login .eyebrow{font-size:11px!important}
+#login .eyebrow{font-size:12px!important}
 #login .local,
 #login .disclaimer{font-size:12px!important;color:#66515c!important}
 #login .text::placeholder{color:#66515c!important;opacity:1}
@@ -634,12 +634,12 @@ body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color
 #home .sync{font-size:12px!important}
 
 /* Keep the hero copy wide enough beside its decorative heart on narrow phones. */
-#home-overview .hero{padding:24px 18px 24px clamp(96px,24vw,108px)}
+#home-overview .hero{padding:24px 18px 24px clamp(108px,27vw,116px)}
 #home-overview .hero>div:first-child{
   width:100%;max-width:none;flex:1 1 auto;min-width:0;
 }
 #home-overview .hero p{max-width:none}
 #home-overview .heroheart{
-  left:16px;top:15px;width:76px;font-size:94px;line-height:1;
+  left:20px;top:15px;width:72px;height:72px;font-size:90px;line-height:1;
   text-align:center;pointer-events:none;
 }
