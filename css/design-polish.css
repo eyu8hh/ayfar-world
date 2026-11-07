@@ -617,3 +617,12 @@ body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color
 #login .text::placeholder{color:#66515c!important;opacity:1}
 #home .plans-intro-copy p,
 #home .plans-footnote p{color:#66515c}
+
+/* Remaining Impeccable text-size findings: game and plan metadata. */
+#home .games button em,
+#home .plan-card-bottom>span,
+#home .plan-card-bottom>em,
+#home .home-anniversary-head p{
+  font-size:12px!important;
+  line-height:1.55;
+}
