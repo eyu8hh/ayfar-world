@@ -1056,7 +1056,7 @@ body.ayoub-theme .calendar-form input,body.ayoub-theme .calendar-form select,bod
 .plan-tool-row{display:flex;gap:8px;flex-wrap:wrap}
 .plan-tool-secondary{border:1px solid #dedaf4;border-radius:12px;background:#fff;color:#625a9f;padding:10px 13px;font:inherit;font-size:11px;font-weight:900}
 .plan-surprise-stage{display:grid;place-items:center;min-height:245px;padding:22px;border:1px solid #f1d9ce;border-radius:23px;background:radial-gradient(circle at 50% 15%,#fff 0,#fff4ed 56%,#fbe5db 100%);text-align:center}
-.plan-surprise-gift{display:grid;place-items:center;width:92px;height:92px;margin:0 auto 12px;border-radius:30px;background:linear-gradient(145deg,#f4a17e,#b85b43);color:#fff;font-size:45px;box-shadow:0 15px 30px #b85b4338;animation:giftFloat 2.6s ease-in-out infinite}
+.plan-surprise-gift{display:grid;place-items:center;width:92px;height:92px;margin:0 auto 12px;border-radius:30px;background:linear-gradient(145deg,#f4a17e,#b85b43);color:#fff;font-size:45px;box-shadow:none;animation:giftFloat 2.6s ease-in-out infinite}
 @keyframes giftFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-7px) rotate(4deg)}}
 .plan-surprise-stage h3{margin:6px 0;color:#8f4939;font-size:18px}
 .plan-surprise-stage p{max-width:380px;margin:0 auto;color:#86675f;font-size:12px;line-height:1.9}
