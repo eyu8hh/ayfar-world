@@ -818,7 +818,7 @@ body.ayoub-theme .planned-features article>span{color:#e2c991}
 .plan-card{--plan-ink:#8e3655;--plan-wash:#fff0f4;--plan-line:#f0d4df;position:relative;isolation:isolate;min-width:0;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;gap:13px;overflow:hidden;padding:14px 13px 12px;border:1px solid var(--plan-line);border-radius:21px;background:linear-gradient(150deg,var(--plan-wash),#fff 82%);box-shadow:0 8px 20px rgba(48,22,33,.055);transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
 .plan-card:before{content:"";position:absolute;z-index:-1;width:112px;height:112px;border-radius:50%;left:-47px;bottom:-58px;background:var(--plan-ink);opacity:.055}
 .plan-card-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.plan-icon{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:15px;background:var(--plan-ink);color:#fff;font-size:23px;box-shadow:0 7px 15px color-mix(in srgb,var(--plan-ink) 22%,transparent)}
+.plan-icon{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:15px;background:var(--plan-ink);color:#fff;font-size:23px;box-shadow:none;}
 .plan-tag{max-width:68%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:5px 8px;border:1px solid var(--plan-line);border-radius:999px;background:rgba(255,255,255,.72);color:var(--plan-ink);font-size:9px;font-weight:800}
 .plan-card-copy{display:flex;flex-direction:column;gap:6px}
 .plan-card-copy>b{font-size:14px;line-height:1.5;color:#382832}
@@ -917,7 +917,7 @@ body.ayoub-theme .dreams-close,body.ayoub-theme .dreams-cancel{background:#29394
   position:relative;width:62px;height:62px;flex-basis:62px;
   border-radius:21px;display:grid;place-items:center;overflow:hidden;
   color:#fff;font-size:29px;
-  box-shadow:0 10px 20px color-mix(in srgb,var(--plan-ink) 25%,transparent),inset 0 1px 0 rgba(255,255,255,.42);
+  box-shadow:none;
   transform:rotate(-5deg);
   transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s ease;
 }
@@ -942,7 +942,7 @@ body.ayoub-theme .dreams-close,body.ayoub-theme .dreams-cancel{background:#29394
 .plan-goals .plan-card-bottom em{color:#287986}
 .plan-surprise .plan-card-bottom em{color:#b85b43}
 @media(hover:hover){
-  .plan-card:hover .plan-icon{transform:rotate(0) translateY(-3px) scale(1.06);box-shadow:0 15px 26px color-mix(in srgb,var(--plan-ink) 32%,transparent),inset 0 1px 0 rgba(255,255,255,.5)}
+  .plan-card:hover .plan-icon{transform:rotate(0) translateY(-3px) scale(1.06);box-shadow:none;}
 }
 .plan-card-action:active .plan-icon{transform:scale(.94) rotate(0)}
 body.ayoub-theme .plan-icon{filter:saturate(.88);box-shadow:0 9px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.25)}
