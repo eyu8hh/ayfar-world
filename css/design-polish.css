@@ -317,3 +317,14 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
   #home-games .games>button,#home-plans .plan-card,#home-routine .routine-intro,
   .home-section-nav button.active,.love-card,.envelope span{transform:none!important;animation:none!important;transition:none!important}
 }
+
+
+/* Fix the legacy .loginbox .logo rule overriding the compact brand mark. */
+#login .loginbox .login-logo-mark{
+  width:76px;
+  height:76px;
+  aspect-ratio:1;
+  background:#fff8fa;
+  background-image:none;
+  border-radius:22px;
+}
