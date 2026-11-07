@@ -16,7 +16,7 @@ declare
 begin
   if not exists(
     select 1 from public.profiles
-    where id=auth.uid() and lower(role) in ('farhati','farhati')
+    where id=auth.uid() and lower(role) in ('farahati','farhati')
   ) then
     raise exception 'فقط فرحتي تستطيع تغيير رصيد النجوم';
   end if;
