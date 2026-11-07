@@ -600,3 +600,20 @@ body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color
 }
 .skip-link:focus-visible{transform:translateY(0);outline:3px solid #d2859d;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
+
+/* Impeccable review: bring functional microcopy to a readable 12px floor. */
+#home small,
+#home .eyebrow,
+#home .plan-tag,
+#home .plan-card-bottom>em,
+#home .plans-section-caption small,
+#home .plans-footnote p{
+  font-size:12px!important;
+  line-height:1.55;
+}
+#login .eyebrow{font-size:11px!important}
+#login .local,
+#login .disclaimer{font-size:12px!important;color:#66515c!important}
+#login .text::placeholder{color:#66515c!important;opacity:1}
+#home .plans-intro-copy p,
+#home .plans-footnote p{color:#66515c}
