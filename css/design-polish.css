@@ -258,6 +258,21 @@ body{color:var(--ayfar-ink)}
 .letter-export-status.is-error{color:#a33b52}
 #close-love-letter{width:100%;min-height:48px;margin-top:10px}
 
+/* Keep inherited 3D transitions inside the same responsive motion scale. */
+#home-overview .hero,#home-overview .home-anniversary,#home-overview .continue-card,
+#home-our-world .stats article,#home-our-world .feature,#home-messages .message-feature,
+#home-games .games>button,#home-plans .plan-card,#home-routine .routine-intro,
+#home-overview .continue-card .primary{
+  transition-duration:220ms;
+}
+#home-plans .plan-icon{transition-duration:220ms}
+.home-section-nav button{transition-duration:180ms}
+.home-slide-controls button{transition-duration:180ms}
+.unfinished-progress>span,.game-progress-track>span{transition-duration:220ms}
+.game-screen{animation-duration:220ms}
+.love-card.is-opening,.love-card.is-revealing{animation:none;transform:none;opacity:1}
+.glow,.challenge-orbit,.challenge-pulse,.plan-surprise-gift{animation:none!important}
+
 /* Consistent motion: fast feedback, no hover simulation on touch. */
 @media(hover:hover) and (pointer:fine){
   .home-section-nav button:not(.active):hover{border-color:#c995a8;background:#fff7fa;color:#70243f}
