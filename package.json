@@ -11,7 +11,7 @@
     "test:e2e": "playwright test",
     "qa": "npm run check:js && npm run validate:html && npm run lint:css && npm run test:e2e",
     "impeccable:help": "impeccable --help",
-    "playwright:cli": "playwright-cli --help",
+    "playwright:cli": "playwright cli --help",
     "design:audit": "impeccable detect ."
   },
   "devDependencies": {
