@@ -161,10 +161,10 @@ function composeLetter(){
 document.addEventListener("DOMContentLoaded",()=>{
  const home=document.querySelector("#home");
  if(home){
-  const card=document.createElement("button");card.className="feature star-feature";card.id="star-wallet";card.innerHTML='<span>⭐</span><small>OUR STAR PROMISE</small><b>نجوم أيوب عند فرحتي</b><em>رصيد مشترك · فرحتي تعدّله وأيوب يتابع الرصيد وسجل التغييرات</em>';
+  const card=document.createElement("button");card.type="button";card.setAttribute("type","button");card.className="feature star-feature";card.id="star-wallet";card.innerHTML='<span>⭐</span><small>OUR STAR PROMISE</small><b>نجوم أيوب عند فرحتي</b><em>رصيد مشترك · فرحتي تعدّله وأيوب يتابع الرصيد وسجل التغييرات</em>';
   const features=home.querySelector(".features");if(features)features.insertBefore(card,home.querySelector("#rating"));
   card.onclick=renderStars;
-  const compose=document.createElement("button");compose.className="feature message-feature";compose.id="compose-love";compose.style.display=window.WorldStore.get().active==="ayoub"?"block":"none";compose.innerHTML='<span>✉</span><small>LETTERS FROM AYOUB</small><b>اكتب رسالة لفرحتي</b><em>أضف رسالة جديدة إلى قائمة رسائلها اليومية</em>';
+  const compose=document.createElement("button");compose.type="button";compose.setAttribute("type","button");compose.className="feature message-feature";compose.id="compose-love";compose.style.display=window.WorldStore.get().active==="ayoub"?"block":"none";compose.innerHTML='<span>✉</span><small>LETTERS FROM AYOUB</small><b>اكتب رسالة لفرحتي</b><em>أضف رسالة جديدة إلى قائمة رسائلها اليومية</em>';
   const msg=home.querySelector("#messages");if(msg&&msg.parentNode)msg.parentNode.insertBefore(compose,msg.nextSibling);
   compose.onclick=composeLetter;
  }
