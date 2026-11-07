@@ -388,8 +388,11 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
   --ayfar-surface-rose:#fff4f7;
   --ayfar-surface-green:#f0f5ef;
   --ayfar-radius-card:18px;
-  --ayfar-fast:140ms;
-  --ayfar-ui:190ms;
+  --ayfar-fast:150ms;
+  --ayfar-ui:250ms;
+  --duration-quick:150ms;
+  --duration-fast:250ms;
+  --ease-smooth-out:cubic-bezier(.22,1,.36,1);
 }
 html{scrollbar-color:#b98298 #f4ecef}
 body:not(.ayoub-theme){background:var(--ayfar-paper);color:var(--ayfar-ink)}
@@ -510,6 +513,15 @@ body:not(.ayoub-theme){background:var(--ayfar-paper);color:var(--ayfar-ink)}
 #home-plans .plan-card:active,
 #home-our-world .feature:active,
 #home-messages .message-feature:active{transform:scale(.985)!important}
+#home-top>button,
+.home-section-nav button,
+.home-slide-controls button,
+#page>header button,
+#pagebody .primary,
+#pagebody .secondary-action{
+  transition:transform var(--duration-quick) var(--ease-smooth-out),background-color var(--duration-quick) ease,border-color var(--duration-quick) ease,color var(--duration-quick) ease;
+}
+:where(button,.primary,.secondary-action):active{transform:scale(.97)}
 :where(button,a,input,textarea,select):focus-visible{outline:2px solid #a65d79;outline-offset:3px}
 @media(hover:hover) and (pointer:fine){
   #home-overview .hero:hover,
