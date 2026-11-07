@@ -19,7 +19,8 @@ const sourceBank=Array.isArray(window.AYFAR_QUESTION_BANK)?window.AYFAR_QUESTION
 const quizBanks={mixed:sourceBank,speed:sourceBank,riddles:sourceBank.filter(q=>q.category==="الألغاز والمنطق والذكاء"),geography:sourceBank.filter(q=>q.category==="الجغرافيا والدول والعواصم")};
 let room=null,role=null,uid=null,channel=null,poll=null,clock=null,speedExpiryPending=false,aiNextPending=false,aiStatusPoll=null,aiStatusBusy=false;let chatOpen=false,chatSending=false,chatDraft="";let challengeChannel=null,challengePoll=null,incomingChallenge=null,outgoingChallenge=null,challengeBusy=false;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const other=p=>p==="ayoub"?"farahati":"ayoub",label=p=>p==="ayoub"?"أيوب 🌙":"فرحتي 🌸";
+const canonicalRole=p=>["farahati","farhati"].includes(String(p||"").toLowerCase())?"farahati":"ayoub";
+const other=p=>canonicalRole(p)==="ayoub"?"farahati":"ayoub",label=p=>p==="ayoub"?"أيوب 🌙":"فرحتي 🌸";
 const norm=v=>String(v??"").normalize("NFKC").replace(/[ًٌٍَُِّْـٰ]/g,"").replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/[٠-٩۰-۹]/g,d=>String("٠١٢٣٤٥٦٧٨٩".indexOf(d)>=0?"٠١٢٣٤٥٦٧٨٩".indexOf(d):"۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/\s+/g," ").trim().toLocaleLowerCase("ar");
 function show(html){$("#home").classList.add("hidden");$("#page").classList.remove("hidden");$("#pagebody").innerHTML=html}
 function toast(t){const x=$("#toast");if(x){x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2200)}}
@@ -63,7 +64,7 @@ async function launchAcceptedChallenge(c){
  const {data,error}=await client().from("ayfar_games").select("*").eq("id",c.game_id).maybeSingle();
  if(error||!data){if(error)console.warn("AYFAR accepted challenge:",error);return;}
  if(room)cleanup();
- room=data;role=window.WorldStore.get().active==="farahati"?"farahati":window.WorldStore.get().active;
+ room=data;role=canonicalRole(window.WorldStore.get().active);
  try{localStorage.setItem(ROOM_KEY,room.id);localStorage.removeItem("ayfar_pending_challenge_v1")}catch(_){}
  outgoingChallenge=null;renderIncomingChallenge(null);watch();render();toast("تم قبول التحدي! لنبدأ اللعب ❤️");
 }
@@ -94,7 +95,7 @@ async function refreshChallenges(){
 async function initChallenges(profileRole){
  try{
   await currentUser();
-  role=profileRole==="farahati"?"farahati":profileRole||window.WorldStore.get().active;
+  role=canonicalRole(profileRole||window.WorldStore.get().active);
   if(challengeChannel)client().removeChannel(challengeChannel);
   challengeChannel=client().channel("ayfar-challenges-"+uid).on("postgres_changes",{event:"*",schema:"public",table:"ayfar_game_challenges"},()=>refreshChallenges()).subscribe();
   if(challengePoll)clearInterval(challengePoll);
@@ -104,7 +105,7 @@ async function initChallenges(profileRole){
 }
 async function createChallenge(key,state){
  try{
-  if(room&&["waiting","playing"].includes(room.status)&&room.state?.phase!=="finished"){toast("لديك مباراة نشطة بالفعل. أنهها أولاً.");return;}
+  // Detach this tab from the current room; the server-side match remains resumable.
   if(room)cleanup();
   await currentUser();role=window.WorldStore.get().active==="farahati"?"farahati":window.WorldStore.get().active;
   const challenge=await rpc("ayfar_challenge_send",{p_game_key:key,p_state:state});
@@ -213,7 +214,7 @@ async function resumeGame(id){
   const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();
   if(error)throw error;if(!data||!["playing","waiting"].includes(data.status)||data.state?.phase==="finished")throw Error("هذه المباراة لم تعد متاحة.");
   if(room)cleanup();
-  room=data;role=window.WorldStore.get().active==="farahati"?"farahati":"ayoub";
+  room=data;role=canonicalRole(window.WorldStore.get().active);
   try{localStorage.setItem(ROOM_KEY,room.id);}catch(_){}
   const home=$("#home"),page=$("#page");if(home)home.classList.add("hidden");if(page)page.classList.remove("hidden");
   watch();render();
