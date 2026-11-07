@@ -255,7 +255,7 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 }
 .letter-export-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}
 .letter-save-button{width:100%;min-height:50px;border:1px solid #69243e;border-radius:14px;background:#69243e;color:#fff;font:inherit;font-weight:800}
-.letter-export-status{min-height:18px;margin:5px 0 0;color:#47765c;font-size:11px;line-height:1.6}
+.letter-export-status{min-height:18px;margin:5px 0 0;color:#47765c;font-size:12px;line-height:1.6}
 .letter-export-status.is-error{color:#a33b52}
 #close-love-letter{width:100%;min-height:48px;margin-top:10px}
 
@@ -634,12 +634,12 @@ body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color
 #home .sync{font-size:12px!important}
 
 /* Keep the hero copy wide enough beside its decorative heart on narrow phones. */
-#home-overview .hero{padding:24px 18px 24px clamp(84px,22vw,98px)}
+#home-overview .hero{padding:24px 18px 24px clamp(96px,24vw,108px)}
 #home-overview .hero>div:first-child{
   width:100%;max-width:none;flex:1 1 auto;min-width:0;
 }
 #home-overview .hero p{max-width:none}
 #home-overview .heroheart{
-  left:12px;top:15px;width:76px;font-size:94px;line-height:1;
+  left:16px;top:15px;width:76px;font-size:94px;line-height:1;
   text-align:center;pointer-events:none;
 }
