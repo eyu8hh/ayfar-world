@@ -1,0 +1,29 @@
+/* AYFAR WORLD · interaction refinements */
+.star-history-entry{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:5px 12px;padding:12px;border:1px solid #efdee4;border-radius:14px;background:linear-gradient(145deg,#fffaf8,#fff)}
+.star-history-entry>b{grid-row:span 2;font-size:14px;white-space:nowrap}
+.star-history-entry>span{font-size:13px;line-height:1.5;overflow-wrap:anywhere;color:#543744}
+.star-history-entry>small{font-size:10px;color:#927783}
+.game-chat-reactions{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.game-chat-reaction{display:inline-flex;align-items:center;gap:4px;min-width:34px;min-height:26px;padding:2px 7px;border:1px solid #ead6de;border-radius:999px;background:rgba(255,255,255,.72);font:inherit;font-size:12px;cursor:pointer;transition:background .16s ease,border-color .16s ease,transform .16s ease}
+.game-chat-reaction small{font-size:9px;color:#765a66}
+.game-chat-reaction.is-active{border-color:#a34f70;background:#f8e5ed}
+.game-chat-reaction:active{transform:scale(.94)}
+.game-chat-reaction:disabled{opacity:.65;cursor:default}
+.game-new-match{flex:0 0 auto;align-self:flex-start;padding:7px 10px;border:1px solid #e7cbd5;border-radius:999px;background:linear-gradient(135deg,#fff8fa,#f1f6f0);color:#70243f;font:inherit;font-size:10px;font-weight:800;white-space:nowrap;cursor:pointer}
+.who-reveal p{line-height:1.8;padding:8px 0;border-bottom:1px solid #f0e3e8}
+.who-evaluation-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.who-evaluation-actions button{flex:1 1 140px}
+.notification-item{width:100%;display:flex;align-items:center;gap:12px;text-align:right;color:inherit;font:inherit;cursor:pointer}
+.notification-item .notification-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
+.notification-item .notification-copy>span{font-size:12px;line-height:1.55;color:#765e68;overflow-wrap:anywhere}
+.notification-item:focus-visible,.game-chat-reaction:focus-visible,.game-new-match:focus-visible{outline:2px solid #a34f70;outline-offset:3px}
+@media(max-width:520px){
+ .game-screen-header{flex-wrap:wrap}
+ .game-screen-heading{flex:1 1 calc(100% - 80px)}
+ .game-new-match{margin-inline-start:auto}
+ .who-evaluation-actions{flex-direction:column}
+ .who-evaluation-actions button{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+ .game-chat-reaction{transition:none}
+}
