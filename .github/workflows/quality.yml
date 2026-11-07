@@ -35,6 +35,15 @@ jobs:
         run: npm run validate:html
       - name: CSS lint
         run: npm run lint:css
+      - name: Impeccable design detector
+        continue-on-error: true
+        run: |
+          mkdir -p artifacts
+          set +e
+          npx impeccable detect . --json > artifacts/impeccable.json
+          detector_status=$?
+          set -e
+          if [ "$detector_status" -gt 2 ]; then exit "$detector_status"; fi
       - name: Playwright and axe-core
         run: npm run test:e2e
       - name: Lighthouse mobile audit
