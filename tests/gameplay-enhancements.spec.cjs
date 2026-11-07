@@ -32,6 +32,7 @@ test("match creation no longer blocks an additional active room", async () => {
   expect(migration).toContain("ayfar_challenge_accept");
   expect(migration).not.toContain("لديكما مباراة نشطة بالفعل");
   expect(migration).not.toContain("لديك مباراة نشطة بالفعل");
+  expect(migration).toContain("يجب كتابة سبب إضافة النجوم أو خصمها");
 });
 
 test("star changes require a reason and display their recorded time", async () => {
