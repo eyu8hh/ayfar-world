@@ -1,0 +1,298 @@
+/* AYFAR WORLD · design polish v1
+   Preserve the existing burgundy / rose / green identity.
+   No framework, shadow dependency, or new runtime library. */
+:root{
+  --ayfar-paper:#fffaf3;
+  --ayfar-paper-edge:#e8d8c8;
+  --ayfar-ink:#4b2b3a;
+  --ayfar-muted:#806b75;
+  --ayfar-ease-out:cubic-bezier(.23,1,.32,1);
+  --ayfar-fast:160ms;
+  --ayfar-ui:220ms;
+}
+html{scrollbar-color:#c995a8 #f6edf0}
+::selection{background:#e8b9c8;color:#4b2436}
+body{color:var(--ayfar-ink)}
+.shell{
+  padding-top:max(12px,env(safe-area-inset-top));
+  padding-bottom:max(12px,env(safe-area-inset-bottom));
+}
+:where(button,.primary,.secondary-action,input,textarea,select){font-family:inherit}
+:where(button,.primary,.secondary-action){min-height:44px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+:where(button,.primary,.secondary-action):active{transform:scale(.97)}
+:where(button,input,textarea,select):focus-visible{outline:2px solid rgba(112,36,63,.72);outline-offset:3px}
+.primary,.secondary-action,button{transition:transform var(--ayfar-fast) var(--ayfar-ease-out),background-color var(--ayfar-fast) ease,border-color var(--ayfar-fast) ease,color var(--ayfar-fast) ease,opacity var(--ayfar-fast) ease}
+
+/* Login: one clear focal point, calm surface, comfortable form controls. */
+#login{min-height:calc(100svh - 24px);padding-block:12px}
+#login .loginbox{
+  width:min(100%,440px);
+  padding:clamp(24px,6vw,38px) clamp(18px,5vw,32px) 24px;
+  border:1px solid #e8d5dd;
+  border-radius:26px;
+  background:rgba(255,253,251,.97);
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.login-logo-mark{display:grid;place-items:center;width:76px;height:76px;margin:0 auto 18px;padding:8px;border:1px solid #ead4dd;border-radius:22px;background:#fff8fa}
+.login-logo-mark img{display:block;width:100%;height:100%;object-fit:contain;border-radius:12px}
+#login .wordmark{margin:10px 0 12px;font-size:clamp(36px,10vw,46px);line-height:1.02;letter-spacing:.035em}
+#login .loginbox>p:not(.disclaimer){max-width:30ch;margin-inline:auto;line-height:1.9}
+#login .auth-form{margin-top:22px}
+#login .field{margin:15px 0 7px;color:#674655;font-size:13px;font-weight:700}
+#login .text{min-height:52px;padding:13px 15px;border:1px solid #e5d4db;border-radius:14px;background:#fff;color:var(--ayfar-ink);font-size:16px}
+#login .text::placeholder{color:#927d86;opacity:1}
+#login .primary{width:100%;min-height:52px;margin-top:17px;border:1px solid #70243f;border-radius:15px;background:linear-gradient(115deg,#70243f,#8e3c5a);color:#fff}
+#auth-error:empty{display:none}
+#login .local{margin-top:18px;color:#47765c;font-size:11px}
+#login .disclaimer{margin-top:8px;font-size:10px!important;line-height:1.75;color:#88747d}
+
+/* Home navigation and surfaces. Keep the seven-section pager intact. */
+#home-top{min-height:54px;gap:12px;padding-bottom:12px}
+#home-top>button{min-width:44px;min-height:44px;border:1px solid #e7d5dc;border-radius:13px;background:#fffaf9}
+.home-section-nav{
+  gap:7px;padding:5px 2px 10px;scrollbar-width:none;
+  overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+}
+.home-section-nav::-webkit-scrollbar{display:none}
+.home-section-nav button{
+  flex:0 0 auto;min-height:44px;padding:0 14px;
+  border:1px solid #e7d7de;border-radius:13px;
+  background:#fffdfb;color:#705564;font-size:12px;font-weight:700;
+  transition:background-color var(--ayfar-fast) ease,border-color var(--ayfar-fast) ease,color var(--ayfar-fast) ease,transform var(--ayfar-fast) var(--ayfar-ease-out);
+}
+.home-section-nav button.active{border-color:#70243f;background:#70243f;color:#fff;transform:none;outline:none}
+#home-pages>.home-section-anchor{padding:9px 6px calc(28px + env(safe-area-inset-bottom))}
+#home-overview .hero{
+  min-height:174px;padding:24px clamp(18px,5vw,30px);
+  border:1px solid #e7cbd5;border-radius:24px;
+  background:linear-gradient(118deg,#f4dfe7 0%,#fff5f5 58%,#eaf2eb 100%);
+  box-shadow:none;
+}
+#home-overview .hero h2{font-size:clamp(22px,5.5vw,29px);line-height:1.35}
+#home-overview .hero p{max-width:34ch;line-height:1.85}
+#home-overview .heroheart{opacity:.62}
+#home-overview .home-anniversary{border:1px solid #e8cbd5;box-shadow:none}
+#home-our-world .stats article,#home-our-world .feature,#home-messages .message-feature,
+#home-games .games>button,#home-plans .plan-card,#home-routine .routine-intro{
+  box-shadow:none;border-color:#e7d6dd;
+  transition:transform var(--ayfar-ui) var(--ayfar-ease-out),border-color var(--ayfar-fast) ease,background-color var(--ayfar-fast) ease;
+}
+#home-games .games{gap:10px}
+#home-games .games>button{
+  min-height:156px;padding:15px 13px;border-radius:17px;
+  background:linear-gradient(145deg,#fffdfc,#fff7f9);
+  transform:perspective(900px) rotateX(1deg) translateZ(4px);
+}
+#home-games .games>button:nth-child(4n+2){background:linear-gradient(145deg,#fffdfc,#f1f7f1)}
+#home-games .games>button:nth-child(4n+3){background:linear-gradient(145deg,#fffdfc,#fff9ef)}
+#home-games .games>button:nth-child(4n){background:linear-gradient(145deg,#fffdfc,#f7f0f6)}
+#home-games .games>button b{font-size:13px;line-height:1.6}
+#home-games .games>button small{font-size:11px;line-height:1.65;color:#796a72}
+#home-games .games>button em{padding-top:10px;font-size:10px}
+.home-slide-controls{gap:14px;margin-bottom:calc(4px + env(safe-area-inset-bottom))}
+.home-slide-controls button{width:44px;height:44px;min-width:44px;border-radius:13px}
+.home-slide-controls button:not(:disabled):active{transform:scale(.97)}
+#continue-game{min-height:48px}
+.unfinished-match{grid-template-columns:42px minmax(0,1fr);gap:10px;padding:13px;border:1px solid #e8d8df;border-radius:17px;background:#fffdfb;box-shadow:none}
+.unfinished-match-actions{gap:8px}
+.unfinished-match-actions button{min-height:44px;padding-inline:12px}
+.unfinished-resume{background:#70243f;box-shadow:none}
+.unfinished-stop{background:#fff;border-color:#e6d7dd}
+
+/* Shared inner pages: stable width, clear hierarchy, touch-safe controls. */
+#page>header{min-height:54px;gap:12px;padding-bottom:12px}
+#page>header button{min-height:44px;padding-inline:14px}
+#pagebody{width:min(100%,720px);margin:12px auto 0}
+#pagebody>.panel{
+  padding:clamp(18px,4.5vw,28px);
+  border:1px solid #e8d7de;border-radius:22px;
+  background:rgba(255,253,251,.98);box-shadow:none;
+}
+#pagebody .panel h2{line-height:1.45}
+#pagebody .panel p{line-height:1.9}
+#pagebody .field{margin:14px 0 7px;font-weight:700}
+#pagebody .text{min-height:48px;padding:13px 14px;border-radius:13px;font-size:16px;line-height:1.7}
+#pagebody textarea.text{min-height:116px}
+#pagebody .primary{min-height:48px;border-radius:14px}
+#pagebody .secondary-action{min-height:44px;border-radius:13px}
+#pagebody .notice{line-height:1.75}
+#pagebody .panel .bigheart{font-size:52px;line-height:1.2}
+
+/* Private messages. */
+.messages-panel{max-width:100%;text-align:right}
+.messages-panel>.bigheart{margin-bottom:4px}
+.message-list{
+  max-height:min(58vh,560px);min-height:150px;
+  padding:8px 4px;gap:12px;
+  overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+}
+.message-bubble{
+  max-width:min(88%,560px);padding:13px 15px;
+  border-radius:17px;line-height:1.9;font-size:14px;
+  box-shadow:none;
+}
+.message-bubble.sent{border:1px solid #e9cbd6;border-bottom-right-radius:5px;background:#f8e8ee;color:#542638}
+.message-bubble.received{border:1px solid #d7e5d8;border-bottom-left-radius:5px;background:#edf4ee;color:#31563f}
+.message-bubble small{margin-top:8px;color:#806c76;font-size:10px}
+.empty-messages{padding:30px 14px;border:1px dashed #e4d1d9;border-radius:15px;background:#fff9fb;line-height:1.9}
+.message-form{padding-top:18px;margin-top:18px;border-top:1px solid #eadde2}
+.message-form .primary{min-height:50px}
+
+/* Star balance: make the number, action and audit trail easy to scan. */
+.star-panel .star-total{font-size:clamp(36px,10vw,48px);color:#a4772e;font-variant-numeric:tabular-nums}
+.star-panel form{padding:16px;margin-top:18px;border:1px solid #ead9c2;border-radius:17px;background:#fffaf1}
+.star-panel form .text{background:#fffdf9;border-color:#e9decd}
+.star-panel form .primary{width:100%;margin-top:14px;background:linear-gradient(115deg,#70243f,#8c3c58)}
+.star-panel h3{margin:26px 0 12px}
+.star-history{gap:9px}
+.star-history>div{
+  display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;
+  align-items:center;gap:4px 12px;padding:12px 13px;
+  border:1px solid #eadde2;border-radius:14px;background:#fffdfb;
+}
+.star-history>div>b{grid-row:1/3;font-size:14px;white-space:nowrap}
+.star-history>div>span{font-size:13px;line-height:1.6;color:#5e4651;overflow-wrap:anywhere}
+.star-history>div>small{font-size:10px;line-height:1.5;color:#806c76}
+
+/* Match screen: readable scoreboard and one consistent game surface. */
+#pagebody>.panel.game-screen{padding:17px clamp(14px,4vw,23px);text-align:right}
+.game-screen-header{gap:11px;padding:4px 0 14px}
+.game-screen-icon{width:48px;height:48px;flex-basis:48px;border:1px solid #ead7df;border-radius:15px;box-shadow:none}
+.game-screen-heading>small{font-size:9px;letter-spacing:.08em}
+.game-screen-heading h2{font-size:clamp(18px,4.6vw,23px);line-height:1.4}
+.game-live-mark{min-height:30px;padding:5px 8px}
+.game-live-mark i{box-shadow:none}
+.game-progress-wrap{margin:15px 0 4px}
+.game-progress-track{height:7px}
+.game-progress-track>span{transition:width 220ms var(--ayfar-ease-out)}
+.game-scoreboard{gap:7px;margin:15px 0 17px}
+.game-player-score{padding:9px 8px;border-radius:14px;background:#fffafc;box-shadow:none}
+.game-player-score.ayoub{border-color:#e8cad5}
+.game-player-score.farahati{border-color:#d5e4d7}
+.game-player-avatar{width:32px;height:32px;border-radius:11px}
+.game-player-score>b{font-size:21px}
+.game-score-divider{font-size:8px}
+.game-screen-content{padding-top:3px}
+.game-screen-content .question-card{
+  margin:13px 0;padding:18px 15px;border-radius:16px;
+  border:1px solid #ead8df;background:linear-gradient(145deg,#fffafc,#fdf8f2);
+  color:#542638;box-shadow:none;line-height:1.9;
+}
+.game-screen-content .text{min-height:48px;background:#fffdfb;border-color:#e5d5dc;font-size:16px}
+.game-screen-content .primary{min-height:48px;box-shadow:none}
+.game-screen-content .answer-actions button{min-height:52px}
+.game-chat-widget{left:12px;bottom:calc(12px + env(safe-area-inset-bottom));gap:8px}
+.game-chat-toggle{min-height:48px;padding:0 15px;border:1px solid #70243f;background:#70243f;box-shadow:none}
+.game-chat-panel{
+  width:min(360px,calc(100vw - 24px));
+  height:min(480px,calc(100dvh - 112px - env(safe-area-inset-bottom)));
+  border:1px solid #e5d3dc;border-radius:18px;background:#fffdfb;box-shadow:none;
+}
+.game-chat-head{min-height:62px;padding:10px 13px;background:linear-gradient(110deg,#70243f,#47765c)}
+.game-chat-head button{width:44px;height:44px;min-width:44px;border:1px solid rgba(255,255,255,.25)}
+.game-chat-messages{padding:12px;background:#fffaf9}
+.game-chat-message{padding:10px 12px;border:1px solid #ecd8e0}
+.game-chat-message.mine{background:#f8e7ed;border-color:#e8cbd6}
+.game-chat-message.theirs{background:#edf4ee;border-color:#d5e5d7}
+.game-chat-composer{padding:10px;border-top:1px solid #eadde2;background:#fffdfb}
+.game-chat-quick{gap:6px}
+.game-chat-quick button{min-width:44px;min-height:44px;border:1px solid #eadbe1;border-radius:12px;background:#fff8fa}
+.game-chat-form{gap:7px}
+.game-chat-form input{min-width:0;min-height:48px;padding:10px 12px;border:1px solid #e5d5dc;border-radius:13px;background:#fff;color:#4b2b3a;font:inherit;font-size:16px}
+.game-chat-form button{width:46px;height:46px;min-width:46px;border:0;border-radius:13px;background:#70243f;color:#fff}
+.challenge-invite-card{padding:22px 19px;border-radius:22px;box-shadow:none;animation:none}
+.challenge-dismiss{width:44px;height:44px;min-width:44px}
+.challenge-invite-actions .primary,.challenge-invite-actions .secondary-action{min-height:48px}
+
+/* Daily letter: the signature AYFAR keepsake is a real paper-like surface. */
+#love-overlay{
+  padding:max(14px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));
+  background:radial-gradient(ellipse at 50% 0%,#8f4c65 0%,#542638 54%,#321522 100%);
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+}
+.love-card{
+  width:min(100%,520px);max-height:calc(100dvh - 28px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  padding:clamp(19px,5vw,28px) clamp(15px,4vw,24px);
+  border:1px solid #e9d6d2;border-radius:22px;background:#fffaf5;
+  box-shadow:none;animation:none;
+  transition:opacity 220ms var(--ayfar-ease-out),transform 220ms var(--ayfar-ease-out);
+}
+.love-card.is-entering{opacity:0;transform:translateY(9px) scale(.97)}
+.love-card>small{letter-spacing:.12em;color:#94546c}
+.love-card h2{font-size:clamp(21px,5vw,26px);line-height:1.5}
+.love-card p{line-height:1.9}
+.love-sparkle{margin-bottom:8px;color:#a75b78}
+.envelope{
+  position:relative;min-height:164px;justify-content:center;
+  margin:20px 0;padding:22px 18px;border:1px solid #e7c5d0;border-radius:17px;
+  background:linear-gradient(145deg,#fae8ed,#fffaf5 60%,#eef4ed);
+}
+.envelope span{font-size:60px;animation:floatEnvelope 2.4s ease-in-out infinite}
+.letter-paper{
+  position:relative;margin:18px 0;padding:27px 22px 30px;
+  border:1px solid var(--ayfar-paper-edge);
+  border-radius:3px 12px 5px 10px;
+  background:
+    radial-gradient(ellipse at 9% 8%,rgba(196,150,112,.08),transparent 34%),
+    radial-gradient(ellipse at 92% 88%,rgba(164,116,80,.07),transparent 32%),
+    linear-gradient(135deg,#fffdf8 0%,var(--ayfar-paper) 55%,#fdf5e9 100%);
+  color:var(--ayfar-ink);
+  font-family:"Aref Ruqaa","Noto Naskh Arabic",serif;
+  font-size:clamp(22px,5.6vw,29px);
+  font-weight:400;line-height:2.05;text-align:right;
+  white-space:normal;overflow-wrap:anywhere;
+  transform:rotate(-.15deg);
+}
+.letter-paper:before{
+  content:"♡";position:absolute;top:7px;left:12px;
+  color:rgba(151,76,103,.28);font-family:serif;font-size:21px;
+}
+.letter-export-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}
+.letter-save-button{width:100%;min-height:50px;border:1px solid #70243f;border-radius:14px;background:#70243f;color:#fff;font:inherit;font-weight:800}
+.letter-export-status{min-height:18px;margin:5px 0 0;color:#47765c;font-size:11px;line-height:1.6}
+.letter-export-status.is-error{color:#a33b52}
+#close-love-letter{width:100%;min-height:48px;margin-top:10px}
+
+/* Consistent motion: fast feedback, no hover simulation on touch. */
+@media(hover:hover) and (pointer:fine){
+  .home-section-nav button:not(.active):hover{border-color:#c995a8;background:#fff7fa;color:#70243f}
+  #home-games .games>button:hover{transform:perspective(900px) translateY(-2px) translateZ(5px);border-color:#d7b2c1}
+  .message-bubble:hover{border-color:#d4b1bf}
+  .star-history>div:hover{border-color:#d8bac6}
+}
+@media(max-width:520px){
+  .shell{padding-inline:12px}
+  #home-top{gap:8px}
+  .brand{gap:8px;font-size:21px}
+  .home-section-nav{gap:6px}
+  .home-section-nav button{padding-inline:12px;font-size:11px}
+  #home-pages>.home-section-anchor{padding-inline:3px}
+  #home-games .games{gap:8px}
+  #home-games .games>button{min-height:158px;padding:13px 11px}
+  .game-screen-header{align-items:flex-start}
+  .game-screen-heading{padding-top:2px}
+  .game-scoreboard{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+  .game-player-score{grid-template-columns:28px 1fr auto;column-gap:5px;padding:8px 6px}
+  .game-player-avatar{width:28px;height:28px}
+  .game-player-name{font-size:10px}
+  .game-player-score>b{font-size:19px}
+  .game-chat-panel{width:min(360px,calc(100vw - 24px));height:min(470px,calc(100dvh - 105px - env(safe-area-inset-bottom)))}
+  .letter-paper{padding:23px 16px 26px;line-height:2}
+}
+@media(max-width:360px){
+  .game-screen-header{flex-wrap:wrap}
+  .game-live-mark{margin-inline-start:auto}
+  .game-score-divider{display:none}
+  .game-scoreboard{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important}
+  :where(button,.primary,.secondary-action){transition:opacity 120ms ease,color 120ms ease,background-color 120ms ease,border-color 120ms ease!important}
+  :where(button,.primary,.secondary-action):active{transform:none!important}
+  #home-overview .hero,#home-overview .home-anniversary,#home-overview .continue-card,
+  #home-our-world .stats article,#home-our-world .feature,#home-messages .message-feature,
+  #home-games .games>button,#home-plans .plan-card,#home-routine .routine-intro,
+  .home-section-nav button.active,.love-card,.envelope span{transform:none!important;animation:none!important;transition:none!important}
+}
