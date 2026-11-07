@@ -86,7 +86,7 @@ async function saveDailyLetterImage(button){
   const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
   if(!blob)throw new Error("لم نتمكن من إنشاء ملف الصورة.");
   const objectUrl=URL.createObjectURL(blob),link=document.createElement("a");
-  link.href=objectUrl;link.download="ayfar-letter-"+safeDate.toISOString().slice(0,10)+".png";
+  link.href=objectUrl;const filenameDate=[safeDate.getFullYear(),String(safeDate.getMonth()+1).padStart(2,"0"),String(safeDate.getDate()).padStart(2,"0")].join("-");link.download="ayfar-letter-"+filenameDate+".png";
   document.body.appendChild(link);link.click();link.remove();
   setTimeout(()=>URL.revokeObjectURL(objectUrl),20000);
   if(status)status.textContent="أصبحت رسالتكِ صورة PNG؛ تحققي من التنزيلات.";
