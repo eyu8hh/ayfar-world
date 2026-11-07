@@ -24,7 +24,7 @@ test("game chat reactions are stored in the shared match state", async () => {
 test("match creation no longer blocks an additional active room", async () => {
   const games = read("js/games.js");
   const migration = read("supabase/migrations/202611070001_allow_multiple_active_games.sql");
-  expect(games).toContain("Detatch this tab");
+  expect(games).toContain("Detach this tab");
   expect(migration).toContain("ayfar_challenge_send");
   expect(migration).toContain("ayfar_challenge_accept");
   expect(migration).not.toContain("لديكما مباراة نشطة بالفعل");
