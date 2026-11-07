@@ -344,3 +344,20 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 #home-plans .plan-card-copy>small,#home-plans .plan-card-bottom>span{color:#66545d}
 #home-plans .plan-card-action{appearance:none;-webkit-appearance:none;width:100%;font-family:inherit;color:inherit;cursor:pointer;text-align:inherit}
 #home-plans .plan-card-action:focus-visible{outline:3px solid rgba(112,36,63,.5);outline-offset:3px}
+
+/* Contrast pass: secondary copy must remain readable on blush, ivory and sage surfaces. */
+:root{--muted:#6d5963;--ayfar-muted:#6d5963}
+.eyebrow,#login .disclaimer,.brand span small,.home-anniversary p,.plan-tag,
+.plans-section-caption small,.message-bubble small,.star-history small,
+.unfinished-loading,.letter-export-status{color:#66515c}
+.count{color:#70243f}
+.sync{color:#315b43}
+.home-section-nav button:not(.active){color:#634653}
+#login .disclaimer{color:#66515c}
+#home-our-world .feature small{color:#793c55}
+#home-games .games>button small,#home-games .games>button em,
+#home-plans .plan-card-copy>small,#home-plans .plan-card-bottom>span,
+#home-routine .routine-intro p,.quote,footer{color:#66515c}
+#home-games .games>button em{color:#315b43}
+#home-plans .plan-card-bottom>em{color:#71334b}
+.letter-export-status.is-error{color:#8b2e42}
