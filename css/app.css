@@ -216,7 +216,7 @@ button:active{filter:saturate(1.12)}
 
 /* AYFAR WORLD · premium game chat and direct challenge surfaces */
 .game-chat-widget{z-index:120;left:16px;bottom:calc(16px + env(safe-area-inset-bottom));gap:12px}
-.game-chat-toggle{min-height:54px;padding:0 18px 0 14px;gap:10px;border:1px solid rgba(255,255,255,.32);background:linear-gradient(120deg,#70243f 0%,#8f3859 58%,#47765a 145%);box-shadow:0 12px 30px rgba(76,25,47,.27);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease}
+.game-chat-toggle{min-height:54px;padding:0 18px 0 14px;gap:10px;border:1px solid rgba(255,255,255,.32);background:linear-gradient(120deg,#70243f 0%,#8f3859 58%,#47765a 145%);box-shadow:0 10px 24px rgba(30,25,28,.16);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease}
 .game-chat-toggle-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.16)}
 .game-chat-toggle svg,.game-chat-context svg,.game-chat-empty-icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .game-chat-toggle-label{font-size:13px;letter-spacing:.1px}
