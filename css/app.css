@@ -635,7 +635,7 @@ body.ayoub-theme .heart.active{background:#665438;border-color:#c5a46d}
  border:1px solid rgba(185,155,101,.62);border-radius:14px;
  background:linear-gradient(105deg,#1b2b43 0%,#263b56 46%,#3e624f 100%);
  color:#fff9ef;letter-spacing:.2px;
- box-shadow:0 10px 22px rgba(27,43,67,.18),inset 0 1px rgba(255,255,255,.12);
+ box-shadow:none;
  transition:transform .2s,filter .2s,box-shadow .2s;
 }
 .login .primary:active{transform:translateY(1px);filter:brightness(.96)}
@@ -645,7 +645,7 @@ body.ayoub-theme .heart.active{background:#665438;border-color:#c5a46d}
 }
 .login .disclaimer{color:#66515c!important;font-size:12px;line-height:1.8}
 @media(hover:hover){
- .login .primary:hover{filter:brightness(1.08);box-shadow:0 14px 28px rgba(27,43,67,.22)}
+ .login .primary:hover{filter:brightness(1.08);box-shadow:none;}
 }
 @media(max-width:520px){
  .login{min-height:calc(100svh - 28px)}
