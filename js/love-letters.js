@@ -55,11 +55,15 @@ async function saveDailyLetterImage(button){
   const paper=ctx.createLinearGradient(70,55,width-40,height-60);
   paper.addColorStop(0,"#fffdf8");paper.addColorStop(.56,"#fff9ef");paper.addColorStop(1,"#fbf1e5");
   ctx.fillStyle=paper;ctx.fill();
-  ctx.strokeStyle="rgba(150,112,89,.25)";ctx.lineWidth=2;ctx.stroke();
-  for(let i=0;i<420;i++){
+  ctx.strokeStyle="rgba(112,36,63,.22)";ctx.lineWidth=2;ctx.stroke();
+  ctx.strokeStyle="rgba(112,36,63,.34)";ctx.lineWidth=3;
+  ctx.strokeRect(82,82,width-164,height-164);
+  ctx.strokeStyle="rgba(177,112,137,.30)";ctx.lineWidth=1;
+  ctx.strokeRect(94,94,width-188,height-188);
+  for(let i=0;i<760;i++){
    const x=76+(i*137)%928,y=68+(i*251)%(height-136);
-   ctx.fillStyle=i%3===0?"rgba(145,105,79,.045)":"rgba(255,255,255,.36)";
-   ctx.fillRect(x,y,i%5===0?2:1,i%4===0?3:1);
+   ctx.fillStyle=i%3===0?"rgba(145,105,79,.055)":"rgba(255,255,255,.42)";
+   ctx.fillRect(x,y,i%5===0?3:1,i%4===0?2:1);
   }
   ctx.direction="rtl";ctx.textAlign="center";
   ctx.fillStyle="#9b6679";ctx.font='22px "Noto Sans Arabic",sans-serif';
@@ -79,8 +83,13 @@ async function saveDailyLetterImage(button){
   const signatureY=y+112;
   ctx.fillStyle="#70243f";ctx.font='54px "Aref Ruqaa","Noto Naskh Arabic",serif';
   ctx.fillText("بكل الحب، أيوب",width-pad,signatureY);
-  ctx.textAlign="left";ctx.font='48px Georgia,serif';ctx.fillStyle="rgba(151,76,103,.62)";
-  ctx.fillText("♡",pad,signatureY+10);
+  const sealX=pad+62,sealY=signatureY-18;
+  const seal=ctx.createRadialGradient(sealX-15,sealY-18,5,sealX,sealY,58);
+  seal.addColorStop(0,"#a94d68");seal.addColorStop(.72,"#70243f");seal.addColorStop(1,"#4d172d");
+  ctx.save();ctx.shadowColor="rgba(77,23,45,.22)";ctx.shadowBlur=16;ctx.shadowOffsetY=5;
+  ctx.beginPath();ctx.arc(sealX,sealY,48,0,Math.PI*2);ctx.fillStyle=seal;ctx.fill();ctx.restore();
+  ctx.beginPath();ctx.arc(sealX,sealY,39,0,Math.PI*2);ctx.strokeStyle="rgba(255,231,235,.55)";ctx.lineWidth=2;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(sealX,sealY+19);ctx.bezierCurveTo(sealX-54,sealY-14,sealX-20,sealY-34,sealX,sealY-10);ctx.bezierCurveTo(sealX+20,sealY-34,sealX+54,sealY-14,sealX,sealY+19);ctx.closePath();ctx.fillStyle="rgba(255,238,241,.92)";ctx.fill();
   ctx.textAlign="center";ctx.font='18px "Noto Sans Arabic",sans-serif';ctx.fillStyle="#9b7c83";
   ctx.fillText("كلمات صغيرة… تبقى قريبة من القلب",width/2,height-104);
   const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
