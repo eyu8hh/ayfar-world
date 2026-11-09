@@ -642,3 +642,6 @@ body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color
   left:20px;top:15px;width:72px;height:72px;font-size:90px;line-height:1;
   text-align:center;pointer-events:none;
 }
+
+/* Keep localized editorial headings balanced without forcing fixed line breaks. */
+#login h1,#home h2,#home h3{text-wrap:balance}
