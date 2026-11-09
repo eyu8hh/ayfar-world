@@ -64,6 +64,7 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
   transition:transform var(--ayfar-fast) var(--ayfar-ease-out),opacity var(--ayfar-fast) ease;
 }
 .home-section-nav button.active{border-color:#69243e;background:#69243e;color:#fff;transform:none;outline:none}
+.home-section-nav button.active:focus-visible{outline:2px solid #4b2b3a;outline-offset:3px}
 #home-pages>.home-section-anchor{padding:9px 6px calc(28px + env(safe-area-inset-bottom))}
 #home-overview .hero{
   min-height:174px;padding:24px clamp(18px,5vw,30px);
@@ -84,7 +85,6 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 #home-games .games>button{
   min-height:156px;padding:15px 13px;border-radius:17px;
   background:linear-gradient(145deg,#fffdfc,#fff7f9);
-  transform:perspective(900px) rotateX(1deg) translateZ(4px);
 }
 #home-games .games>button:nth-child(4n+2){background:linear-gradient(145deg,#fffdfc,#f1f7f1)}
 #home-games .games>button:nth-child(4n+3){background:linear-gradient(145deg,#fffdfc,#fff9ef)}
@@ -247,7 +247,6 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
   font-size:clamp(22px,5.6vw,29px);
   font-weight:400;line-height:2.05;text-align:right;
   white-space:normal;overflow-wrap:anywhere;
-  transform:rotate(-.15deg);
 }
 .letter-paper:before{
   content:"♡";position:absolute;top:7px;left:12px;
@@ -259,7 +258,7 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 .letter-export-status.is-error{color:#a33b52}
 #close-love-letter{width:100%;min-height:48px;margin-top:10px}
 
-/* Keep inherited 3D transitions inside the same responsive motion scale. */
+/* Keep interactive surface transitions inside the same responsive motion scale. */
 #home-overview .hero,#home-overview .home-anniversary,#home-overview .continue-card,
 #home-our-world .stats article,#home-our-world .feature,#home-messages .message-feature,
 #home-games .games>button,#home-plans .plan-card,#home-routine .routine-intro,
@@ -279,7 +278,7 @@ button,.primary,.secondary-action{transition-property:transform,opacity!importan
 /* Consistent motion: fast feedback, no hover simulation on touch. */
 @media(hover:hover) and (pointer:fine){
   .home-section-nav button:not(.active):hover{border-color:#c995a8;background:#fff7fa;color:#69243e}
-  #home-games .games>button:hover{transform:perspective(900px) translateY(-2px) translateZ(5px);border-color:#d7b2c1}
+  #home-games .games>button:hover{transform:translateY(-2px);border-color:#d7b2c1}
   .message-bubble:hover{opacity:.98}
   .star-history>div:hover{opacity:.98}
 }
@@ -634,7 +633,7 @@ body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color
 #home .sync{font-size:12px!important}
 
 /* Keep the hero copy wide enough beside its decorative heart on narrow phones. */
-#home-overview .hero{padding:24px 18px 24px clamp(108px,27vw,116px)}
+#home-overview .hero{padding:24px 24px 24px clamp(108px,27vw,116px)}
 #home-overview .hero>div:first-child{
   width:100%;max-width:none;flex:1 1 auto;min-width:0;
 }
