@@ -633,13 +633,13 @@ body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color
 #home .sync{font-size:12px!important}
 
 /* Keep the hero copy wide enough beside its decorative heart on narrow phones. */
-#home-overview .hero{padding:24px 24px 24px clamp(100px,26vw,108px)}
+#home-overview .hero{padding:24px 24px 24px clamp(112px,29vw,120px)}
 #home-overview .hero>div:first-child{
   width:100%;max-width:none;flex:1 1 auto;min-width:0;
 }
 #home-overview .hero p{max-width:none}
 #home-overview .heroheart{
-  left:28px;top:20px;width:64px;height:64px;font-size:0;line-height:1;
+  left:36px;top:20px;width:64px;height:64px;font-size:0;line-height:1;
   border-radius:18px;pointer-events:none;
 }
 
