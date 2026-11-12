@@ -88,6 +88,8 @@ test("home navigation uses smooth native horizontal touch scrolling and readable
   const pager = page.locator("#home-pages");
   await expect(pager).toHaveCSS("touch-action", "pan-x pan-y pinch-zoom");
   await expect(pager).toHaveCSS("scroll-snap-type", "x mandatory");
+  await expect(pager).toHaveCSS("direction", "rtl");
+  await expect(page.locator("#home-slide-label")).toHaveCSS("position", "absolute");
   const controls = page.locator(".home-slide-controls button");
   await expect(controls).toHaveCount(2);
   for (const control of await controls.all()) {
