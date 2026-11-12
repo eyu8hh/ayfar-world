@@ -80,3 +80,22 @@ test("static navigation uses native controls with explicit button types", async 
   await expect(page.locator('[role="button"]')).toHaveCount(0);
   await expect(page.locator(".home-slide-controls")).toHaveJSProperty("tagName", "NAV");
 });
+
+test("home navigation uses smooth native horizontal touch scrolling and readable controls", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await stubExternalServices(page);
+  await page.goto("/");
+  const pager = page.locator("#home-pages");
+  await expect(pager).toHaveCSS("touch-action", "pan-x pan-y pinch-zoom");
+  await expect(pager).toHaveCSS("scroll-snap-type", "x mandatory");
+  const controls = page.locator(".home-slide-controls button");
+  await expect(controls).toHaveCount(2);
+  for (const control of await controls.all()) {
+    const box = await control.boundingBox();
+    expect(box.width).toBeGreaterThanOrEqual(44);
+    expect(box.height).toBeGreaterThanOrEqual(44);
+    await expect(control.locator("i")).toHaveAttribute("aria-hidden", "true");
+  }
+  await expect(page.locator("#home-slide-label")).not.toContainText(/\\d/);
+  await expect(page.locator(".home-section-nav button")).toHaveCount(7);
+});
