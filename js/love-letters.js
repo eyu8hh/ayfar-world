@@ -105,9 +105,11 @@ async function renderDailyLetterImagePreview(){
   await createDailyLetterImage();
   const image=document.createElement("img");image.src=dailyLetterImageUrl;image.alt="رسالة مكتوبة بخط اليد من أيوب إلى فرحتي";image.className="daily-letter-handwritten-image";
   preview.replaceChildren(image);
+  const fallback=$(".letter-text-fallback");if(fallback)fallback.hidden=true;
   if(status)status.textContent="رسالتكِ أصبحت ورقة مكتوبة بخط اليد ❤️";
   if(button){button.disabled=false;button.textContent="احتفظي بالصورة";}
  }catch(error){
+  const fallback=$(".letter-text-fallback");if(fallback)fallback.hidden=false;
   if(status){status.classList.add("is-error");status.textContent=error?.message||"تعذر تجهيز صورة الرسالة.";}
   if(button){button.disabled=false;button.textContent="حاولي تجهيز الصورة مجدداً";}
  }
@@ -133,6 +135,8 @@ async function checkDailyLetter(){
  if(error){console.error("Daily letter:",error.message);return}
  if(!data||!data.length)return;
  activeLetter=data[0];
+ dailyLetterImageBlob=null;
+ if(dailyLetterImageUrl){URL.revokeObjectURL(dailyLetterImageUrl);dailyLetterImageUrl=null;}
  showEnvelope();
 }
 function showEnvelope(){
