@@ -96,6 +96,6 @@ test("home navigation uses smooth native horizontal touch scrolling and readable
     expect(box.height).toBeGreaterThanOrEqual(44);
     await expect(control.locator("i")).toHaveAttribute("aria-hidden", "true");
   }
-  await expect(page.locator("#home-slide-label")).not.toContainText(/\\d/);
+  await expect(page.locator("#home-slide-label")).not.toContainText(/[0-9]/);
   await expect(page.locator(".home-section-nav button")).toHaveCount(7);
 });
