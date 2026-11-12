@@ -51,12 +51,19 @@ test("notifications offer a contextual action and mark read on selection", async
   expect(notifications).toContain('pet_care:"#home-pets"');
 });
 
-test("daily letter PNG uses the approved paper-and-wax-seal design without envelope branding", async () => {
+test("daily letters render varied handwritten keepsake images and preserve a downloadable copy", async () => {
   const letters = read("js/love-letters.js");
-  const exportCode = letters.slice(letters.indexOf("async function saveDailyLetterImage"), letters.indexOf("async function checkDailyLetter"));
-  expect(exportCode).toContain('ctx.strokeRect(82,82,width-164,height-164)');
-  expect(exportCode).toContain('const seal=ctx.createRadialGradient');
-  expect(exportCode).toContain('ctx.fillText("بكل الحب، أيوب"');
-  expect(exportCode).not.toContain("GHUSEIN");
-  expect(exportCode).not.toContain("💌");
+  const imageCode = letters.slice(letters.indexOf("async function createDailyLetterImage"), letters.indexOf("async function renderDailyLetterImagePreview"));
+  expect(imageCode).toContain('name:"linen"');
+  expect(imageCode).toContain('name:"garden"');
+  expect(imageCode).toContain('name:"sunset"');
+  expect(imageCode).toContain('name:"bluehour"');
+  expect(imageCode).toContain('name:"kraft"');
+  expect(imageCode).toContain('name:"rose"');
+  expect(imageCode).toContain('canvas.toBlob');
+  expect(imageCode).toContain('ctx.fillText("بكل الحب، أيوب"');
+  expect(letters).toContain('id="daily-letter-image-preview"');
+  expect(letters).toContain("renderDailyLetterImagePreview();");
+  expect(letters).toContain('link.download="ayfar-letter-"');
+  expect(letters).not.toContain("GHUSEIN");
 });

@@ -643,3 +643,15 @@ body.ayoub-theme #home-overview .continue-card .primary{background:#f7e7ed;color
   left:20px;top:15px;width:72px;height:72px;font-size:90px;line-height:1;
   text-align:center;pointer-events:none;
 }
+
+/* Handwritten daily-letter keepsake: generated from each message, with a fresh paper scene. */
+.daily-letter-image-preview{margin:18px auto 22px;max-width:540px;border-radius:18px;overflow:hidden;background:#f4e9e5;border:1px solid #ead9d9;box-shadow:0 12px 30px rgba(70,35,49,.10)}
+.daily-letter-handwritten-image{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain}
+.daily-letter-image-loading{min-height:180px;display:grid;place-items:center;padding:28px;color:#70243f;font-family:"Aref Ruqaa","Noto Naskh Arabic",serif;font-size:24px}
+.letter-text-fallback{margin-top:12px}.letter-text-fallback[hidden]{display:none}
+.letter-export-actions{display:grid;gap:8px;justify-items:center;margin:16px 0}
+.letter-save-button{min-height:46px;padding:11px 20px;border:1px solid #8c5268;border-radius:14px;background:#70243f;color:#fff;font:700 14px system-ui,sans-serif;cursor:pointer}
+.letter-save-button:disabled{opacity:.65;cursor:wait}
+.letter-export-status{min-height:20px;margin:0;color:#66515c;font-size:12px;text-align:center}
+.letter-export-status.is-error{color:#a52f45}
+@media(max-width:520px){.daily-letter-image-preview{margin:14px -4px 18px;border-radius:14px}.daily-letter-handwritten-image{max-height:65vh}}
