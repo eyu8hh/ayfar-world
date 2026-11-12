@@ -24,86 +24,107 @@ function wrapHandwrittenLines(ctx,value,maxWidth){
  });
  return lines;
 }
+let dailyLetterImageBlob=null;
+let dailyLetterImageUrl=null;
+async function createDailyLetterImage(){
+ if(!activeLetter?.letter_body)throw new Error("تعذر العثور على نص الرسالة.");
+ if(dailyLetterImageBlob)return dailyLetterImageBlob;
+ if(document.fonts?.load)await Promise.race([document.fonts.load('46px "Aref Ruqaa"'),new Promise(resolve=>setTimeout(resolve,1400))]);
+ const canvas=document.createElement("canvas"),width=1080,pad=132,maxTextWidth=816;
+ const ctx=canvas.getContext("2d");
+ if(!ctx)throw new Error("هذا المتصفح لا يدعم تجهيز الصورة.");
+ const themes=[
+  {name:"linen",outer:["#e8d8c8","#f5e9dc","#d8c4b3"],paper:["#fffdf7","#f8f0e3"],ink:"#503c37",accent:"#9a5264",line:"rgba(133,78,82,.32)"},
+  {name:"garden",outer:["#dce7d9","#edf1e6","#c8d9c9"],paper:["#fffef7","#f3f0df"],ink:"#354b3e",accent:"#547c5b",line:"rgba(84,124,91,.34)"},
+  {name:"sunset",outer:["#572f45","#a85e65","#e2a078"],paper:["#fff4e9","#f6dfce"],ink:"#573443",accent:"#a84e61",line:"rgba(168,78,97,.36)"},
+  {name:"bluehour",outer:["#263b55","#536a7c","#a2a8a2"],paper:["#fffdf4","#edf0e8"],ink:"#2e4052",accent:"#6b8792",line:"rgba(78,111,132,.38)"},
+  {name:"kraft",outer:["#9a795b","#c7a47c","#806047"],paper:["#f5e5c9","#ead4ae"],ink:"#49382d",accent:"#8c493c",line:"rgba(125,77,52,.36)"},
+  {name:"rose",outer:["#e9cbd2","#f5e4e4","#d9b7c0"],paper:["#fffafa","#f7e9e9"],ink:"#583747",accent:"#a64e70",line:"rgba(166,78,112,.34)"}
+ ];
+ const theme=themes[Math.floor(Math.random()*themes.length)];
+ let fontSize=46,lineHeight=68,lines=[];
+ for(let attempt=0;attempt<8;attempt++){
+  ctx.font=fontSize+'px "Aref Ruqaa","Noto Naskh Arabic",serif';
+  lines=wrapHandwrittenLines(ctx,activeLetter.letter_body,maxTextWidth);
+  if(470+lines.length*lineHeight+330<=16000||fontSize<=32)break;
+  fontSize-=2;lineHeight=Math.round(fontSize*1.48);
+ }
+ const bodyTop=440,height=Math.max(1500,bodyTop+lines.length*lineHeight+330);
+ if(height>18000)throw new Error("الرسالة طويلة جداً لتجهيزها في صورة واحدة على هذا الجهاز.");
+ canvas.width=width;canvas.height=height;
+ const outer=ctx.createLinearGradient(0,0,width,height);
+ theme.outer.forEach((color,i)=>outer.addColorStop(i/(theme.outer.length-1),color));
+ ctx.fillStyle=outer;ctx.fillRect(0,0,width,height);
+ if(theme.name==="bluehour"){
+  for(let i=0;i<95;i++){const x=(i*173)%width,y=(i*271)%height;ctx.fillStyle="rgba(255,255,255,.45)";ctx.beginPath();ctx.arc(x,y,(i%3)+1,0,Math.PI*2);ctx.fill();}
+ }else if(theme.name==="garden"||theme.name==="rose"){
+  ctx.save();ctx.globalAlpha=.22;ctx.strokeStyle=theme.accent;ctx.lineWidth=5;
+  for(const side of [0,1]){const x=side?width-35:35;ctx.beginPath();ctx.moveTo(x,90);ctx.bezierCurveTo(side?width-180:180,220,side?width-10:10,320,side?width-160:160,440);ctx.stroke();for(let j=0;j<6;j++){const yy=130+j*48;ctx.beginPath();ctx.ellipse(x+(side?-1:1)*(j%2?28:48),yy,24,9,-.6,0,Math.PI*2);ctx.fillStyle=theme.accent;ctx.fill();}}
+  ctx.restore();
+ }
+ const inset=theme.name==="kraft"?48:58;
+ ctx.save();ctx.shadowColor="rgba(34,24,22,.28)";ctx.shadowBlur=38;ctx.shadowOffsetY=18;
+ ctx.fillStyle=theme.paper[0];ctx.fillRect(inset,inset,width-inset*2,height-inset*2);ctx.restore();
+ const paperGrad=ctx.createLinearGradient(inset,inset,width-inset,height-inset);
+ paperGrad.addColorStop(0,theme.paper[0]);paperGrad.addColorStop(1,theme.paper[1]);
+ ctx.fillStyle=paperGrad;ctx.fillRect(inset,inset,width-inset*2,height-inset*2);
+ ctx.strokeStyle=theme.line;ctx.lineWidth=3;
+ if(theme.name==="kraft"){
+  ctx.setLineDash([10,9]);ctx.strokeRect(86,86,width-172,height-172);ctx.setLineDash([]);
+ }else{
+  ctx.strokeRect(82,82,width-164,height-164);
+  ctx.globalAlpha=.55;ctx.lineWidth=1;ctx.strokeRect(96,96,width-192,height-192);ctx.globalAlpha=1;
+ }
+ for(let i=0;i<520;i++){const x=72+(i*137)%936,y=70+(i*251)%(height-140);ctx.fillStyle=i%3===0?"rgba(115,86,66,.045)":"rgba(255,255,255,.32)";ctx.fillRect(x,y,i%5===0?3:1,i%4===0?2:1);}
+ ctx.direction="rtl";ctx.textAlign="center";ctx.fillStyle=theme.accent;ctx.font='23px "Noto Sans Arabic",sans-serif';
+ ctx.fillText(theme.name==="bluehour"?"كلمات تحت ضوء المساء":"رسائل من أيوب",width/2,132);
+ ctx.fillStyle=theme.ink;ctx.font='68px "Aref Ruqaa","Noto Naskh Arabic",serif';ctx.fillText("إلى فرحتي",width/2,244);
+ ctx.strokeStyle=theme.line;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(330,284);ctx.quadraticCurveTo(width/2,297,750,284);ctx.stroke();
+ const dateSource=activeLetter.created_at?new Date(activeLetter.created_at):new Date(),safeDate=Number.isNaN(dateSource.getTime())?new Date():dateSource;
+ ctx.textAlign="right";ctx.direction="rtl";ctx.fillStyle=theme.accent;ctx.font='23px "Noto Sans Arabic",sans-serif';
+ ctx.fillText(new Intl.DateTimeFormat("ar-MA",{dateStyle:"long"}).format(safeDate),width-pad,350);
+ ctx.fillStyle=theme.ink;ctx.font=fontSize+'px "Aref Ruqaa","Noto Naskh Arabic",serif';
+ let y=bodyTop;
+ for(const line of lines){if(line)y+=lineHeight;else y+=Math.round(lineHeight*.62);if(line)ctx.fillText(line,width-pad,y,maxTextWidth);}
+ const signatureY=y+112;
+ ctx.fillStyle=theme.accent;ctx.font='56px "Aref Ruqaa","Noto Naskh Arabic",serif';ctx.fillText("بكل الحب، أيوب",width-pad,signatureY);
+ ctx.save();ctx.translate(pad+62,signatureY-18);
+ ctx.strokeStyle=theme.accent;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(0,22);ctx.bezierCurveTo(-72,-26,-22,-62,0,-26);ctx.bezierCurveTo(22,-62,72,-26,0,22);ctx.stroke();ctx.restore();
+ ctx.textAlign="center";ctx.font='18px "Noto Sans Arabic",sans-serif';ctx.fillStyle=theme.accent;
+ ctx.fillText("كلمات صغيرة… تبقى قريبة من القلب",width/2,height-104);
+ dailyLetterImageBlob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
+ if(!dailyLetterImageBlob)throw new Error("لم نتمكن من إنشاء ملف الصورة.");
+ dailyLetterImageUrl=URL.createObjectURL(dailyLetterImageBlob);
+ return dailyLetterImageBlob;
+}
+async function renderDailyLetterImagePreview(){
+ const preview=$("#daily-letter-image-preview"),status=$("#letter-export-status"),button=$("#save-love-letter");
+ if(!preview)return;
+ if(status)status.textContent="نكتب رسالتكِ على ورقة جديدة…";
+ try{
+  await createDailyLetterImage();
+  const image=document.createElement("img");image.src=dailyLetterImageUrl;image.alt="رسالة مكتوبة بخط اليد من أيوب إلى فرحتي";image.className="daily-letter-handwritten-image";
+  preview.replaceChildren(image);
+  if(status)status.textContent="رسالتكِ أصبحت ورقة مكتوبة بخط اليد ❤️";
+  if(button){button.disabled=false;button.textContent="احتفظي بالصورة";}
+ }catch(error){
+  if(status){status.classList.add("is-error");status.textContent=error?.message||"تعذر تجهيز صورة الرسالة.";}
+  if(button){button.disabled=false;button.textContent="حاولي تجهيز الصورة مجدداً";}
+ }
+}
 async function saveDailyLetterImage(button){
  const status=$("#letter-export-status");
- if(!activeLetter?.letter_body){if(status)status.textContent="تعذر العثور على نص الرسالة.";return;}
  if(!button||button.disabled)return;
- button.disabled=true;
- button.textContent="نكتب رسالتكِ على الورق…";
- if(status){status.classList.remove("is-error");status.textContent="نجهّز ورقتكِ بخط اليد…";}
+ button.disabled=true;button.textContent="نجهّز الصورة…";
  try{
-  if(document.fonts?.load)await Promise.race([document.fonts.load('46px "Aref Ruqaa"'),new Promise(resolve=>setTimeout(resolve,1400))]);
-  const canvas=document.createElement("canvas"),width=1080,pad=132,maxTextWidth=816;
-  const ctx=canvas.getContext("2d");
-  if(!ctx)throw new Error("هذا المتصفح لا يدعم تجهيز الصورة.");
-  let fontSize=46,lineHeight=68,lines=[];
-  for(let attempt=0;attempt<8;attempt++){
-   ctx.font=fontSize+'px "Aref Ruqaa","Noto Naskh Arabic",serif';
-   lines=wrapHandwrittenLines(ctx,activeLetter.letter_body,maxTextWidth);
-   if(470+lines.length*lineHeight+330<=16000||fontSize<=32)break;
-   fontSize-=2;lineHeight=Math.round(fontSize*1.48);
-  }
-  const bodyTop=440,signatureSpace=300;
-  const height=Math.max(1500,bodyTop+lines.length*lineHeight+signatureSpace);
-  if(height>18000)throw new Error("الرسالة طويلة جداً لتجهيزها في صورة واحدة على هذا الجهاز.");
-  canvas.width=width;canvas.height=height;
-  const g=ctx.createLinearGradient(0,0,width,height);
-  g.addColorStop(0,"#f3e8e5");g.addColorStop(.52,"#f8efea");g.addColorStop(1,"#efe3df");
-  ctx.fillStyle=g;ctx.fillRect(0,0,width,height);
-  ctx.beginPath();
-  ctx.moveTo(54,48);ctx.lineTo(width-58,52);ctx.lineTo(width-48,height-56);ctx.lineTo(60,height-50);ctx.closePath();
-  const paper=ctx.createLinearGradient(70,55,width-40,height-60);
-  paper.addColorStop(0,"#fffdf8");paper.addColorStop(.56,"#fff9ef");paper.addColorStop(1,"#fbf1e5");
-  ctx.fillStyle=paper;ctx.fill();
-  ctx.strokeStyle="rgba(112,36,63,.22)";ctx.lineWidth=2;ctx.stroke();
-  ctx.strokeStyle="rgba(112,36,63,.34)";ctx.lineWidth=3;
-  ctx.strokeRect(82,82,width-164,height-164);
-  ctx.strokeStyle="rgba(177,112,137,.30)";ctx.lineWidth=1;
-  ctx.strokeRect(94,94,width-188,height-188);
-  for(let i=0;i<760;i++){
-   const x=76+(i*137)%928,y=68+(i*251)%(height-136);
-   ctx.fillStyle=i%3===0?"rgba(145,105,79,.055)":"rgba(255,255,255,.42)";
-   ctx.fillRect(x,y,i%5===0?3:1,i%4===0?2:1);
-  }
-  ctx.direction="rtl";ctx.textAlign="center";
-  ctx.fillStyle="#9b6679";ctx.font='22px "Noto Sans Arabic",sans-serif';
-  ctx.fillText("AYFAR WORLD  ·  رسائلنا اليومية",width/2,132);
-  ctx.fillStyle="#70243f";ctx.font='66px "Aref Ruqaa","Noto Naskh Arabic",serif';
-  ctx.fillText("إلى فرحتي",width/2,244);
-  ctx.strokeStyle="rgba(177,112,137,.55)";ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(330,284);ctx.quadraticCurveTo(width/2,297,750,284);ctx.stroke();
-  const dateSource=activeLetter.created_at?new Date(activeLetter.created_at):new Date();
-  const safeDate=Number.isNaN(dateSource.getTime())?new Date():dateSource;
-  const dateLabel=new Intl.DateTimeFormat("ar-MA",{dateStyle:"long"}).format(safeDate);
-  ctx.textAlign="right";ctx.direction="rtl";ctx.fillStyle="#927681";
-  ctx.font='23px "Noto Sans Arabic",sans-serif';ctx.fillText(dateLabel,width-pad,350);
-  ctx.fillStyle="#4b2b3a";ctx.font=fontSize+'px "Aref Ruqaa","Noto Naskh Arabic",serif';
-  let y=bodyTop;
-  for(const line of lines){if(line)y+=lineHeight;else y+=Math.round(lineHeight*.62);if(line)ctx.fillText(line,width-pad,y,maxTextWidth);}
-  const signatureY=y+112;
-  ctx.fillStyle="#70243f";ctx.font='54px "Aref Ruqaa","Noto Naskh Arabic",serif';
-  ctx.fillText("بكل الحب، أيوب",width-pad,signatureY);
-  const sealX=pad+62,sealY=signatureY-18;
-  const seal=ctx.createRadialGradient(sealX-15,sealY-18,5,sealX,sealY,58);
-  seal.addColorStop(0,"#a94d68");seal.addColorStop(.72,"#70243f");seal.addColorStop(1,"#4d172d");
-  ctx.save();ctx.shadowColor="rgba(77,23,45,.22)";ctx.shadowBlur=16;ctx.shadowOffsetY=5;
-  ctx.beginPath();ctx.arc(sealX,sealY,48,0,Math.PI*2);ctx.fillStyle=seal;ctx.fill();ctx.restore();
-  ctx.beginPath();ctx.arc(sealX,sealY,39,0,Math.PI*2);ctx.strokeStyle="rgba(255,231,235,.55)";ctx.lineWidth=2;ctx.stroke();
-  ctx.beginPath();ctx.moveTo(sealX,sealY+19);ctx.bezierCurveTo(sealX-54,sealY-14,sealX-20,sealY-34,sealX,sealY-10);ctx.bezierCurveTo(sealX+20,sealY-34,sealX+54,sealY-14,sealX,sealY+19);ctx.closePath();ctx.fillStyle="rgba(255,238,241,.92)";ctx.fill();
-  ctx.textAlign="center";ctx.font='18px "Noto Sans Arabic",sans-serif';ctx.fillStyle="#9b7c83";
-  ctx.fillText("كلمات صغيرة… تبقى قريبة من القلب",width/2,height-104);
-  const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
-  if(!blob)throw new Error("لم نتمكن من إنشاء ملف الصورة.");
-  const objectUrl=URL.createObjectURL(blob),link=document.createElement("a");
-  link.href=objectUrl;const filenameDate=[safeDate.getFullYear(),String(safeDate.getMonth()+1).padStart(2,"0"),String(safeDate.getDate()).padStart(2,"0")].join("-");link.download="ayfar-letter-"+filenameDate+".png";
-  document.body.appendChild(link);link.click();link.remove();
-  setTimeout(()=>URL.revokeObjectURL(objectUrl),20000);
-  if(status)status.textContent="أصبحت رسالتكِ صورة PNG؛ تحققي من التنزيلات.";
- }catch(error){
-  if(status){status.classList.add("is-error");status.textContent=error?.message||"تعذر حفظ الصورة. حاولي مرة أخرى.";}
- }finally{
-  button.disabled=false;button.textContent="احتفظي بالرسالة كصورة";
- }
+  const blob=await createDailyLetterImage(),url=dailyLetterImageUrl||URL.createObjectURL(blob);
+  const date=activeLetter?.created_at?new Date(activeLetter.created_at):new Date();
+  const safeDate=Number.isNaN(date.getTime())?new Date():date;
+  const filenameDate=[safeDate.getFullYear(),String(safeDate.getMonth()+1).padStart(2,"0"),String(safeDate.getDate()).padStart(2,"0")].join("-");
+  const link=document.createElement("a");link.href=url;link.download="ayfar-letter-"+filenameDate+".png";document.body.appendChild(link);link.click();link.remove();
+  if(status)status.textContent="حُفظت صورة رسالتكِ في التنزيلات ❤️";
+ }catch(error){if(status){status.classList.add("is-error");status.textContent=error?.message||"تعذر حفظ الصورة. حاولي مرة أخرى.";}}
+ finally{button.disabled=false;button.textContent="احتفظي بالصورة";}
 }
 
 async function checkDailyLetter(){
@@ -140,7 +161,8 @@ function showEnvelope(){
    if(!data)throw new Error("يبدو أن رسالة اليوم فُتحت من قبل. حدّثي الصفحة للتحقق من الرسالة التالية.");
    card?.classList.remove("is-opening");
    card?.classList.add("is-revealing");
-   card.innerHTML='<div class="love-sparkle" aria-hidden="true">♡</div><small>FROM AYOUB 🌙</small><h2>إلى فرحتي 🌸</h2><article class="letter-paper">'+esc(activeLetter.letter_body).replace(/\n/g,"<br>")+'</article><p class="love-foot">احتفظي بهذه الكلمات، وغدًا حكاية أخرى ♡</p><div class="letter-export-actions"><button id="save-love-letter" class="letter-save-button" type="button">احتفظي بالرسالة كصورة</button><p id="letter-export-status" class="letter-export-status" role="status" aria-live="polite"></p></div><button id="close-love-letter" class="primary" type="button">أكملت القراءة</button>';
+   card.innerHTML='<div class="love-sparkle" aria-hidden="true">♡</div><small>FROM AYOUB 🌙</small><h2>إلى فرحتي 🌸</h2><div id="daily-letter-image-preview" class="daily-letter-image-preview" aria-live="polite"><div class="daily-letter-image-loading">نحضّر لكِ رسالة اليوم… ♡</div></div><article class="letter-paper letter-text-fallback">'+esc(activeLetter.letter_body).replace(/\n/g,"<br>")+"</article><p class=\"love-foot\">كلماتكِ اليوم لها ورقتها الخاصة، وغداً حكاية جديدة ♡</p><div class=\"letter-export-actions\"><button id=\"save-love-letter\" class=\"letter-save-button\" type=\"button\" disabled>نجهّز الصورة…</button><p id=\"letter-export-status\" class=\"letter-export-status\" role=\"status\" aria-live=\"polite\">نكتبها لكِ بخط اليد…</p></div><button id=\"close-love-letter\" class=\"primary\" type=\"button\">أكملت القراءة</button>';
+   renderDailyLetterImagePreview();
    $("#save-love-letter")?.addEventListener("click",event=>saveDailyLetterImage(event.currentTarget));
    $("#close-love-letter")?.addEventListener("click",()=>overlay.remove());
   }catch(error){
