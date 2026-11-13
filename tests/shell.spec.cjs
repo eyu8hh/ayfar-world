@@ -86,7 +86,8 @@ test("home navigation uses smooth native horizontal touch scrolling and readable
   await stubExternalServices(page);
   await page.goto("/");
   const pager = page.locator("#home-pages");
-  await expect(pager).toHaveCSS("touch-action", "pan-x pan-y pinch-zoom");
+  const touchAction = await pager.evaluate(element => getComputedStyle(element).touchAction);
+  expect(["pan-x pan-y pinch-zoom", "manipulation"]).toContain(touchAction);
   await expect(pager).toHaveCSS("scroll-snap-type", "x mandatory");
   await expect(pager).toHaveCSS("direction", "rtl");
   await expect(page.locator("#home-slide-label")).toHaveCSS("position", "absolute");
