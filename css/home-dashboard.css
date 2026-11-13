@@ -11,7 +11,7 @@
 .home-next-event-meta{min-height:17px;margin-top:6px;color:#7b6971;font-size:11px;line-height:1.7}
 .home-next-event-action{
   display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:0 0 auto;
-  min-height:42px;padding:9px 12px;border:1px solid #cfe0d3;border-radius:13px;
+  min-height:44px;padding:9px 12px;border:1px solid #cfe0d3;border-radius:13px;
   background:#fff;color:#38664e;font:inherit;font-size:11px;font-weight:900;
 }
 .home-next-event-action:focus-visible{outline:3px solid #6d9d7c;outline-offset:3px}
