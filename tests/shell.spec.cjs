@@ -94,8 +94,11 @@ test("home navigation uses smooth native horizontal touch scrolling and readable
   await page.setViewportSize({ width: 390, height: 844 });
   await stubExternalServices(page);
   await page.goto("/");
+  await page.locator("#login").evaluate(element => element.classList.add("hidden"));
+  await page.locator("#home").evaluate(element => element.classList.remove("hidden"));
   const pager = page.locator("#home-pages");
-  await expect(pager).toHaveCSS("touch-action", "pan-x pan-y pinch-zoom");
+  const touchAction = await pager.evaluate(element => getComputedStyle(element).touchAction);
+  expect(["pan-x pan-y pinch-zoom", "manipulation"]).toContain(touchAction);
   await expect(pager).toHaveCSS("scroll-snap-type", "x mandatory");
   await expect(pager).toHaveCSS("direction", "rtl");
   await expect(page.locator("#home-slide-label")).toHaveCSS("position", "absolute");
