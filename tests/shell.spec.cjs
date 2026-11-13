@@ -113,4 +113,6 @@ test("home dashboard includes a live next-event card and clean welcome hero", as
   await expect(page.locator("#notification-bell")).toHaveCount(1);
   await expect(page.locator("#notification-bell .bi-bell")).toHaveCount(1);
   await expect(page.locator(".home-next-event-action")).toHaveAttribute("type", "button");
+  const actionBox = await page.locator(".home-next-event-action").boundingBox();
+  expect(actionBox.height).toBeGreaterThanOrEqual(44);
 });
