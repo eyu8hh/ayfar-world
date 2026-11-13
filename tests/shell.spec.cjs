@@ -63,6 +63,15 @@ test("plan actions are native buttons and retain their action hooks", async ({ p
   await expect(cards.nth(2)).toHaveAttribute("data-plan-open", "daily");
 });
 
+test("home hero uses the full width after removing its decorative heart", async ({ page }) => {
+  await stubExternalServices(page);
+  await page.goto("/");
+  const paddingLeft = await page.locator("#home-overview .hero").evaluate(element => getComputedStyle(element).paddingLeft);
+  expect(parseFloat(paddingLeft)).toBeLessThanOrEqual(30);
+  const gameCardTransform = await page.locator("#home-games .games>button").first().evaluate(element => getComputedStyle(element).transform);
+  expect(gameCardTransform).toBe("none");
+});
+
 test("login screen does not overflow horizontally at 390px", async ({ page }) => {
   await stubExternalServices(page);
   await page.goto("/");
