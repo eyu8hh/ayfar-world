@@ -7,7 +7,7 @@
   card.setAttribute("aria-labelledby","home-next-event-title");
   card.innerHTML=`
     <div class="home-next-event-copy">
-      <small class="eyebrow">OUR NEXT MOMENT</small>
+      
       <h3 id="home-next-event-title">موعدنا القادم</h3>
       <p class="home-next-event-name" id="home-next-event-name">نبحث عن موعدنا القادم…</p>
       <div class="home-next-event-meta" id="home-next-event-meta" aria-live="polite"></div>
