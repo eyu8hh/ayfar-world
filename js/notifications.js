@@ -5,7 +5,7 @@
   const icons={daily_rating:"💗",star_change:"⭐",routine_status:"🌿",habit_checkin:"🌱",pet_care:"🐾",music_added:"🎧"};
   function ensureButton(){
     const top=$("#home-top");if(!top||$("#notification-bell"))return;
-    const b=document.createElement("button");b.id="notification-bell";b.type="button";b.setAttribute("aria-label","الإشعارات");b.innerHTML='<span aria-hidden="true">♧</span><i id="notification-count" hidden>0</i>';
+    const b=document.createElement("button");b.id="notification-bell";b.type="button";b.setAttribute("aria-label","الإشعارات");b.innerHTML='<i class="bi bi-bell" aria-hidden="true"></i><i id="notification-count" hidden>0</i>';b.title="الإشعارات";
     const brand=top.querySelector(".brand");top.insertBefore(b,brand||null);b.addEventListener("click",openCenter);
   }
   function updateBadge(){

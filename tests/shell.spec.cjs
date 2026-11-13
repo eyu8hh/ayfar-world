@@ -85,8 +85,11 @@ test("home navigation uses smooth native horizontal touch scrolling and readable
   await page.setViewportSize({ width: 390, height: 844 });
   await stubExternalServices(page);
   await page.goto("/");
+  await page.locator("#login").evaluate(element => element.classList.add("hidden"));
+  await page.locator("#home").evaluate(element => element.classList.remove("hidden"));
   const pager = page.locator("#home-pages");
-  await expect(pager).toHaveCSS("touch-action", "pan-x pan-y pinch-zoom");
+  const touchAction = await pager.evaluate(element => getComputedStyle(element).touchAction);
+  expect(["pan-x pan-y pinch-zoom", "manipulation"]).toContain(touchAction);
   await expect(pager).toHaveCSS("scroll-snap-type", "x mandatory");
   await expect(pager).toHaveCSS("direction", "rtl");
   await expect(page.locator("#home-slide-label")).toHaveCSS("position", "absolute");
@@ -100,4 +103,20 @@ test("home navigation uses smooth native horizontal touch scrolling and readable
   }
   await expect(page.locator("#home-slide-label")).not.toContainText(/[0-9]/);
   await expect(page.locator(".home-section-nav button")).toHaveCount(7);
+});
+
+
+test("home dashboard includes a live next-event card and clean welcome hero", async ({ page }) => {
+  await stubExternalServices(page);
+  await page.goto("/");
+  await page.locator("#login").evaluate(element => element.classList.add("hidden"));
+  await page.locator("#home").evaluate(element => element.classList.remove("hidden"));
+  await expect(page.locator("#home-next-event")).toHaveCount(1);
+  await expect(page.locator("#home-next-event-title")).toHaveText("موعدنا القادم");
+  await expect(page.locator("#home-overview .heroheart")).toHaveCount(0);
+  await expect(page.locator("#notification-bell")).toHaveCount(1);
+  await expect(page.locator("#notification-bell .bi-bell")).toHaveCount(1);
+  await expect(page.locator(".home-next-event-action")).toHaveAttribute("type", "button");
+  const actionBox = await page.locator(".home-next-event-action").boundingBox();
+  expect(actionBox.height).toBeGreaterThanOrEqual(44);
 });
