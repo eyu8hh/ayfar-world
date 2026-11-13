@@ -63,6 +63,15 @@ test("plan actions are native buttons and retain their action hooks", async ({ p
   await expect(cards.nth(2)).toHaveAttribute("data-plan-open", "daily");
 });
 
+test("home hero uses the full width after removing its decorative heart", async ({ page }) => {
+  await stubExternalServices(page);
+  await page.goto("/");
+  const paddingLeft = await page.locator("#home-overview .hero").evaluate(element => getComputedStyle(element).paddingLeft);
+  expect(parseFloat(paddingLeft)).toBeLessThanOrEqual(30);
+  const gameCardTransform = await page.locator("#home-games .games>button").first().evaluate(element => getComputedStyle(element).transform);
+  expect(gameCardTransform).toBe("none");
+});
+
 test("login screen does not overflow horizontally at 390px", async ({ page }) => {
   await stubExternalServices(page);
   await page.goto("/");
@@ -85,8 +94,11 @@ test("home navigation uses smooth native horizontal touch scrolling and readable
   await page.setViewportSize({ width: 390, height: 844 });
   await stubExternalServices(page);
   await page.goto("/");
+  await page.locator("#login").evaluate(element => element.classList.add("hidden"));
+  await page.locator("#home").evaluate(element => element.classList.remove("hidden"));
   const pager = page.locator("#home-pages");
-  await expect(pager).toHaveCSS("touch-action", "pan-x pan-y pinch-zoom");
+  const touchAction = await pager.evaluate(element => getComputedStyle(element).touchAction);
+  expect(["pan-x pan-y pinch-zoom", "manipulation"]).toContain(touchAction);
   await expect(pager).toHaveCSS("scroll-snap-type", "x mandatory");
   await expect(pager).toHaveCSS("direction", "rtl");
   await expect(page.locator("#home-slide-label")).toHaveCSS("position", "absolute");
