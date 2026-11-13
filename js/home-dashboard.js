@@ -46,7 +46,7 @@
       .on("postgres_changes",{event:"*",schema:"public",table:"ayfar_shared_calendar"},load).subscribe();
   }
   if(supa()){
-    supa().auth.onAuthStateChange((_event,session)=>{setUser(session?.user||null);});
+    supa().auth.onAuthStateChange((_event,session)=>{queueMicrotask(()=>setUser(session?.user||null));});
     supa().auth.getUser().then(({data})=>{if(data?.user)setUser(data.user);});
   }
   document.addEventListener("visibilitychange",()=>{if(!document.hidden&&userId)load();});
