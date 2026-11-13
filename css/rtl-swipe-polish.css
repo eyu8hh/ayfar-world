@@ -19,16 +19,6 @@
 }
 .home-slide-controls button{flex:0 0 44px;min-width:44px;min-height:44px}
 .home-slide-controls button .bi{font-size:19px;line-height:1}
-#home-overview .hero{isolation:isolate}
-#home-overview .heroheart{
-  top:50%!important;left:16px!important;right:auto!important;
-  width:clamp(64px,17vw,78px)!important;height:clamp(64px,17vw,78px)!important;
-  aspect-ratio:1;border:2px solid #c8a35a;border-radius:50%!important;
-  background-position:center 38%!important;background-size:cover!important;
-  transform:translateY(-50%)!important;opacity:1!important;
-  z-index:0;
-}
-#home-overview .hero>div:first-child{max-width:calc(100% - 96px)}
 .brand::before{
   width:40px;height:40px;flex-basis:40px;
   background-position:center!important;background-size:cover!important;
@@ -55,8 +45,6 @@ body.ayoub-theme .home-anniversary-head p{color:#c2cbd7}
 body.ayoub-theme .home-anniversary-head>span{background:#f5e5ee;color:#6b2945}
 @media(max-width:520px){
   #home-overview .hero{padding-inline:17px}
-  #home-overview .heroheart{left:12px!important;width:64px!important;height:64px!important}
-  #home-overview .hero>div:first-child{max-width:calc(100% - 78px)}
   .brand::before{width:38px;height:38px;flex-basis:38px}
   .home-anniversary .date-count-grid{gap:6px}
   .home-anniversary .date-count-grid>div{padding:11px 2px}
