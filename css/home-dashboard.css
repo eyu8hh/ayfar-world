@@ -1,0 +1,40 @@
+/* AYFAR WORLD · home dashboard upcoming shared event */
+.home-next-event{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  margin:0 0 20px;padding:17px 18px;border:1px solid #dce9df;border-radius:21px;
+  background:linear-gradient(120deg,#f1f7f0 0%,#fffaf7 68%,#f8edf1 100%);
+}
+.home-next-event-copy{min-width:0}
+.home-next-event .eyebrow{color:#57816a}
+.home-next-event h3{margin:4px 0 7px;color:#315f49;font-size:16px}
+.home-next-event-name{margin:0;color:#513c46;font-size:14px;font-weight:900;overflow-wrap:anywhere}
+.home-next-event-meta{min-height:17px;margin-top:6px;color:#7b6971;font-size:11px;line-height:1.7}
+.home-next-event-action{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:0 0 auto;
+  min-height:44px;padding:9px 12px;border:1px solid #cfe0d3;border-radius:13px;
+  background:#fff;color:#38664e;font:inherit;font-size:11px;font-weight:900;
+}
+.home-next-event-action:focus-visible{outline:3px solid #6d9d7c;outline-offset:3px}
+body.ayoub-theme .home-next-event{border-color:#405d53;background:linear-gradient(120deg,#223b38,#26374b 68%,#3b2d3c)}
+body.ayoub-theme .home-next-event h3{color:#d7e8d7}
+body.ayoub-theme .home-next-event-name{color:#f0e5d0}
+body.ayoub-theme .home-next-event-meta{color:#b9c7d0}
+body.ayoub-theme .home-next-event-action{border-color:#536d60;background:#293d42;color:#c5dfc9}
+#notification-bell{
+  position:relative;display:grid;place-items:center;flex:0 0 44px;width:44px;height:44px;min-width:44px;min-height:44px;
+  border:1px solid var(--line);border-radius:14px;background:var(--surface,#fff);color:var(--burgundy);
+  font-size:19px;line-height:1;cursor:pointer;touch-action:manipulation;
+}
+#notification-bell:focus-visible{outline:3px solid #b66e89;outline-offset:3px}
+#notification-bell #notification-count{
+  position:absolute;top:-4px;inset-inline-end:-4px;min-width:18px;height:18px;padding:0 4px;
+  display:grid;place-items:center;border:2px solid var(--surface,#fff);border-radius:999px;
+  background:#a83e60;color:#fff;font-size:9px;font-style:normal;font-weight:900;line-height:1;
+}
+#notification-bell #notification-count[hidden]{display:none}
+body.ayoub-theme #notification-bell{border-color:#40516a;background:#202f43;color:#e6d3a8}
+@media(max-width:520px){
+  .home-next-event{align-items:flex-start;flex-direction:column;gap:10px;padding:15px}
+  .home-next-event-action{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.home-next-event-action{transition:none!important}}
