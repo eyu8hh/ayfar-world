@@ -28,11 +28,13 @@
   async function load(){
     if(!userId||!supa())return;
     const seq=++requestId;show("نبحث عن موعدنا القادم…","");
+    const now=new Date(),todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).toISOString();
     const {data,error}=await supa().from("ayfar_shared_calendar").select("id,title,starts_at,all_day,category")
-      .gte("starts_at",new Date().toISOString()).order("starts_at",{ascending:true}).limit(1);
+      .gte("starts_at",todayStart).order("starts_at",{ascending:true}).limit(50);
     if(seq!==requestId||!userId)return;
     if(error){show("تعذر تحميل المواعيد حالياً","يمكن فتح التقويم والمحاولة مجدداً.");return;}
-    const next=data?.[0];
+    const today=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
+    const next=(data||[]).find(item=>new Date(item.starts_at)>=now||(item.all_day&&new Date(item.starts_at).getFullYear()+"-"+String(new Date(item.starts_at).getMonth()+1).padStart(2,"0")+"-"+String(new Date(item.starts_at).getDate()).padStart(2,"0")===today));
     if(!next){show("لا يوجد موعد قادم بعد","يمكنكما إضافة لقاء أو مناسبة جديدة.");return;}
     show(next.title,dateParts(next.starts_at,next.all_day)+(next.category?" · "+next.category:""));
   }
