@@ -135,6 +135,6 @@ test("static page headings do not rely on decorative English overlines", async (
   await page.goto("/");
   await expect(page.locator("small.eyebrow")).toHaveCount(0);
   await expect(page.locator("#hello")).toHaveText("مرحباً بك في عالمنا");
-  await expect(page.locator("#home-anniversary h3")).toHaveText("منذ أول حديث بيننا");
+  await expect(page.locator(".home-anniversary h3")).toHaveText("منذ أول حديث بيننا");
   await expect(page.locator("#home-games h3")).toHaveText("ألعابنا");
 });
