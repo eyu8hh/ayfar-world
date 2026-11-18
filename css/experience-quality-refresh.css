@@ -149,3 +149,7 @@ body.ayoub-theme #pagebody textarea::placeholder{color:#aebccc}
   #home-messages .message-feature,#home-games .games>button,
   #home-plans .plan-card{transition:none!important}
 }
+
+/* Remove the small heart ornament from the first-conversation anniversary block too. */
+#home-overview .home-anniversary-head>span{display:none!important}
+#home-overview .home-anniversary-head{gap:0!important}
