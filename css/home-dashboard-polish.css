@@ -1,0 +1,85 @@
+/* AYFAR WORLD · home dashboard polish */
+#home-overview{--home-card-radius:22px}
+#home-overview>.hero{
+  position:relative;isolation:isolate;min-height:184px;
+  padding:clamp(22px,5vw,30px);
+  border:1px solid rgba(112,36,63,.13);
+  border-radius:26px;
+  background:
+    radial-gradient(ellipse at 8% 100%,rgba(71,115,90,.13),transparent 48%),
+    linear-gradient(125deg,#f3dce5 0%,#fff8f5 57%,#edf4ed 100%);
+}
+#home-overview>.hero:after{
+  content:"";position:absolute;inset-inline-start:14px;inset-block:14px;
+  width:3px;border-radius:9px;background:linear-gradient(180deg,#d98ba5,#46735a);
+  opacity:.62;z-index:0;
+}
+#home-overview>.hero>div:first-child{max-width:min(82%,520px)}
+#home-overview>.hero h2{font-size:clamp(22px,5.5vw,30px);letter-spacing:-.035em}
+#home-overview>.hero p{font-size:13px;max-width:38ch;color:#705b65}
+#home-overview .home-anniversary{
+  position:relative;overflow:hidden;margin-top:14px;padding:17px;
+  border:1px solid #ead5dd;border-radius:var(--home-card-radius);
+  background:linear-gradient(135deg,#fffaf8,#f8edf1 65%,#f0f5ef);
+}
+#home-overview .home-anniversary:before{
+  content:"";position:absolute;inset-inline-end:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#d98ba5,#46735a);
+}
+#home-overview .home-anniversary-head{gap:12px;align-items:center}
+#home-overview .home-anniversary-head>span{
+  display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;
+  border:1px solid #ecd6df;border-radius:14px;background:#fff;color:#70243f;font-size:19px;
+}
+#home-overview .home-anniversary-head h3{font-size:15px;line-height:1.6}
+#home-overview .home-anniversary-head p{font-size:11px;line-height:1.7}
+#home-overview #home-anniversary-countdown{
+  margin-top:12px;padding-top:12px;border-top:1px solid rgba(112,36,63,.10);
+  font-variant-numeric:tabular-nums;
+}
+#home-overview .continue-card{
+  gap:14px;padding:18px;border:1px solid rgba(112,36,63,.12);
+  border-radius:var(--home-card-radius);
+  background:linear-gradient(125deg,#70243f,#87445d 58%,#47735a);
+}
+#home-overview .continue-card h3{font-size:16px;line-height:1.6}
+#home-overview .continue-card p{font-size:12px;line-height:1.8}
+#home-overview .continue-card .primary{
+  min-height:46px;padding-inline:16px;border:1px solid rgba(255,255,255,.24);
+  border-radius:14px;background:#fffaf5;color:#64263e;
+  box-shadow:0 5px 13px rgba(40,12,26,.13);
+}
+#home-overview .heading{margin-top:25px;margin-bottom:13px}
+#home-overview .unfinished-match{
+  border-radius:17px;background:linear-gradient(135deg,#fffdfb,#fbf5f6);
+  border-color:#e9dce1;
+}
+#home-overview .unfinished-match-actions button{border-radius:12px;font-weight:700}
+#home-overview .history-section{margin-top:8px}
+body.ayoub-theme #home-overview>.hero{
+  border-color:#45576b;
+  background:radial-gradient(ellipse at 8% 100%,rgba(71,115,90,.20),transparent 48%),
+    linear-gradient(125deg,#26374b,#202f43 58%,#293b3b);
+}
+body.ayoub-theme #home-overview>.hero h2{color:#f3e8ed}
+body.ayoub-theme #home-overview>.hero p{color:#c5ced8}
+body.ayoub-theme #home-overview>.hero:after{opacity:.9}
+body.ayoub-theme #home-overview .home-anniversary{
+  border-color:#46566b;background:linear-gradient(130deg,#26384a,#293648 65%,#303d3b);
+}
+body.ayoub-theme #home-overview .home-anniversary:before{opacity:.8}
+body.ayoub-theme #home-overview .home-anniversary-head>span{background:#31445a;border-color:#52627a;color:#e8c9d5}
+body.ayoub-theme #home-overview .home-anniversary-head h3{color:#f0e7eb}
+body.ayoub-theme #home-overview .home-anniversary-head p{color:#b9c5d1}
+body.ayoub-theme #home-overview #home-anniversary-countdown{border-color:#46566b;color:#e5d9df}
+body.ayoub-theme #home-overview .continue-card{border-color:#536b63;background:linear-gradient(125deg,#472a3a,#3b3448 58%,#29443d)}
+body.ayoub-theme #home-overview .unfinished-match{border-color:#40516a;background:linear-gradient(135deg,#223247,#26364a)}
+@media(max-width:520px){
+  #home-overview>.hero{min-height:164px;padding:20px 17px;border-radius:22px}
+  #home-overview>.hero>div:first-child{max-width:88%}
+  #home-overview .home-anniversary{padding:14px;border-radius:19px}
+  #home-overview .continue-card{padding:15px;border-radius:19px}
+}
+@media(prefers-reduced-motion:reduce){
+  #home-overview .continue-card .primary{transition:none!important}
+}
