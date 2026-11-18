@@ -109,3 +109,15 @@ test("Morocco is not exposed as a standalone quiz category", async () => {
   const expansionMixed = expansion.slice(expansion.indexOf("mixed:["), expansion.indexOf("speed:["));
   expect(expansionMixed).not.toContain('["المغرب"');
 });
+
+
+test("daily love letters use Morocco's local date and serialize simultaneous opens", async () => {
+  const migration = read("supabase/migrations/202611180001_daily_love_letters_casablanca_day.sql");
+  expect(migration).toContain("clock_timestamp() at time zone 'Africa/Casablanca'");
+  expect(migration).toContain("opened_at at time zone 'Africa/Casablanca'");
+  expect(migration).toContain("pg_advisory_xact_lock(20261118, 1)");
+  expect(migration).toContain("where id=p_letter_id and opened_at is null");
+  expect(migration).not.toContain("current_date");
+  expect(migration).not.toMatch(/create\s+table|alter\s+table|drop\s+table/i);
+  expect(migration).toContain("role in ('farhati','farahati')");
+});
