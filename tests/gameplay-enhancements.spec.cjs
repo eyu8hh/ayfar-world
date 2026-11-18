@@ -75,4 +75,8 @@ test("speed challenge uses a shared server timestamp and calibrated local clock"
   expect(games).toContain('x.deadlineAt=null');
   expect(games).toContain('Date.now()+serverClockOffsetMs');
   expect(games).toContain('key==="speed"&&!s.deadlineAt');
+  expect(games).toContain('const startedAt=Date.now();const {data,error}=await client().from("ayfar_games")');
+  expect(games).toContain('observeServerTime(data,startedAt,endedAt)');
+  expect(games).toContain('if(data.game_key==="speed"&&data.state?.deadlineAt)');
+
 });
