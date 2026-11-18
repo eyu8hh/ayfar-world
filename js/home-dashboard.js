@@ -1,6 +1,7 @@
 (()=> {
   const supa=()=>window.ayfarSupabase;
   const $=selector=>document.querySelector(selector);
+  const TIME_ZONE="Africa/Casablanca";
   let userId=null,channel=null,requestId=0;
   const card=document.createElement("section");
   card.className="home-next-event";card.id="home-next-event";
@@ -20,21 +21,36 @@
     const title=$("#home-next-event-name"),detail=$("#home-next-event-meta");
     if(title)title.textContent=name;if(detail)detail.textContent=meta||"";
   }
+  function dateKey(value){
+    const parts=new Intl.DateTimeFormat("en-CA",{timeZone:TIME_ZONE,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(value);
+    const part=type=>parts.find(item=>item.type===type)?.value||"";
+    return part("year")+"-"+part("month")+"-"+part("day");
+  }
+  function offsetMinutes(value){
+    const zone=new Intl.DateTimeFormat("en-US",{timeZone:TIME_ZONE,timeZoneName:"longOffset"}).formatToParts(value).find(item=>item.type==="timeZoneName")?.value||"GMT";
+    const match=/GMT([+-])(\d{2}):(\d{2})/.exec(zone);
+    return match?(match[1]==="-"?-1:1)*(Number(match[2])*60+Number(match[3])):0;
+  }
+  function dayStartIso(value){
+    const [year,month,day]=dateKey(value).split("-").map(Number);
+    const utcMidnight=Date.UTC(year,month-1,day);
+    const offset=offsetMinutes(new Date(utcMidnight+60*60*1000));
+    return new Date(utcMidnight-offset*60000).toISOString();
+  }
   function dateParts(value,allDay){
     const date=new Date(value);if(Number.isNaN(date.getTime()))return "";
-    const day=new Intl.DateTimeFormat("ar-MA",{weekday:"long",day:"numeric",month:"long"}).format(date);
-    return allDay?day+" · طوال اليوم":day+" · "+new Intl.DateTimeFormat("ar-MA",{hour:"2-digit",minute:"2-digit"}).format(date);
+    const day=new Intl.DateTimeFormat("ar-MA",{timeZone:TIME_ZONE,weekday:"long",day:"numeric",month:"long"}).format(date);
+    return allDay?day+" · طوال اليوم":day+" · "+new Intl.DateTimeFormat("ar-MA",{timeZone:TIME_ZONE,hour:"2-digit",minute:"2-digit"}).format(date);
   }
   async function load(){
     if(!userId||!supa())return;
     const seq=++requestId;show("نبحث عن موعدنا القادم…","");
-    const now=new Date(),todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).toISOString();
+    const now=new Date(),todayStart=dayStartIso(now),today=dateKey(now);
     const {data,error}=await supa().from("ayfar_shared_calendar").select("id,title,starts_at,all_day,category")
       .gte("starts_at",todayStart).order("starts_at",{ascending:true}).limit(50);
     if(seq!==requestId||!userId)return;
     if(error){show("تعذر تحميل المواعيد حالياً","يمكن فتح التقويم والمحاولة مجدداً.");return;}
-    const today=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
-    const next=(data||[]).find(item=>new Date(item.starts_at)>=now||(item.all_day&&new Date(item.starts_at).getFullYear()+"-"+String(new Date(item.starts_at).getMonth()+1).padStart(2,"0")+"-"+String(new Date(item.starts_at).getDate()).padStart(2,"0")===today));
+    const next=(data||[]).find(item=>new Date(item.starts_at)>=now||(item.all_day&&dateKey(new Date(item.starts_at))===today));
     if(!next){show("لا يوجد موعد قادم بعد","يمكنكما إضافة لقاء أو مناسبة جديدة.");return;}
     show(next.title,dateParts(next.starts_at,next.all_day)+(next.category?" · "+next.category:""));
   }
