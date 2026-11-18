@@ -83,3 +83,7 @@ body.ayoub-theme #home-overview .unfinished-match{border-color:#40516a;backgroun
 @media(prefers-reduced-motion:reduce){
   #home-overview .continue-card .primary{transition:none!important}
 }
+
+/* The AI quiz remains visible as a preview but cannot start before its manual question bank is ready. */
+#home-games .games>button[data-ai-quiz]:disabled{opacity:.62;cursor:not-allowed;filter:saturate(.55);transform:none!important;box-shadow:none!important;border-style:dashed}
+#home-games .games>button[data-ai-quiz]:disabled .home-tile-icon{opacity:.78}
