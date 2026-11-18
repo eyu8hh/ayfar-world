@@ -1,7 +1,7 @@
 /* AYFAR WORLD · visual refresh v1 */
 :root{
  --ayfar-burgundy:#70243f;--ayfar-burgundy-deep:#542638;--ayfar-rose:#d98ba5;
- --ayfar-rose-soft:#f8e8ee;--ayfar-green:#47765c;--ayfar-green-soft:#eaf2eb;
+ --ayfar-rose-soft:#f8e8ee;--ayfar-green:#46735a;--ayfar-green-soft:#eaf2eb;
  --ayfar-ivory:#fffaf5;--ayfar-ink:#4b2b3a;--ayfar-muted:#806b75;--ayfar-line:#e8d8df;
  --ayfar-shadow-soft:0 3px 10px rgba(84,38,56,.055),0 1px 2px rgba(84,38,56,.04);
  --ayfar-shadow-card:0 8px 22px rgba(84,38,56,.085),0 2px 5px rgba(84,38,56,.045);
@@ -18,7 +18,7 @@ body{background:radial-gradient(ellipse at 8% 4%,rgba(248,232,238,.82),transpare
 #home-our-world .stats article:nth-child(2) .metric-icon{background:linear-gradient(145deg,#fff,#edf5ee);border-color:#d9e8dc;color:var(--ayfar-green)}
 #home-our-world .stats article:nth-child(3) .metric-icon{background:linear-gradient(145deg,#fff,#fff4df);border-color:#eee0c6;color:#9b6a36}
 #home-our-world .feature-icon,#home-messages .message-feature>.feature-icon{display:grid;place-items:center;width:46px;height:46px;margin-bottom:10px;border:1px solid rgba(112,36,63,.10);border-radius:15px;background:rgba(255,255,255,.62);color:var(--ayfar-burgundy);font-size:21px}
-#home-our-world .rating .feature-icon{background:rgba(255,255,255,.68);color:var(--ayfar-green);border-color:rgba(71,118,92,.16)}
+#home-our-world .rating .feature-icon{background:rgba(255,255,255,.68);color:var(--ayfar-green);border-color:rgba(70,115,90,.16)}
 #home-messages .message-feature>.feature-icon{background:rgba(255,255,255,.7);color:var(--ayfar-burgundy)}
 #home-games .games>button{align-items:flex-start;gap:0}
 #home-games .home-tile-icon{display:grid;place-items:center;flex:0 0 44px;width:44px;height:44px;margin-bottom:8px;border:1px solid #edd9e1;border-radius:14px;background:linear-gradient(145deg,#fff,#f8e8ee);color:var(--ayfar-burgundy);font-size:20px}
