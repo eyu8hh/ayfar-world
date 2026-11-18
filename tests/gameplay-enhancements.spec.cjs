@@ -121,3 +121,16 @@ test("daily love letters use Morocco's local date and serialize simultaneous ope
   expect(migration).not.toMatch(/create\s+table|alter\s+table|drop\s+table/i);
   expect(migration).toContain("role in ('farhati','farahati')");
 });
+
+
+test("home next-event dashboard uses Casablanca civil-day boundaries and formatting", async () => {
+  const dashboard = read("js/home-dashboard.js");
+  expect(dashboard).toContain('const TIME_ZONE="Africa/Casablanca"');
+  expect(dashboard).toContain('timeZone:TIME_ZONE,timeZoneName:"longOffset"');
+  expect(dashboard).toContain("function dayStartIso(value)");
+  expect(dashboard).toContain(".gte(\"starts_at\",todayStart)");
+  expect(dashboard).toContain('timeZone:TIME_ZONE,weekday:"long",day:"numeric",month:"long"');
+  expect(dashboard).not.toContain("now.getFullYear()");
+  expect(dashboard).not.toContain("now.getMonth()");
+  expect(dashboard).not.toContain("now.getDate()");
+});
