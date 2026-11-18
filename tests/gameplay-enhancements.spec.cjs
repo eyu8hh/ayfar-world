@@ -90,3 +90,15 @@ test("AI quiz entry stays visibly deferred until the manual question bank is sup
   expect(tile).toContain('قريباً');
   expect(tile).toContain('بنك الأسئلة اليدوي');
 });
+
+
+test("Morocco is not exposed as a standalone quiz category", async () => {
+  const games = read("js/games.js");
+  const expansion = read("js/knowledge-bank-expansion.js");
+  expect(games).toContain('categories:["ثقافة عامة","علوم","تاريخ","جغرافيا","سينما","ألغاز"]');
+  expect(games).not.toContain('cat==="المغرب"');
+  const mixed = games.slice(games.indexOf("mixed:["), games.indexOf("predict:"));
+  expect(mixed).not.toContain('["المغرب"');
+  const expansionMixed = expansion.slice(expansion.indexOf("mixed:["), expansion.indexOf("speed:["));
+  expect(expansionMixed).not.toContain('["المغرب"');
+});
