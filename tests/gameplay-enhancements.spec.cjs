@@ -24,7 +24,7 @@ test("game chat reactions are stored in the shared match state", async () => {
   expect(games).toContain("actors.filter(actor=>actor!==role)");
 });
 
-test("match creation no longer blocks an additional active room", async () => {
+test("game chat reaction retries preserve the originally requested state", async () => {\n  const games = read("js/games.js");\n  expect(games).toContain("shouldReact=!button.classList.contains(\\\"is-active\\\")");\n  expect(games).toContain("message.reactions[emoji]=shouldReact?");\n  expect(games).toContain("actors.includes(role)?actors:[...actors,role]");\n});\n\ntest("match creation no longer blocks an additional active room", async () => {
   const games = read("js/games.js");
   const migration = read("supabase/migrations/202611070001_allow_multiple_active_games.sql");
   expect(games).toContain("Detach this tab");
