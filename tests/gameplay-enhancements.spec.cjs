@@ -127,7 +127,7 @@ test("home next-event dashboard uses Casablanca civil-day boundaries and formatt
   const dashboard = read("js/home-dashboard.js");
   expect(dashboard).toContain('const TIME_ZONE="Africa/Casablanca"');
   expect(dashboard).toContain('timeZone:TIME_ZONE,timeZoneName:"longOffset"');
-  expect(dashboard).toContain(String.raw`const match=/GMT([+-])(\\d{2}):(\\d{2})/.exec(zone)`);
+  expect(dashboard).toContain(String.raw`const match=/GMT([+-])(\d{2}):(\d{2})/.exec(zone)`);
   expect(dashboard).toContain("function dayStartIso(value)");
   expect(dashboard).toContain(".gte(\"starts_at\",todayStart)");
   expect(dashboard).toContain('timeZone:TIME_ZONE,weekday:"long",day:"numeric",month:"long"');
