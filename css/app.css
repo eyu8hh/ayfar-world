@@ -1401,3 +1401,7 @@ input,textarea,select{min-height:46px}
   .games button:hover,.feature:hover,.continue-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-card)}
   .envelope:hover{transform:translateY(-2px);box-shadow:none;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* Remove the oversized translucent corner circles from game tiles. */
+#home-games .games>button::after{display:none!important;content:none!important}
