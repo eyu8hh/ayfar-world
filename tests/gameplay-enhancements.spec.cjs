@@ -80,3 +80,13 @@ test("speed challenge uses a shared server timestamp and calibrated local clock"
   expect(games).toContain('if(data.game_key==="speed"&&data.state?.deadlineAt)');
 
 });
+
+
+test("AI quiz entry stays visibly deferred until the manual question bank is supplied", async () => {
+  const html = read("index.html");
+  const tile = html.slice(html.indexOf('data-ai-quiz') - 80, html.indexOf('data-ai-quiz') + 500);
+  expect(tile).toContain('disabled');
+  expect(tile).toContain('aria-disabled="true"');
+  expect(tile).toContain('قريباً');
+  expect(tile).toContain('بنك الأسئلة اليدوي');
+});
