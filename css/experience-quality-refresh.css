@@ -1,0 +1,151 @@
+/* AYFAR WORLD · icon decluttering and product-wide quality pass */
+
+/* Decorative hero heart: remove the large floating heart from the welcome panel. */
+#home-overview .heroheart{display:none!important}
+
+/* Keep every icon glyph, but remove the decorative tile/circle behind it. */
+:is(
+  #home-our-world .metric-icon,
+  #home-our-world .feature-icon,
+  #home-messages .message-feature>.feature-icon,
+  #home-games .home-tile-icon,
+  #home-plans .plan-icon,
+  #home-routine .routine-intro-art .bi,
+  #home-overview .home-anniversary-head>span,
+  .game-screen-icon,
+  .game-player-avatar,
+  .unfinished-match-icon,
+  .challenge-invite-icon,
+  .challenge-orbit
+){
+  background:transparent!important;
+  border-color:transparent!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+:is(
+  #home-our-world .metric-icon,
+  #home-our-world .feature-icon,
+  #home-messages .message-feature>.feature-icon,
+  #home-games .home-tile-icon,
+  #home-plans .plan-icon,
+  #home-routine .routine-intro-art .bi,
+  #home-overview .home-anniversary-head>span,
+  .game-screen-icon,
+  .game-player-avatar,
+  .unfinished-match-icon,
+  .challenge-invite-icon,
+  .challenge-orbit
+){background-image:none!important}
+
+/* Stronger visual hierarchy and consistent spacing across the product. */
+#home-pages .home-section-anchor{scroll-margin-top:18px}
+#home-pages .heading h3{font-weight:750;letter-spacing:-.025em}
+#home-our-world .stats article,
+#home-our-world .feature,
+#home-messages .message-feature,
+#home-games .games>button,
+#home-plans .plan-card{
+  border:1px solid var(--ayfar-line,#e7d6dd);
+  box-shadow:0 5px 16px rgba(55,28,40,.055);
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+#home-our-world .stats article{padding:15px 13px}
+#home-our-world .feature,#home-messages .message-feature{padding:17px}
+#home-games .games>button{gap:7px}
+#home-games .games>button b{margin-top:2px}
+#home-games .games>button small{max-width:34ch}
+#home-plans .plan-card{min-height:164px}
+#home-plans .plan-card-copy>small{line-height:1.8}
+#home-overview .home-anniversary-head{gap:8px}
+#home-overview .home-anniversary-head>span{font-size:22px;line-height:1}
+#home-overview #home-anniversary-countdown{font-variant-numeric:tabular-nums}
+
+/* Make controls feel consistent and remain easy to tap on phones. */
+#home button,#page button,#notification-bell{
+  -webkit-tap-highlight-color:transparent;
+}
+#home button:focus-visible,#page button:focus-visible,
+#home a:focus-visible,#page a:focus-visible{
+  outline:3px solid rgba(185,145,83,.72);
+  outline-offset:3px;
+}
+#pagebody .panel{border-radius:22px}
+#pagebody .panel h2,#pagebody .panel h3{line-height:1.55}
+#pagebody .text,#pagebody textarea,#pagebody select{
+  min-height:46px;border-radius:13px;font:inherit;
+}
+#pagebody textarea{min-height:112px;line-height:1.8}
+#pagebody .primary,#pagebody .secondary-action,
+#login .primary{min-height:46px;border-radius:13px;font-weight:700}
+.game-chat-panel{border-radius:22px}
+.game-chat-form input{min-height:46px;border-radius:13px}
+.game-chat-form button{min-width:46px;min-height:46px;border-radius:13px}
+
+/* More coherent light surfaces and quieter borders. */
+body:not(.ayoub-theme){
+  --ayfar-line:#e7d9df;
+}
+body:not(.ayoub-theme) #home-our-world .stats article,
+body:not(.ayoub-theme) #home-our-world .feature,
+body:not(.ayoub-theme) #home-messages .message-feature,
+body:not(.ayoub-theme) #home-games .games>button,
+body:not(.ayoub-theme) #home-plans .plan-card{
+  border-color:#e8dce1;
+}
+body:not(.ayoub-theme) #home-games .games>button:hover{
+  border-color:#c99aaa;
+}
+
+/* Dark theme: preserve legibility after removing icon backplates. */
+body.ayoub-theme #home-our-world .metric-icon,
+body.ayoub-theme #home-our-world .feature-icon,
+body.ayoub-theme #home-messages .message-feature>.feature-icon,
+body.ayoub-theme #home-games .home-tile-icon,
+body.ayoub-theme #home-plans .plan-icon,
+body.ayoub-theme #home-routine .routine-intro-art .bi,
+body.ayoub-theme #home-overview .home-anniversary-head>span,
+body.ayoub-theme .game-screen-icon,
+body.ayoub-theme .game-player-avatar,
+body.ayoub-theme .unfinished-match-icon{
+  color:#e6c4d0!important;
+}
+body.ayoub-theme #home-our-world .stats article,
+body.ayoub-theme #home-our-world .feature,
+body.ayoub-theme #home-messages .message-feature,
+body.ayoub-theme #home-games .games>button,
+body.ayoub-theme #home-plans .plan-card{
+  border-color:#40516a;
+}
+body.ayoub-theme #pagebody .panel{border-color:#40516a}
+body.ayoub-theme #pagebody .text,
+body.ayoub-theme #pagebody textarea,
+body.ayoub-theme #pagebody select{
+  background:#1d2d42;color:#edf1f6;border-color:#46566d;
+}
+body.ayoub-theme #pagebody .text::placeholder,
+body.ayoub-theme #pagebody textarea::placeholder{color:#aebccc}
+
+/* Respect reduced-motion settings and prevent hover-only movement on touch. */
+@media(hover:hover) and (pointer:fine){
+  #home-our-world .stats article:hover,
+  #home-our-world .feature:hover,
+  #home-messages .message-feature:hover,
+  #home-games .games>button:hover,
+  #home-plans .plan-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 24px rgba(55,28,40,.09);
+  }
+}
+@media(max-width:520px){
+  #home-our-world .stats{gap:8px}
+  #home-our-world .stats article{padding:12px 9px}
+  #home-our-world .feature,#home-messages .message-feature{padding:14px}
+  #home-plans .plan-card{min-height:154px}
+  #pagebody .panel{padding:16px;border-radius:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  #home-our-world .stats article,#home-our-world .feature,
+  #home-messages .message-feature,#home-games .games>button,
+  #home-plans .plan-card{transition:none!important}
+}
