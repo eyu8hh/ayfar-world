@@ -1,0 +1,57 @@
+/* AYFAR WORLD · typography, navigation and game-card refinement */
+:root{
+  --ayfar-font-body:"IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --ayfar-font-display:"Alexandria","IBM Plex Sans Arabic",sans-serif;
+}
+html,body,button,input,textarea,select{
+  font-family:var(--ayfar-font-body);
+  font-feature-settings:"kern" 1,"liga" 1;
+}
+body{font-weight:400;letter-spacing:0}
+h1,h2,h3,h4,.heading h3,.home-section-nav button,.home-slide-controls,#home-games .games>button b{
+  font-family:var(--ayfar-font-display);
+}
+#home-top .brand b{font-family:var(--ayfar-font-display);font-weight:700;letter-spacing:.13em}
+#home-top .brand small{font-family:var(--ayfar-font-body);font-weight:500}
+.heading h3{font-size:clamp(19px,4.4vw,23px);font-weight:700;letter-spacing:-.025em}
+.home-section-nav{gap:7px;padding:7px 2px 9px}
+.home-section-nav button{
+  min-height:46px;padding:9px 14px;border-radius:15px;
+  font-size:12px;font-weight:700;letter-spacing:-.02em;
+}
+.home-section-nav button.active{font-weight:800}
+#home-games .games{gap:12px}
+#home-games .games>button{
+  min-height:156px;padding:15px 14px 14px;border-radius:20px;
+  border-width:1px;line-height:1.5;
+}
+#home-games .home-tile-icon{
+  width:46px;height:46px;flex-basis:46px;border-radius:15px;
+  margin-bottom:10px;font-size:20px;
+}
+#home-games .games>button b{font-size:14px;line-height:1.55;font-weight:700}
+#home-games .games>button small{font-size:11px;line-height:1.65;margin-top:5px}
+#home-games .games>button em{font-size:10px;font-weight:700;letter-spacing:0}
+#home-pages .home-section-anchor>.heading{margin-bottom:16px}
+.home-slide-controls{font-family:var(--ayfar-font-body);font-weight:600}
+#home-overview .hero h2{font-family:var(--ayfar-font-display);font-weight:700;line-height:1.55}
+#home-overview .hero p{line-height:1.9}
+#pagebody .panel h2,#pagebody .panel h3{font-family:var(--ayfar-font-display);line-height:1.6}
+#pagebody .panel p,#pagebody .panel label{line-height:1.85}
+:where(button,input,textarea,select){letter-spacing:0}
+@media(max-width:520px){
+  #home-games .games{gap:10px}
+  #home-games .games>button{min-height:150px;padding:13px 12px;border-radius:18px}
+  #home-games .games>button b{font-size:13px}
+  #home-games .games>button small{font-size:10px}
+  .home-section-nav button{padding-inline:11px;font-size:11px}
+}
+@media(hover:hover) and (pointer:fine){
+  #home-games .games>button:hover{transform:translateY(-2px)}
+}
+body.ayoub-theme #home-games .games>button{border-color:#40516a}
+body.ayoub-theme .home-section-nav button.active{border-color:#b99a62}
+body.ayoub-theme #home-games .games>button b{color:#edf1f6}
+@media(prefers-reduced-motion:reduce){
+  #home-games .games>button,.home-section-nav button{transition:none!important}
+}
