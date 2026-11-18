@@ -28,7 +28,7 @@
   }
   function offsetMinutes(value){
     const zone=new Intl.DateTimeFormat("en-US",{timeZone:TIME_ZONE,timeZoneName:"longOffset"}).formatToParts(value).find(item=>item.type==="timeZoneName")?.value||"GMT";
-    const match=/GMT([+-])(\\d{2}):(\\d{2})/.exec(zone);
+    const match=/GMT([+-])(\d{2}):(\d{2})/.exec(zone);
     return match?(match[1]==="-"?-1:1)*(Number(match[2])*60+Number(match[3])):0;
   }
   function dayStartIso(value){
