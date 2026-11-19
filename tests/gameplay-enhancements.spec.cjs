@@ -183,6 +183,7 @@ test("saved bank-backed matches load their questions before rendering or resumin
 
 test("notifications show readable details and support background system delivery", async () => {
   const notifications = read("js/notifications.js");
+  const app = read("js/app.js");
   const worker = read("service-worker.js");
   expect(notifications).toContain('payload.new.body?" — "+payload.new.body:""');
   expect(notifications).toContain("Notification.requestPermission()");
@@ -221,6 +222,8 @@ test("Web Push subscriptions are private per user and notification delivery is s
   expect(notifications).toContain('registration.pushManager.subscribe');
   expect(notifications).toContain('from("ayfar_push_subscriptions").upsert');
   expect(notifications).toContain('from("ayfar_push_subscriptions").delete()');
+  expect(notifications).toContain("async function disableForLogout()");
+  expect(app).toContain("await window.AYFAR_Notifications?.disableForLogout?.()");
   expect(notifications).toContain("isIOSHomeScreenApp()");
   expect(notifications).toContain("await registration.pushManager.getSubscription())return");
   expect(worker).toContain('self.addEventListener("push"');
