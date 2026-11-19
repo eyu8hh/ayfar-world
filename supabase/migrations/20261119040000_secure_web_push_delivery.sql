@@ -213,3 +213,77 @@ drop trigger if exists ayfar_notifications_push_insert on public.ayfar_notificat
 create trigger ayfar_notifications_push_insert
   after insert on public.ayfar_notifications
   for each row execute function private.ayfar_enqueue_push_notification();
+
+-- New private-message alerts use sender/recipient labels only; message text is never copied
+-- into the notification center or lock-screen payload.
+create or replace function public.ayfar_notify_private_message()
+returns trigger
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+declare
+  sender_role text;
+  sender_label text;
+begin
+  select lower(role) into sender_role
+  from public.profiles where id = new.sender_id;
+
+  if coalesce(sender_role, '') not in ('ayoub', 'farhati', 'farahati') then
+    return new;
+  end if;
+
+  sender_label := case when sender_role = 'ayoub' then 'أيوب 🌙' else 'فرحتي 🌸' end;
+  perform public.ayfar_send_notification(
+    new.sender_id,
+    new.recipient_id,
+    'private_message',
+    'رسالة جديدة من ' || sender_label,
+    'وصلتك رسالة خاصة. افتح عالمكما لقراءتها.',
+    new.id
+  );
+  return new;
+end
+$$;
+revoke all on function public.ayfar_notify_private_message() from public, anon, authenticated;
+drop trigger if exists ayfar_private_message_notify on public.private_messages;
+create trigger ayfar_private_message_notify
+  after insert on public.private_messages
+  for each row execute function public.ayfar_notify_private_message();
+
+-- A new daily letter alerts Farahati without exposing the letter text on the lock screen.
+create or replace function public.ayfar_notify_love_letter()
+returns trigger
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+declare
+  actor_id uuid := auth.uid();
+  actor_role text;
+  partner_id uuid;
+begin
+  select lower(role) into actor_role
+  from public.profiles where id = actor_id;
+
+  if coalesce(actor_role, '') <> 'ayoub' then
+    return new;
+  end if;
+
+  partner_id := public.ayfar_partner_user_id(actor_id);
+  perform public.ayfar_send_notification(
+    actor_id,
+    partner_id,
+    'love_letter',
+    'رسالة يومية جديدة من أيوب 🌙',
+    'هناك رسالة جديدة داخل المغلف. افتح عالمكما لقراءتها.',
+    new.id
+  );
+  return new;
+end
+$$;
+revoke all on function public.ayfar_notify_love_letter() from public, anon, authenticated;
+drop trigger if exists ayfar_love_letter_notify on public.love_letters;
+create trigger ayfar_love_letter_notify
+  after insert on public.love_letters
+  for each row execute function public.ayfar_notify_love_letter();
