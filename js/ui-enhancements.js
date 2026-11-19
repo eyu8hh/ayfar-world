@@ -141,7 +141,7 @@ function setupReveal(){
  targets.forEach(node=>{if(node.dataset.revealReady)return;node.dataset.revealReady="true";node.classList.add("ayfar-scroll-reveal","is-pending");window._ayfarRevealObserver.observe(node)});
 }
 function avatarFallbacks(){
- all(".ayfar-avatar img,.game-player-avatar img,.message-avatar img").forEach(img=>{
+ all(".ayfar-avatar img,.game-player-avatar img,.game-chat-avatar img,.message-avatar img").forEach(img=>{
   if(img.dataset.fallbackReady)return;img.dataset.fallbackReady="true";
   img.addEventListener("error",()=>{const host=img.parentElement;img.remove();host.classList.add("avatar-fallback");host.innerHTML='<i data-lucide="user-round" aria-hidden="true"></i>'},{once:true});
  });
