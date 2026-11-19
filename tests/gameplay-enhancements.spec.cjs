@@ -193,3 +193,34 @@ test("notifications show readable details and support background system delivery
   expect(worker).toContain('self.addEventListener("notificationclick"');
   expect(worker).toContain('type:"AYFAR_OPEN_NOTIFICATION"');
 });
+
+
+test("Web Push subscriptions are private per user and notification delivery is signed", async () => {
+  const migration = read("supabase/migrations/20261119040000_secure_web_push_delivery.sql");
+  const push = read("supabase/functions/ayfar-push/index.ts");
+  const notifications = read("js/notifications.js");
+  const worker = read("service-worker.js");
+  expect(migration).toContain("create extension if not exists pg_net with schema extensions");
+  expect(migration).toContain("create table if not exists public.ayfar_push_subscriptions");
+  expect(migration).toContain("alter table public.ayfar_push_subscriptions enable row level security");
+  expect(migration).toContain("using (user_id = (select auth.uid()))");
+  expect(migration).toContain("with check (user_id = (select auth.uid()))");
+  expect(migration).toContain("vault.create_secret");
+  expect(migration).toContain("extensions.hmac(");
+  expect(migration).toContain("net.http_post(");
+  expect(migration).toContain("after insert on public.ayfar_notifications");
+  expect(migration).toContain("revoke all on function public.ayfar_push_get_config() from public, anon, authenticated");
+  expect(push).toContain('npm:web-push@3.6.7');
+  expect(push).toContain("webpush.generateVAPIDKeys()");
+  expect(push).toContain("crypto.subtle.importKey");
+  expect(push).toContain("constantTimeEqual");
+  expect(push).toContain("admin.auth.getUser(token)");
+  expect(push).toContain('statusCode === 404 || statusCode === 410');
+  expect(notifications).toContain('db().functions.invoke("ayfar-push"');
+  expect(notifications).toContain('registration.pushManager.subscribe');
+  expect(notifications).toContain('from("ayfar_push_subscriptions").upsert');
+  expect(notifications).toContain('from("ayfar_push_subscriptions").delete()');
+  expect(notifications).toContain("isIOSHomeScreenApp()");
+  expect(worker).toContain('self.addEventListener("push"');
+  expect(worker).toContain('target.searchParams.set("ayfar_notification",data.id)');
+});
