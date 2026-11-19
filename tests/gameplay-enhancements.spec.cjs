@@ -147,3 +147,11 @@ test("game chat dialog exposes accessible non-modal semantics and keyboard dismi
   expect(games).toContain('$("#game-chat-input")?.focus()');
   expect(games).toContain('$("#game-chat-toggle")?.focus()');
 });
+
+
+test("private messages expose connection and send feedback through polite live regions", async () => {
+  const messages = read("js/messages.js");
+  expect(messages).toContain('id="realtime-status" class="notice" role="status" aria-live="polite" aria-atomic="true"');
+  expect(messages).toContain('id="msg-status" class="notice" role="status" aria-live="polite" aria-atomic="true"');
+  expect(messages).toContain('for="msg-body"');
+});
