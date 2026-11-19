@@ -198,6 +198,12 @@ test("notifications show readable details and support background system delivery
 });
 
 
+test("Web Push client state is initialized before subscription preparation", async () => {
+  const notifications = read("js/notifications.js");
+  expect(notifications).toContain('let pushPublicKey="",pushRegistration=null,pushSubscription=null,pushPreparation=null;');
+  expect(notifications.indexOf('let pushPublicKey=""')).toBeLessThan(notifications.indexOf("async function preparePushSubscription()"));
+});
+
 test("Web Push subscriptions are private per user and notification delivery is signed", async () => {
   const migration = read("supabase/migrations/20261119040000_secure_web_push_delivery.sql");
   const push = read("supabase/functions/ayfar-push/index.ts");
