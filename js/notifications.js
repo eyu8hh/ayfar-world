@@ -117,7 +117,7 @@
       if(saveError){await subscription.unsubscribe();throw saveError;}
       await syncDeviceNotificationButton();
       const toast=$("#toast");if(toast){toast.textContent="تم تفعيل الإشعارات الفورية على هذا الجهاز.";toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),3600);}
-      await registration.showNotification("AYFAR WORLD ♡",{body:"أصبحت إشعارات عالمكما جاهزة على هذا الجهاز.",icon:"./assets/brand/ayfar-app-icon.jpg",dir:"rtl",lang:"ar",tag:"ayfar-notification-ready"});
+      await registration.showNotification("AYFAR WORLD ♡",{body:"أصبحت إشعارات عالمكما جاهزة على هذا الجهاز.",icon:"./assets/brand/ayfar-app-icon.jpg",dir:"rtl",lang:"ar",silent:false,tag:"ayfar-notification-ready"});
     }catch(error){
       console.warn("AYFAR push subscription:",error?.message||error);
       alert("تعذر تفعيل إشعارات الهاتف حالياً. تحقق من اتصالك وحاول مجدداً.");
@@ -131,7 +131,7 @@
       // A registered Web Push subscription already receives this event from the server.
       // Avoid showing a second local notification for the same database insert.
       if("PushManager" in window&&await registration.pushManager.getSubscription())return;
-      await registration.showNotification(item.title||"إشعار جديد من AYFAR WORLD",{body:item.body||"لديك نشاط جديد في عالمكما.",icon:"./assets/brand/ayfar-app-icon.jpg",badge:"./assets/brand/ayfar-app-icon.jpg",tag:"ayfar-"+item.id,dir:"rtl",lang:"ar",timestamp:Date.parse(item.created_at||new Date().toISOString()),data:{url:"./index.html",id:item.id,eventType:item.event_type}});
+      await registration.showNotification(item.title||"إشعار جديد من AYFAR WORLD",{body:item.body||"لديك نشاط جديد في عالمكما.",icon:"./assets/brand/ayfar-app-icon.jpg",badge:"./assets/brand/ayfar-app-icon.jpg",tag:"ayfar-"+item.id,dir:"rtl",lang:"ar",silent:false,timestamp:Date.parse(item.created_at||new Date().toISOString()),data:{url:"./index.html",id:item.id,eventType:item.event_type}});
     }catch(error){console.warn("AYFAR system notification:",error);}
   }
   async function openCenter(){
