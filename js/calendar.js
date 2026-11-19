@@ -36,7 +36,7 @@
       else if(i>=offset+days){date=localDate(new Date(cursor.getFullYear(),cursor.getMonth()+1,i-offset-days+1));other=true;}
       else date=localDate(new Date(cursor.getFullYear(),cursor.getMonth(),i-offset+1));
       const count=dayEvents(date).length;
-      cells+=`<button type="button" class="calendar-day ${other?"is-out ":""}${date===selected?"is-selected ":""}${date===today?"is-today ":""}${count?"has-events":""}" data-calendar-date="${date}" aria-label="${date}">${Number(date.slice(-2))}</button>`;
+      cells+=`<button type="button" class="calendar-day ${other?"is-out ":""}${date===selected?"is-selected ":""}${date===today?"is-today ":""}${count?"has-events":""}" data-calendar-date="${date}" aria-label="${Number(date.slice(-2))}، ${date}">${Number(date.slice(-2))}</button>`;
     }
     $("#calendar-grid").innerHTML=cells;
     const chosen=dayEvents(selected),d=parseDate(selected);
