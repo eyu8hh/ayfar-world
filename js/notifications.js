@@ -49,20 +49,80 @@
     if(Notification.permission==="denied")return "الإشعارات محظورة من إعدادات المتصفح";
     return "تفعيل إشعارات الهاتف";
   }
-  async function enableDeviceNotifications(){
-    if(!("Notification" in window)){alert("هذا المتصفح لا يدعم إشعارات الهاتف.");return;}
-    if(!("serviceWorker" in navigator)){alert("يلزم متصفح يدعم PWA لتفعيل إشعارات الهاتف.");return;}
+  function isIOSHomeScreenApp(){
+    const ios=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+    const standalone=window.matchMedia?.("(display-mode: standalone)").matches||navigator.standalone===true;
+    return ios&&!standalone;
+  }
+  function decodeVapidKey(value){
+    const padding="=".repeat((4-value.length%4)%4);
+    const raw=atob((value+padding).replace(/-/g,"+").replace(/_/g,"/"));
+    return Uint8Array.from(raw,char=>char.charCodeAt(0));
+  }
+  async function getPushRegistration(){
+    if(!("serviceWorker" in navigator)||!("PushManager" in window))throw new Error("هذا المتصفح لا يدعم الإشعارات الفورية.");
+    return await navigator.serviceWorker.ready;
+  }
+  async function syncDeviceNotificationButton(){
+    const button=$("#notification-enable");if(!button)return;
+    if(!("Notification" in window)||!("PushManager" in window)||!("serviceWorker" in navigator)){
+      button.textContent="الإشعارات الفورية غير مدعومة في هذا المتصفح";button.disabled=true;return;
+    }
+    if(Notification.permission==="denied"){
+      button.textContent="اسمح بالإشعارات من إعدادات الهاتف";button.disabled=true;return;
+    }
     try{
-      const permission=await Notification.requestPermission();
-      const button=$("#notification-enable");
-      if(button){button.textContent=notificationPermissionLabel();button.disabled=permission!=="granted";}
-      if(permission==="granted"){
-        const registration=await navigator.serviceWorker.ready;
-        await registration.showNotification("AYFAR WORLD ♡",{body:"أصبحت إشعارات عالمكما جاهزة على هذا الجهاز.",icon:"./assets/brand/ayfar-app-icon.jpg",dir:"rtl",lang:"ar",tag:"ayfar-notification-ready"});
-      }else if(permission==="denied"){
-        alert("تم حظر الإشعارات. يمكنك السماح بها من إعدادات الموقع في المتصفح أو الهاتف.");
+      const registration=await getPushRegistration();
+      const subscription=await registration.pushManager.getSubscription();
+      button.textContent=subscription?"إيقاف إشعارات الهاتف":"تفعيل إشعارات الهاتف";
+      button.disabled=false;
+      button.dataset.enabled=subscription?"true":"false";
+    }catch(_){button.textContent="تعذر التحقق من حالة الإشعارات";button.disabled=true;}
+  }
+  async function enableDeviceNotifications(){
+    const button=$("#notification-enable");
+    if(!user){alert("سجّل الدخول أولاً لتفعيل إشعارات حسابك.");return;}
+    if(isIOSHomeScreenApp()){
+      alert("على iPhone أو iPad: افتح AYFAR WORLD في Safari، ثم اختر مشاركة ← إضافة إلى الشاشة الرئيسية. افتح التطبيق من أيقونته الجديدة ثم فعّل الإشعارات.");
+      return;
+    }
+    if(!("Notification" in window)){alert("هذا المتصفح لا يدعم إشعارات الهاتف.");return;}
+    try{
+      if(button){button.disabled=true;button.textContent="جارٍ إعداد الإشعارات...";}
+      let permission=Notification.permission;
+      if(permission==="default")permission=await Notification.requestPermission();
+      if(permission!=="granted"){
+        if(permission==="denied")alert("الإشعارات محظورة. يمكنك السماح بها من إعدادات الموقع في المتصفح أو الهاتف.");
+        await syncDeviceNotificationButton();return;
       }
-    }catch(error){console.warn("AYFAR notification permission:",error);alert("تعذر تفعيل إشعارات الهاتف حالياً.");}
+      const registration=await getPushRegistration();
+      let subscription=await registration.pushManager.getSubscription();
+      if(subscription){
+        const {error}=await db().from("ayfar_push_subscriptions").delete().eq("user_id",user.id).eq("endpoint",subscription.endpoint);
+        if(error)throw error;
+        await subscription.unsubscribe();
+        await syncDeviceNotificationButton();
+        const toast=$("#toast");if(toast){toast.textContent="تم إيقاف إشعارات هذا الجهاز.";toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),3200);}
+        return;
+      }
+      const {data,error}=await db().functions.invoke("ayfar-push",{body:{action:"public-key"}});
+      if(error||!data?.publicKey)throw error||new Error("تعذر الحصول على مفتاح الإشعارات الآمن.");
+      subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:decodeVapidKey(data.publicKey)});
+      const value=subscription.toJSON();
+      if(!value.endpoint||!value.keys?.p256dh||!value.keys?.auth)throw new Error("لم يُرجع المتصفح بيانات اشتراك مكتملة.");
+      const {error:saveError}=await db().from("ayfar_push_subscriptions").upsert({
+        user_id:user.id,endpoint:value.endpoint,p256dh:value.keys.p256dh,auth:value.keys.auth,
+        user_agent:String(navigator.userAgent||"").slice(0,300),updated_at:new Date().toISOString()
+      },{onConflict:"endpoint"});
+      if(saveError){await subscription.unsubscribe();throw saveError;}
+      await syncDeviceNotificationButton();
+      const toast=$("#toast");if(toast){toast.textContent="تم تفعيل الإشعارات الفورية على هذا الجهاز.";toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),3600);}
+      await registration.showNotification("AYFAR WORLD ♡",{body:"أصبحت إشعارات عالمكما جاهزة على هذا الجهاز.",icon:"./assets/brand/ayfar-app-icon.jpg",dir:"rtl",lang:"ar",tag:"ayfar-notification-ready"});
+    }catch(error){
+      console.warn("AYFAR push subscription:",error?.message||error);
+      alert("تعذر تفعيل إشعارات الهاتف حالياً. تحقق من اتصالك وحاول مجدداً.");
+      await syncDeviceNotificationButton();
+    }
   }
   async function showBackgroundNotification(item){
     if(!item||!("Notification" in window)||Notification.permission!=="granted"||!("serviceWorker" in navigator))return;
@@ -79,7 +139,7 @@
     body.innerHTML='<section class="panel notifications-panel"><div class="notification-heading"><div><small class="eyebrow">OUR SHARED ACTIVITY</small><h2>إشعارات عالمنا</h2><p>كل جديد بينكما في مكان واحد.</p><button type="button" class="secondary-action notification-enable" id="notification-enable">تفعيل إشعارات الهاتف</button><small class="notification-privacy">قد يظهر نص الإشعار على شاشة قفل الهاتف عند تفعيلها.</small></div><span>🔔</span></div><div class="notification-list">'+list+'</div><button type="button" class="secondary-action" id="notifications-back">العودة إلى عالمنا</button></section>';
     $("#notifications-back").onclick=()=>{page.classList.add("hidden");home.classList.remove("hidden");};
     const enableButton=$("#notification-enable");
-    if(enableButton){enableButton.textContent=notificationPermissionLabel();enableButton.disabled=("Notification" in window)&&Notification.permission==="granted";enableButton.onclick=enableDeviceNotifications;}
+    if(enableButton){enableButton.textContent=notificationPermissionLabel();enableButton.disabled=("Notification" in window)&&Notification.permission==="granted";enableButton.onclick=enableDeviceNotifications;syncDeviceNotificationButton();}
     body.querySelectorAll("[data-notification-open]").forEach(button=>button.addEventListener("click",()=>openNotification(button.dataset.notificationOpen,button.dataset.eventType)));
   }
   async function init(){
@@ -99,6 +159,13 @@
       const toast=$("#toast");if(toast){toast.textContent=(payload.new.title||"إشعار جديد")+(payload.new.body?" — "+payload.new.body:"");toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),4200);}
       if(document.visibilityState==="hidden")showBackgroundNotification(payload.new);
     }).subscribe();
+    const params=new URLSearchParams(location.search);
+    const pendingId=params.get("ayfar_notification");
+    if(pendingId){
+      await refresh();await openCenter();
+      openNotification(pendingId,params.get("ayfar_event"));
+      history.replaceState({},document.title,location.pathname+location.hash);
+    }
     if(!window.__ayfarNotificationPoll)window.__ayfarNotificationPoll=setInterval(refresh,30000);
   }
   window.AYFAR_Notifications={init,open:openCenter,refresh,enableDeviceNotifications};
