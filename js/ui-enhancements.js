@@ -59,7 +59,7 @@ function enhanceFunctionalIcons(){
  const toggle=$("#game-chat-toggle");
  if(toggle){
   const icon=toggle.querySelector(".game-chat-toggle-icon");
-  if(icon&&!icon.querySelector("[data-lucide]"))icon.innerHTML='<i data-lucide="messages-square" aria-hidden="true"></i>';
+  if(icon&&!icon.querySelector("svg.lucide"))icon.innerHTML='<i data-lucide="messages-square" aria-hidden="true"></i>';
   const label=toggle.querySelector(".game-chat-toggle-label");if(label)label.textContent="محادثتنا";
   const count=toggle.querySelector("i:not(.lucide):not([data-lucide])");
   if(count){count.classList.add("game-chat-count");count.setAttribute("aria-label","رسائل جديدة في المحادثة")}
@@ -74,7 +74,7 @@ function enhanceFunctionalIcons(){
  const bell=$("#notification-bell");
  if(bell){const icon=bell.querySelector("i.bi");if(icon){icon.className="";icon.setAttribute("data-lucide","bell");icon.setAttribute("aria-hidden","true")}}
  const icons={daily_rating:"heart",star_change:"star",routine_status:"calendar-check",habit_checkin:"sprout",pet_care:"paw-print",music_added:"music",private_message:"message-circle",love_letter:"mail"};
- $$(".notification-item .notification-icon").forEach(node=>{if(node.querySelector("i.bi"))node.innerHTML='<i data-lucide="'+(icons[node.closest(".notification-item")?.querySelector("[data-event-type]")?.dataset.eventType]||"bell")+'" aria-hidden="true"></i>'});
+ $(".notification-item .notification-icon").forEach(node=>{if(!node.querySelector("svg.lucide"))node.innerHTML='<i data-lucide="'+(icons[node.closest(".notification-item")?.querySelector("[data-event-type]")?.dataset.eventType]||"bell")+'" aria-hidden="true"></i>'});
  $$(".game-player-score").forEach(score=>{
   const avatar=score.querySelector(".game-player-avatar");if(!avatar||avatar.querySelector("img"))return;
   const isAyoub=score.classList.contains("ayoub"),isCurrent=isAyoub===document.body.classList.contains("ayoub-theme"),img=document.createElement("img");
