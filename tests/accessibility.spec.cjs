@@ -38,7 +38,7 @@ test("axe-core scans the login experience and records WCAG findings", async ({ p
 
 
 test("axe-core covers authenticated private messages and the shared calendar dialog", async ({ page }, testInfo) => {
-  await page.route(/^https:\/\/(fonts\\.googleapis\\.com|fonts\\.gstatic\\.com|cdn\\.jsdelivr\\.net)\\//, route => route.abort());
+  await page.route(url => ["fonts.googleapis.com", "fonts.gstatic.com", "cdn.jsdelivr.net"].includes(url.hostname), route => route.abort());
   await page.route("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2", route =>
     route.fulfill({
       status: 200,
