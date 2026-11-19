@@ -32,7 +32,7 @@ self.addEventListener("push",event=>{
 self.addEventListener("notificationclick",event=>{
   event.notification.close();
   const data=event.notification.data||{};
-  const target=new URL(data.url||"./index.html",self.location.origin);
+  const target=new URL(data.url||"./index.html",self.registration.scope);
   if(data.id)target.searchParams.set("ayfar_notification",data.id);
   if(data.eventType)target.searchParams.set("ayfar_event",data.eventType);
   event.waitUntil((async()=>{
