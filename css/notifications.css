@@ -1,0 +1,20 @@
+/* AYFAR WORLD · readable notification controls */
+#notification-bell{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line,#ead6dd);border-radius:14px;background:var(--surface,#fff);color:var(--burgundy,#70243f);font-size:18px}
+#notification-bell #notification-count{position:absolute;top:-4px;inset-inline-start:-4px;min-width:18px;height:18px;padding:1px 4px;border-radius:999px;background:#b23b58;color:#fff;font:800 10px/16px sans-serif;text-align:center}
+.notification-enable{display:block;width:100%;margin-top:12px}
+.notification-enable:disabled{opacity:.75;cursor:default}
+.notification-privacy{display:block;margin-top:7px;color:var(--muted,#75636b);font-size:10px;line-height:1.7}
+.notification-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:10px;padding:13px;border:1px solid var(--line,#ead6dd);border-radius:16px;background:var(--surface,#fff)}
+.notification-copy{min-width:0}
+.notification-copy b{display:block;color:var(--text,#402b35);font-size:13px;line-height:1.6}
+.notification-copy p{margin:4px 0;color:var(--text,#59434d);font-size:12px;line-height:1.8;overflow-wrap:anywhere}
+.notification-copy small{color:var(--muted,#75636b);font-size:10px}
+.notification-item.unread{border-color:#dba9bb;background:linear-gradient(120deg,#fff8fa,#fff)}
+.notification-open{grid-column:2/-1;justify-self:start;min-height:38px;border:0;border-radius:10px;padding:7px 11px;background:#f5e8ed;color:#70243f;font:700 11px inherit}
+.notification-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.notification-heading h2{margin:4px 0;font-size:21px}
+.notification-list{display:grid;gap:9px;margin:16px 0}
+body.ayoub-theme .notification-item{background:#202f43;border-color:#40516a}
+body.ayoub-theme .notification-copy b,body.ayoub-theme .notification-copy p{color:#eef2f7}
+body.ayoub-theme .notification-item.unread{background:#29384b;border-color:#bd7792}
+@media(prefers-reduced-motion:reduce){.notification-item{transition:none!important}}
