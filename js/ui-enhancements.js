@@ -15,6 +15,7 @@ function renderIcons(){
  const paths={
   house:'<path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/>',
   heart:'<path d="M20.8 8.8c0 5.2-8.8 10-8.8 10S3.2 14 3.2 8.8A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7Z"/>',
+  star:'<path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/>',
   "messages-square":'<path d="M21 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-6.5A7.5 7.5 0 1 1 21 11.5Z"/><path d="M8 10h8M8 14h5"/>',
   "gamepad-2":'<path d="M6 11h4m-2-2v4"/><path d="M15 12h.01M18 10h.01"/><path d="M7 6h10a4 4 0 0 1 3.9 3.1l1 5A3 3 0 0 1 17 17l-3-2H10l-3 2a3 3 0 0 1-4.9-2.9l1-5A4 4 0 0 1 7 6Z"/>',
   ellipsis:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
@@ -106,6 +107,7 @@ function enhanceFunctionalIcons(){
   lastChatTotal=total;
   if(countNode){countNode.textContent=String(unreadCount);countNode.hidden=unreadCount===0;countNode.setAttribute("aria-label",unreadCount+" رسائل جديدة")}
  }
+ const group=$(".ayfar-avatar-group");if(group){const avatars=all(".ayfar-avatar",group),ayoub=document.body.classList.contains("ayoub-theme");avatars.forEach((avatar,index)=>{if((index===0)===ayoub)avatar.dataset.presence="online";else delete avatar.dataset.presence})}
  const bell=$("#notification-bell");
  if(bell){const icon=bell.querySelector("i.bi");if(icon){icon.className="";icon.setAttribute("data-lucide","bell");icon.setAttribute("aria-hidden","true")}}
  const icons={daily_rating:"heart",star_change:"star",routine_status:"calendar-check",habit_checkin:"sprout",pet_care:"paw-print",music_added:"music",private_message:"message-circle",love_letter:"mail"};
