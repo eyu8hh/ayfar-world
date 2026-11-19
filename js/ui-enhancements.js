@@ -32,7 +32,7 @@ function renderIcons(){
   "user-round":'<circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/>',
   send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>'
  };
- $("[data-lucide]").forEach(node=>{
+ all("[data-lucide]").forEach(node=>{
   const name=node.getAttribute("data-lucide"),body=paths[name];if(!body)return;
   const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
   svg.setAttribute("viewBox","0 0 24 24");svg.setAttribute("fill","none");svg.setAttribute("stroke","currentColor");svg.setAttribute("stroke-width","1.8");svg.setAttribute("stroke-linecap","round");svg.setAttribute("stroke-linejoin","round");svg.setAttribute("aria-hidden","true");svg.setAttribute("class","lucide lucide-"+name);
@@ -76,7 +76,7 @@ function addProgressRing(){
 }
 function enhanceMessages(){
  const empty=$(".messages-panel .empty-messages");if(empty&&!empty.dataset.premiumReady){empty.dataset.premiumReady="true";empty.innerHTML='<i data-lucide="message-circle" aria-hidden="true"></i><b>لا توجد رسائل بعد</b><span>اتركا أول كلمة جميلة هنا.</span>'}
- $(".messages-panel .message-bubble").forEach(bubble=>{
+ all(".messages-panel .message-bubble").forEach(bubble=>{
   if(bubble.dataset.premiumReady)return;bubble.dataset.premiumReady="true";
   const small=bubble.querySelector("small"),body=bubble.querySelector(":scope > div");
   const author=small?.textContent?.split(" · ")[0]||"";
@@ -112,7 +112,7 @@ function enhanceFunctionalIcons(){
  const bell=$("#notification-bell");
  if(bell){const icon=bell.querySelector("i.bi");if(icon){icon.className="";icon.setAttribute("data-lucide","bell");icon.setAttribute("aria-hidden","true")}}
  const icons={daily_rating:"heart",star_change:"star",routine_status:"calendar-check",habit_checkin:"sprout",pet_care:"paw-print",music_added:"music",private_message:"message-circle",love_letter:"mail"};
- $(".notification-item .notification-icon").forEach(node=>{if(!node.querySelector("svg.lucide"))node.innerHTML='<i data-lucide="'+(icons[node.closest(".notification-item")?.querySelector("[data-event-type]")?.dataset.eventType]||"bell")+'" aria-hidden="true"></i>'});
+ all(".notification-item .notification-icon").forEach(node=>{if(!node.querySelector("svg.lucide"))node.innerHTML='<i data-lucide="'+(icons[node.closest(".notification-item")?.querySelector("[data-event-type]")?.dataset.eventType]||"bell")+'" aria-hidden="true"></i>'});
  all(".game-player-score").forEach(score=>{
   const avatar=score.querySelector(".game-player-avatar");if(!avatar||avatar.dataset.avatarReady==="true"||avatar.querySelector("img"))return;avatar.dataset.avatarReady="true";
   const isAyoub=score.classList.contains("ayoub"),isCurrent=isAyoub===document.body.classList.contains("ayoub-theme"),img=document.createElement("img");
