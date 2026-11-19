@@ -15,8 +15,30 @@ const prompts={
  riddles:[["له أوراق وليس نباتاً، وله غلاف وليس هدية","كتاب"],["يسير بلا قدمين ويبكي بلا عينين","سحاب"],["كلما أخذت منه كبر","حفرة"],["له أسنان ولا يعض","مشط"],["بيت بلا أبواب ولا نوافذ","بيضة"],["ما الكوكب المعروف بالكوكب الأحمر؟","المريخ"],["ما عاصمة اليابان؟","طوكيو"],["ما أكبر محيط في العالم؟","المحيط الهادئ"],["كم عدد أضلاع الشكل السداسي؟","6"],["ما الغاز الذي تمتصه النباتات من الهواء؟","ثاني أكسيد الكربون"],["من رسم لوحة الموناليزا؟","ليوناردو دافنشي"],["ما أسرع حيوان بري؟","الفهد"],["في أي قارة تقع دولة البرازيل؟","أمريكا الجنوبية"],["ما العنصر الكيميائي الذي رمزه O؟","الأكسجين"],["كم عدد أيام السنة الكبيسة؟","366"],["ما عاصمة أستراليا؟","كانبيرا"],["ما اللغة الرسمية في البرازيل؟","البرتغالية"],["ما الحيوان الذي يُلقب بسفينة الصحراء؟","الجمل"],["كم عدد الكواكب في المجموعة الشمسية؟","8"],["ما البحر الذي يفصل بين أوروبا وأفريقيا؟","البحر الأبيض المتوسط"],["ما العضو الذي يضخ الدم في جسم الإنسان؟","القلب"],["ما أكبر قارة من حيث المساحة؟","آسيا"],["ما اسم العملية التي تصنع بها النباتات غذاءها؟","البناء الضوئي"],["ما عاصمة مصر؟","القاهرة"],["كم دقيقة في الساعة؟","60"],["ما المعدن السائل في درجة حرارة الغرفة؟","الزئبق"],["ما الحيوان المعروف بتغيير لونه للتمويه؟","الحرباء"],["ما اسم أقرب نجم إلى الأرض؟","الشمس"],["ما الشيء الذي يبتل كلما جفف غيره؟","المنشفة"],["ما عاصمة المغرب؟","الرباط"]]
 };
 if(window.AYFAR_QUESTION_EXPANSION){prompts.mixed.push(...window.AYFAR_QUESTION_EXPANSION.mixed);prompts.speed.push(...window.AYFAR_QUESTION_EXPANSION.speed);}
-const sourceBank=Array.isArray(window.AYFAR_QUESTION_BANK)?window.AYFAR_QUESTION_BANK:[];
-const quizBanks={mixed:sourceBank,speed:sourceBank,riddles:sourceBank.filter(q=>q.category==="الألغاز والمنطق والذكاء"),geography:sourceBank.filter(q=>q.category==="الجغرافيا والدول والعواصم")};
+let sourceBank=[];
+const quizBanks={mixed:[],speed:[],riddles:[],geography:[]};
+const BANK_GAME_KEYS=new Set(["mixed","speed","riddles","geography"]);
+let questionBankLoadPromise=null;
+function loadQuestionScript(src){
+ return new Promise((resolve,reject)=>{
+  const script=document.createElement("script");script.src=src;script.async=false;script.onload=resolve;
+  script.onerror=()=>{script.remove();reject(new Error("تعذر تحميل بنك الأسئلة. تحقق من الاتصال ثم أعد المحاولة."));};
+  document.head.appendChild(script);
+ });
+}
+async function ensureQuestionBank(){
+ if(questionBankLoadPromise)return questionBankLoadPromise;
+ questionBankLoadPromise=(async()=>{
+  if(!Array.isArray(window.AYFAR_QUESTION_BANK))await loadQuestionScript("js/ayfar-question-bank.js?v=2");
+  if(!window.AYFAR_QUESTION_BANK_STATS)await loadQuestionScript("js/ayfar-question-bank-expansion.js?v=2");
+  sourceBank=Array.isArray(window.AYFAR_QUESTION_BANK)?window.AYFAR_QUESTION_BANK:[];
+  quizBanks.mixed=sourceBank;quizBanks.speed=sourceBank;
+  quizBanks.riddles=sourceBank.filter(q=>q.category==="الألغاز والمنطق والذكاء");
+  quizBanks.geography=sourceBank.filter(q=>q.category==="الجغرافيا والدول والعواصم");
+  if(!sourceBank.length)throw new Error("بنك الأسئلة غير متاح حالياً.");
+ })();
+ try{await questionBankLoadPromise;}catch(error){questionBankLoadPromise=null;throw error;}
+}
 let room=null,role=null,uid=null,channel=null,poll=null,clock=null,speedExpiryPending=false,aiNextPending=false,aiStatusPoll=null,aiStatusBusy=false,serverClockOffsetMs=0;let chatOpen=false,chatSending=false,chatDraft="",chatShouldFocus=false;let challengeChannel=null,challengePoll=null,incomingChallenge=null,outgoingChallenge=null,challengeBusy=false;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const canonicalRole=p=>["farahati","farhati"].includes(String(p||"").toLowerCase())?"farahati":"ayoub";
@@ -63,6 +85,7 @@ async function launchAcceptedChallenge(c){
  if(!c?.game_id||room?.id===c.game_id)return;
  const {data,error}=await client().from("ayfar_games").select("*").eq("id",c.game_id).maybeSingle();
  if(error||!data){if(error)console.warn("AYFAR accepted challenge:",error);return;}
+ if(BANK_GAME_KEYS.has(data.game_key))await ensureQuestionBank();
  if(room)cleanup();
  room=data;role=canonicalRole(window.WorldStore.get().active);
  try{localStorage.setItem(ROOM_KEY,room.id);localStorage.removeItem("ayfar_pending_challenge_v1")}catch(_){}
@@ -118,7 +141,7 @@ async function createChallenge(key,state){
   $("#challenge-return")?.addEventListener("click",()=>location.reload());
  }
 }
-async function start(key){await createChallenge(key,fresh(key));}
+async function start(key){try{if(BANK_GAME_KEYS.has(key))await ensureQuestionBank();await createChallenge(key,fresh(key));}catch(e){toast(e.message||"تعذر تجهيز اللعبة");}}
 function buildLocalAiQuestions(settings){
  const requested=settings?.categories||["ثقافة عامة","علوم","تاريخ","جغرافيا","سينما","ألغاز"];
  const categoryMap={"ثقافة عامة":["ثقافة عامة"],"علوم":["العلوم والطبيعة"],"تاريخ":["التاريخ والحضارات"],"جغرافيا":["الجغرافيا والدول والعواصم"],"سينما":["السينما والأفلام والمسلسلات"],"ألغاز":["الألغاز والمنطق والذكاء"]};
@@ -147,6 +170,7 @@ async function acceptChallenge(id){
   await currentUser();role=canonicalRole(window.WorldStore.get().active);
   const game=await rpc("ayfar_challenge_accept",{p_challenge_id:id});
   if(!game)throw Error("انتهت صلاحية هذا التحدي. اطلب تحدياً جديداً.");
+  if(BANK_GAME_KEYS.has(game.game_key))await ensureQuestionBank();
   if(room)cleanup();
   room=game;incomingChallenge=null;renderIncomingChallenge(null);
   try{localStorage.setItem(ROOM_KEY,room.id)}catch(_){}
@@ -213,6 +237,7 @@ async function resumeGame(id){
   await currentUser();
   const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();
   if(error)throw error;if(!data||!["playing","waiting"].includes(data.status)||data.state?.phase==="finished")throw Error("هذه المباراة لم تعد متاحة.");
+  if(BANK_GAME_KEYS.has(data.game_key))await ensureQuestionBank();
   if(room)cleanup();
   room=data;role=canonicalRole(window.WorldStore.get().active);
   try{localStorage.setItem(ROOM_KEY,room.id);}catch(_){}
@@ -232,7 +257,7 @@ async function stopSavedGame(id){
   toast("تم إيقاف المباراة");loadOpenGames();
  }catch(e){toast(e.message||"تعذر إيقاف المباراة");}
 }
-async function restore(){try{const id=localStorage.getItem(ROOM_KEY);if(!id)return;await currentUser();const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();if(error)throw error;if(!data){localStorage.removeItem(ROOM_KEY);return}room=data;role=canonicalRole(window.WorldStore.get().active);watch();render()}catch(e){console.warn("AYFAR game restore:",e);toast("تعذر استعادة المباراة. تحقق من الاتصال ثم حدّث الصفحة.")}}
+async function restore(){try{const id=localStorage.getItem(ROOM_KEY);if(!id)return;await currentUser();const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();if(error)throw error;if(!data){localStorage.removeItem(ROOM_KEY);return}if(BANK_GAME_KEYS.has(data.game_key))await ensureQuestionBank();room=data;role=canonicalRole(window.WorldStore.get().active);watch();render()}catch(e){console.warn("AYFAR game restore:",e);toast("تعذر استعادة المباراة. تحقق من الاتصال ثم حدّث الصفحة.")}}
 function watch(){if(!room)return;const roomId=room.id;if(channel)client().removeChannel(channel);channel=client().channel("ayfar-game-"+roomId).on("postgres_changes",{event:"UPDATE",schema:"public",table:"ayfar_games",filter:"id=eq."+roomId},p=>{if(room?.id===roomId&&p.new?.id===roomId&&Number(p.new.version)>Number(room.version)){if(p.new.game_key==="speed"&&p.new.state?.deadlineAt)observeServerTime(p.new,Date.now(),Date.now());room=p.new;render()}}).subscribe();if(poll)clearInterval(poll);poll=setInterval(async()=>{if(!room||room.id!==roomId)return;const startedAt=Date.now();const {data,error}=await client().from("ayfar_games").select("*").eq("id",roomId).single();const endedAt=Date.now();if(error||!data||room?.id!==roomId||data.id!==roomId)return;if(data.game_key==="speed"&&data.state?.deadlineAt)observeServerTime(data,startedAt,endedAt);if(Number(data.version)>Number(room.version)){room=data;render()}},3500)}
 function observeServerTime(row,startedAt,endedAt){const stamp=Date.parse(row?.updated_at);if(!Number.isFinite(stamp))return;const estimate=stamp-((startedAt+endedAt)/2);if(!Number.isFinite(serverClockOffsetMs)||serverClockOffsetMs===0||Math.abs(estimate-serverClockOffsetMs)<2500)serverClockOffsetMs=estimate;}
 async function save(mutator,status){if(!room)return;const roomId=room.id;for(let attempt=0;attempt<3;attempt++){if(!room||room.id!==roomId)return;const base=room,s=normalizeParticipantKeys(JSON.parse(JSON.stringify(base.state||{})));mutator(s);try{let startedAt=Date.now();let updated=await rpc("ayfar_game_update",{p_game_id:base.id,p_expected_version:base.version,p_state:s,p_status:status||null});let endedAt=Date.now();observeServerTime(updated,startedAt,endedAt);if(base.game_key==="speed"&&s.phase==="play"&&s.deadlineAt===null){const serverStartedAt=Date.parse(updated.updated_at);const deadlineAt=(Number.isFinite(serverStartedAt)?serverStartedAt:endedAt+serverClockOffsetMs)+15000;const correctedState={...(updated.state||s),deadlineAt};startedAt=Date.now();updated=await rpc("ayfar_game_update",{p_game_id:base.id,p_expected_version:updated.version,p_state:correctedState,p_status:status||null});endedAt=Date.now();observeServerTime(updated,startedAt,endedAt);}if(room?.id===roomId&&Number(updated.version)>=Number(room.version))room=updated;render();return}catch(e){const {data}=await client().from("ayfar_games").select("*").eq("id",base.id).single();if(!data)break;if(room?.id===roomId&&Number(data.version)>=Number(room.version))room=data;if(Number(data.version)<=Number(base.version))break;}}if(room?.id===roomId){render();toast("تعذر حفظ الحركة بعد عدة محاولات. تمت مزامنة آخر حالة؛ أعد المحاولة إن لم تظهر إجابتك.")}}
