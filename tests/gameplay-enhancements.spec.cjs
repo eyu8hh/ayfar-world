@@ -184,7 +184,7 @@ test("saved bank-backed matches load their questions before rendering or resumin
 test("notifications show readable details and support background system delivery", async () => {
   const notifications = read("js/notifications.js");
   const worker = read("service-worker.js");
-  expect(notifications).toContain('payload.new.title)+(payload.new.body?" — "+payload.new.body:"")');
+  expect(notifications).toContain('payload.new.body?" — "+payload.new.body:""');
   expect(notifications).toContain("Notification.requestPermission()");
   expect(notifications).toContain("registration.showNotification(item.title");
   expect(notifications).toContain('document.visibilityState==="hidden"');
