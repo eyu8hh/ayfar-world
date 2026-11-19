@@ -189,6 +189,7 @@ test("notifications show readable details and support background system delivery
   expect(notifications).toContain("registration.showNotification(item.title");
   expect(notifications).toContain('document.visibilityState==="hidden"');
   expect(worker).toContain('self.addEventListener("push"');
+  expect(worker).toContain('silent:false');
   expect(worker).toContain('self.registration.showNotification(title,options)');
   expect(worker).toContain('self.addEventListener("notificationclick"');
   expect(worker).toContain('type:"AYFAR_OPEN_NOTIFICATION"');
