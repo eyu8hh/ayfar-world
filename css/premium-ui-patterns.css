@@ -30,7 +30,7 @@ body.ayoub-theme .home-section-nav button.active{background:linear-gradient(140d
 .ayfar-avatar-group{display:flex;align-items:center;direction:ltr;margin-inline-start:auto;padding-inline-start:8px}
 .ayfar-avatar{position:relative;display:grid;place-items:center;width:42px;height:42px;margin-inline-start:-9px;border:2px solid rgba(255,255,255,.9);border-radius:50%;overflow:hidden;background:#f4dce5;box-shadow:0 3px 9px rgba(35,10,20,.15)}
 .ayfar-avatar:first-child{margin-inline-start:0}
-.ayfar-avatar img{width:100%;height:100%;object-fit:cover}
+.ayfar-avatar img{width:100%;height:100%;object-fit:cover}.ayfar-avatar[data-presence="online"]::after{content:"";position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border:2px solid #fff;border-radius:50%;background:#4c9a68}
 #home-overview .continue-card,#home-overview .unfinished-match{height:100%;border-radius:20px;box-shadow:var(--ayfar-card-shadow)}
 #home-overview .history-section{margin-top:2px}
 #home-overview .history-section .heading{margin-top:0}
