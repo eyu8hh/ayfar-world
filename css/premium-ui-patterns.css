@@ -70,6 +70,8 @@ body.ayoub-theme .home-section-nav button.active{background:linear-gradient(140d
 .message-bubble small{display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:8px;font-size:10px;color:#806c76}
 .message-delivery{display:inline-flex;align-items:center;gap:4px;color:#47765c}
 .message-delivery:before{content:"✓";font-weight:800}
+.ayfar-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:112px;padding:20px 14px;border:1px dashed #e4d1d9;border-radius:17px;background:linear-gradient(145deg,#fff9fb,#f5f8f3);text-align:center;color:var(--muted)}
+.ayfar-empty-state>svg{width:26px;height:26px;color:var(--burgundy)}
 .empty-messages,.notification-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;min-height:150px;padding:24px;border:1px dashed #e4d1d9;border-radius:18px;background:linear-gradient(145deg,#fff9fb,#f5f8f3);color:var(--muted)}
 .empty-messages>svg,.notification-empty-icon svg{width:28px;height:28px;color:var(--burgundy)}
 .empty-messages b,.notification-empty b{color:var(--burgundy);font-size:14px}
@@ -88,7 +90,7 @@ body.ayoub-theme .home-section-nav button.active{background:linear-gradient(140d
 /* Gentle reveal; visible by default so content is never gated by animation JS. */
 .ayfar-text-reveal{animation:ayfarTextReveal .48s var(--ayfar-ease) both}
 .ayfar-scroll-reveal{opacity:1;transform:none}
-.ayfar-scroll-reveal.is-pending{opacity:0;transform:translateY(12px)}
+.ayfar-scroll-reveal.is-pending{opacity:1;transform:translateY(8px)}
 .ayfar-scroll-reveal.is-visible{opacity:1;transform:translateY(0);transition:opacity .42s ease,transform .42s var(--ayfar-ease)}
 @keyframes ayfarTextReveal{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
 @keyframes ayfarMessageIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
@@ -99,7 +101,7 @@ body.ayoub-theme #home-overview .home-anniversary{background:linear-gradient(125
 body.ayoub-theme .home-more-menu button{background:#202f43;border-color:#40516a;color:#eef2f7}
 body.ayoub-theme .messages-panel .message-bubble.sent{background:#3b2d42;border-color:#68475c;color:#f3e9ef}
 body.ayoub-theme .messages-panel .message-bubble.received{background:#263c38;border-color:#466558;color:#e6f0e8}
-body.ayoub-theme .empty-messages,body.ayoub-theme .notification-empty{background:#202f43;border-color:#40516a;color:#c5ced8}
+body.ayoub-theme .ayfar-empty-state,body.ayoub-theme .empty-messages,body.ayoub-theme .notification-empty{background:#202f43;border-color:#40516a;color:#c5ced8}
 body.ayoub-theme .empty-messages b,body.ayoub-theme .notification-empty b{color:#f0e7eb}
 body.ayoub-theme .game-progress-ring .ring-track{stroke:rgba(255,255,255,.16)}
 body.ayoub-theme .game-progress-ring .ring-value{stroke:#d98ba5}
