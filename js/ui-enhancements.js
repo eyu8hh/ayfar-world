@@ -108,6 +108,7 @@ function enhanceFunctionalIcons(){
   if(countNode){countNode.textContent=String(unreadCount);countNode.hidden=unreadCount===0;countNode.setAttribute("aria-label",unreadCount+" رسائل جديدة")}
  }
  const group=$(".ayfar-avatar-group");if(group){const avatars=all(".ayfar-avatar",group),ayoub=document.body.classList.contains("ayoub-theme");avatars.forEach((avatar,index)=>{if((index===0)===ayoub)avatar.dataset.presence="online";else delete avatar.dataset.presence})}
+ all(".game-chat-avatar").forEach(avatar=>{if(avatar.querySelector("img"))return;const isAyoub=avatar.classList.contains("ayoub"),img=document.createElement("img");img.src=isAyoub?"./assets/brand/ayoub-profile.jpg":"./assets/brand/farah-profile.jpg";img.alt="";img.loading="lazy";avatar.replaceChildren(img)});
  const bell=$("#notification-bell");
  if(bell){const icon=bell.querySelector("i.bi");if(icon){icon.className="";icon.setAttribute("data-lucide","bell");icon.setAttribute("aria-hidden","true")}}
  const icons={daily_rating:"heart",star_change:"star",routine_status:"calendar-check",habit_checkin:"sprout",pet_care:"paw-print",music_added:"music",private_message:"message-circle",love_letter:"mail"};
