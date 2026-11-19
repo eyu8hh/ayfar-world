@@ -193,6 +193,7 @@ begin
       body := payload,
       headers := jsonb_build_object(
         'Content-Type', 'application/json',
+        'apikey', 'sb_publishable_hPnXuYCKVqjC7iopD691JQ_7yPpdLJ3',
         'x-ayfar-timestamp', sent_at,
         'x-ayfar-signature', signature
       ),
