@@ -11,8 +11,32 @@ function toast(message,kind="info",duration=2600){
  toastTimer=setTimeout(()=>node.classList.remove("show"),Math.max(1800,duration));
 }
 function renderIcons(){
- if(!window.lucide?.createIcons)return;
- try{window.lucide.createIcons({attrs:{"stroke-width":1.8}})}catch(error){console.debug("Lucide icon rendering skipped",error)}
+ if(window.lucide?.createIcons){try{window.lucide.createIcons({attrs:{"stroke-width":1.8}});return}catch(error){console.debug("Lucide icon rendering skipped",error)}}
+ const paths={
+  house:'<path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/>',
+  heart:'<path d="M20.8 8.8c0 5.2-8.8 10-8.8 10S3.2 14 3.2 8.8A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7Z"/>',
+  "messages-square":'<path d="M21 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-6.5A7.5 7.5 0 1 1 21 11.5Z"/><path d="M8 10h8M8 14h5"/>',
+  "gamepad-2":'<path d="M6 11h4m-2-2v4"/><path d="M15 12h.01M18 10h.01"/><path d="M7 6h10a4 4 0 0 1 3.9 3.1l1 5A3 3 0 0 1 17 17l-3-2H10l-3 2a3 3 0 0 1-4.9-2.9l1-5A4 4 0 0 1 7 6Z"/>',
+  ellipsis:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+  "calendar-heart":'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 9h18"/><path d="M12 17s-3-1.7-3-3.5a1.8 1.8 0 0 1 3-1.2 1.8 1.8 0 0 1 3 1.2c0 1.8-3 3.5-3 3.5Z"/>',
+  sunrise:'<path d="M12 2v7m-7 5H2m20 0h-3M5 6l2 2m12-2-2 2"/><path d="M4 18a8 8 0 0 1 16 0M2 22h20"/>',
+  "paw-print":'<circle cx="7.5" cy="8" r="2"/><circle cx="16.5" cy="8" r="2"/><circle cx="5" cy="14" r="1.7"/><circle cx="19" cy="14" r="1.7"/><path d="M12 13c-3 0-5 4-5 6a2 2 0 0 0 3 1.7l2-1 2 1a2 2 0 0 0 3-1.7c0-2-2-6-5-6Z"/>',
+  bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/>',
+  "calendar-check":'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 9h18m4 4 2 2 4-4"/>',
+  sprout:'<path d="M12 22V10"/><path d="M12 14c-5 0-8-3-8-8 5 0 8 3 8 8Zm0-3c0-5 3-8 8-8 0 5-3 8-8 8Z"/>',
+  music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  "message-circle":'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-4-.9L3 21l1.8-4.5A8.5 8.5 0 1 1 21 11.5Z"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  "bell-off":'<path d="M10.6 5.2A6 6 0 0 1 18 11c0 3 1 4.5 2 6H8"/><path d="M3 3 21 21M6.3 6.3A6 6 0 0 0 6 11c0 3-1 4.5-2 6h14M10 21h4"/>',
+  "user-round":'<circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/>',
+  send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>'
+ };
+ $("[data-lucide]").forEach(node=>{
+  const name=node.getAttribute("data-lucide"),body=paths[name];if(!body)return;
+  const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("viewBox","0 0 24 24");svg.setAttribute("fill","none");svg.setAttribute("stroke","currentColor");svg.setAttribute("stroke-width","1.8");svg.setAttribute("stroke-linecap","round");svg.setAttribute("stroke-linejoin","round");svg.setAttribute("aria-hidden","true");svg.setAttribute("class","lucide lucide-"+name);
+  svg.innerHTML=body;node.replaceWith(svg);
+ });
 }
 function setupMoreMenu(){
  const toggle=$(".home-more-toggle"),menu=$("#home-more-menu");if(!toggle||!menu||toggle.dataset.ready)return;
