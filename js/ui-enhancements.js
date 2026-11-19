@@ -51,6 +51,17 @@ function setupMoreMenu(){
   if(event.key==="Escape"&&!menu.hidden){menu.hidden=true;toggle.setAttribute("aria-expanded","false");toggle.focus()}
  });
 }
+function setupHomeShortcuts(){
+ all("[data-home-shortcut]").forEach(button=>{
+  if(button.dataset.shortcutReady)return;button.dataset.shortcutReady="true";
+  button.addEventListener("click",()=>{
+   const key=button.dataset.homeShortcut;
+   if(key==="stars"){const wallet=$("#star-wallet");if(wallet){wallet.click();return}}
+   const target=key==="games"?"home-games":"home-messages";
+   $('.home-section-nav [data-home-target="'+target+'"]')?.click();
+  });
+ });
+}
 function addProgressRing(){
  const wrap=$(".game-progress-wrap");if(!wrap||wrap.dataset.ringReady==="true")return;
  const value=wrap.querySelector(".game-progress-label b");if(!value)return;
@@ -133,7 +144,7 @@ function avatarFallbacks(){
  });
 }
 function enhance(){
- setupMoreMenu();enhanceMessages();enhanceEmptyStates();enhanceFunctionalIcons();addProgressRing();setupReveal();avatarFallbacks();renderIcons();
+ setupMoreMenu();setupHomeShortcuts();enhanceMessages();enhanceEmptyStates();enhanceFunctionalIcons();addProgressRing();setupReveal();avatarFallbacks();renderIcons();
  const menu=$("#home-more-menu"),toggle=$(".home-more-toggle");
  if(menu&&toggle){const active=all("[data-home-target]",menu).some(item=>item.classList.contains("active"));toggle.classList.toggle("active",active)}
 }
