@@ -128,6 +128,9 @@
     if(!item||!("Notification" in window)||Notification.permission!=="granted"||!("serviceWorker" in navigator))return;
     try{
       const registration=await navigator.serviceWorker.ready;
+      // A registered Web Push subscription already receives this event from the server.
+      // Avoid showing a second local notification for the same database insert.
+      if("PushManager" in window&&await registration.pushManager.getSubscription())return;
       await registration.showNotification(item.title||"إشعار جديد من AYFAR WORLD",{body:item.body||"لديك نشاط جديد في عالمكما.",icon:"./assets/brand/ayfar-app-icon.jpg",badge:"./assets/brand/ayfar-app-icon.jpg",tag:"ayfar-"+item.id,dir:"rtl",lang:"ar",timestamp:Date.parse(item.created_at||new Date().toISOString()),data:{url:"./index.html",id:item.id,eventType:item.event_type}});
     }catch(error){console.warn("AYFAR system notification:",error);}
   }
