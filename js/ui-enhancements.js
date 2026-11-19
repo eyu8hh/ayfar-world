@@ -98,14 +98,14 @@ function enhanceFunctionalIcons(){
   if(icon&&!icon.querySelector("svg.lucide"))icon.innerHTML='<i data-lucide="messages-square" aria-hidden="true"></i>';
   const label=toggle.querySelector(".game-chat-toggle-label");if(label)label.textContent="محادثتنا";
   const count=toggle.querySelector("i:not(.lucide):not([data-lucide])");
-  if(count){count.classList.add("game-chat-count");count.setAttribute("aria-label","رسائل جديدة في المحادثة")}
+  if(count){count.classList.add("game-chat-count");count.setAttribute("aria-hidden","true")}
   const screen=$(".game-screen"),gameKey=screen?[...screen.classList].filter(name=>name.startsWith("game-")).join(" "):"";
   const countNode=toggle.querySelector(".game-chat-count"),total=Number(countNode?.textContent||0);
   if(gameKey!==lastChatGame){lastChatGame=gameKey;lastChatTotal=total;unreadCount=0}
   else if(lastChatTotal!==null&&total>lastChatTotal&&!toggle.classList.contains("is-open"))unreadCount+=total-lastChatTotal;
   if(toggle.classList.contains("is-open"))unreadCount=0;
   lastChatTotal=total;
-  if(countNode){countNode.textContent=String(unreadCount);countNode.hidden=unreadCount===0;countNode.setAttribute("aria-label",unreadCount+" رسائل جديدة")}
+  if(countNode){countNode.textContent=String(unreadCount);countNode.hidden=unreadCount===0;toggle.setAttribute("aria-label",unreadCount?"فتح المحادثة الجانبية، "+unreadCount+" رسائل جديدة":"فتح المحادثة الجانبية")}
  }
  const group=$(".ayfar-avatar-group");if(group){const avatars=all(".ayfar-avatar",group),ayoub=document.body.classList.contains("ayoub-theme");avatars.forEach((avatar,index)=>{if((index===0)===ayoub)avatar.dataset.presence="online";else delete avatar.dataset.presence})}
  all(".game-chat-avatar").forEach(avatar=>{if(avatar.dataset.avatarReady==="true"||avatar.querySelector("img"))return;avatar.dataset.avatarReady="true";const isAyoub=avatar.classList.contains("ayoub"),img=document.createElement("img");img.src=isAyoub?"./assets/brand/ayoub-profile.jpg":"./assets/brand/farah-profile.jpg";img.alt="";img.loading="lazy";avatar.replaceChildren(img)});
