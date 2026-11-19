@@ -221,6 +221,7 @@ test("Web Push subscriptions are private per user and notification delivery is s
   expect(notifications).toContain('from("ayfar_push_subscriptions").upsert');
   expect(notifications).toContain('from("ayfar_push_subscriptions").delete()');
   expect(notifications).toContain("isIOSHomeScreenApp()");
+  expect(notifications).toContain("await registration.pushManager.getSubscription())return");
   expect(worker).toContain('self.addEventListener("push"');
   expect(worker).toContain('target.searchParams.set("ayfar_notification",data.id)');
 });
