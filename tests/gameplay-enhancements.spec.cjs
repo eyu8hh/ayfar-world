@@ -183,13 +183,69 @@ test("saved bank-backed matches load their questions before rendering or resumin
 
 test("notifications show readable details and support background system delivery", async () => {
   const notifications = read("js/notifications.js");
+  const app = read("js/app.js");
   const worker = read("service-worker.js");
   expect(notifications).toContain('payload.new.body?" — "+payload.new.body:""');
   expect(notifications).toContain("Notification.requestPermission()");
   expect(notifications).toContain("registration.showNotification(item.title");
   expect(notifications).toContain('document.visibilityState==="hidden"');
   expect(worker).toContain('self.addEventListener("push"');
+  expect(worker).toContain("silent:false");
+  expect(worker).toContain('silent:false');
   expect(worker).toContain('self.registration.showNotification(title,options)');
   expect(worker).toContain('self.addEventListener("notificationclick"');
   expect(worker).toContain('type:"AYFAR_OPEN_NOTIFICATION"');
+});
+
+
+test("Web Push subscriptions are private per user and notification delivery is signed", async () => {
+  const migration = read("supabase/migrations/20261119040000_secure_web_push_delivery.sql");
+  const push = read("supabase/functions/ayfar-push/index.ts");
+  const notifications = read("js/notifications.js");
+  const app = read("js/app.js");
+  const worker = read("service-worker.js");
+  expect(migration).toContain("create extension if not exists pg_net with schema extensions");
+  expect(migration).toContain("create table if not exists public.ayfar_push_subscriptions");
+  expect(migration).toContain("alter table public.ayfar_push_subscriptions enable row level security");
+  expect(migration).toContain("using (user_id = (select auth.uid()))");
+  expect(migration).toContain("with check (user_id = (select auth.uid()))");
+  expect(migration).toContain("vault.create_secret");
+  expect(migration).toContain("extensions.hmac(");
+  expect(migration).toContain("net.http_post(");
+  expect(migration).toContain("after insert on public.ayfar_notifications");
+  expect(migration).toContain("after insert on public.private_messages");
+  expect(migration).toContain("after insert on public.love_letters");
+  expect(migration).toContain("وصلتك رسالة خاصة. افتح عالمكما لقراءتها.");
+  expect(migration).toContain("هناك رسالة جديدة داخل المغلف. افتح عالمكما لقراءتها.");
+  const privateMessageTrigger = migration.slice(migration.indexOf("create or replace function public.ayfar_notify_private_message"), migration.indexOf("revoke all on function public.ayfar_notify_private_message"));
+  const loveLetterTrigger = migration.slice(migration.indexOf("create or replace function public.ayfar_notify_love_letter"), migration.indexOf("revoke all on function public.ayfar_notify_love_letter"));
+  expect(privateMessageTrigger).not.toContain("new.body");
+  expect(privateMessageTrigger).not.toContain("new.subject");
+  expect(loveLetterTrigger).not.toContain("new.body");
+
+
+  expect(migration).toContain("revoke all on function public.ayfar_push_get_config() from public, anon, authenticated");
+  expect(push).toContain('npm:web-push@3.6.7');
+  expect(push).toContain("webpush.generateVAPIDKeys()");
+  expect(push).toContain("crypto.subtle.importKey");
+  expect(push).toContain("constantTimeEqual");
+  expect(push).toContain("admin.auth.getUser(token)");
+  expect(push).toContain('statusCode === 404 || statusCode === 410');
+  expect(notifications).toContain('db().functions.invoke("ayfar-push"');
+  expect(notifications).toContain('pushRegistration.pushManager.subscribe');
+  expect(notifications).toContain("preparePushSubscription().then(syncDeviceNotificationButton)");
+  expect(notifications).toContain("if(!pushRegistration||!pushPublicKey)");
+  expect(notifications).toContain('from("ayfar_push_subscriptions").upsert');
+  expect(notifications).toContain('from("ayfar_push_subscriptions").delete()');
+  expect(notifications).toContain("async function disableForLogout()");
+  expect(app).toContain("await window.AYFAR_Notifications?.disableForLogout?.()");
+  expect(notifications).toContain("isIOSHomeScreenApp()");
+  expect(notifications).toContain('timeZone:"Africa/Casablanca"');
+  expect(notifications).toContain('private_message:"#messages"');
+  expect(notifications).toContain('love_letter:"#home-messages"');
+  expect(notifications).toContain('window.AYFAR_on_enter?.(window.WorldStore?.get?.().active)');
+  expect(notifications).toContain("await registration.pushManager.getSubscription())return");
+  expect(worker).toContain('self.addEventListener("push"');
+  expect(worker).toContain('target.searchParams.set("ayfar_notification",data.id)');
+  expect(worker).toContain('new URL(data.url||"./index.html",self.registration.scope)');
 });
