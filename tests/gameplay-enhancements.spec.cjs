@@ -255,3 +255,16 @@ test("Web Push subscriptions are private per user and notification delivery is s
   expect(worker).toContain('target.searchParams.set("ayfar_notification",data.id)');
   expect(worker).toContain('new URL(data.url||"./index.html",self.registration.scope)');
 });
+
+
+test("Web Push lifecycle is wired from service-worker registration through authenticated login", () => {
+  const app = read("js/app.js");
+  const notifications = read("js/notifications.js");
+  const html = read("index.html");
+  expect(app).toContain('navigator.serviceWorker.register("./service-worker.js")');
+  expect(app).toContain("window.AYFAR_Notifications.init(p)");
+  expect(html).toContain('src="js/notifications.js?v=2"');
+  expect(notifications).toContain('pushRegistration=await navigator.serviceWorker.ready');
+  expect(notifications).toContain('db().functions.invoke("ayfar-push",{body:{action:"public-key"}})');
+  expect(notifications).toContain('pushManager.subscribe({userVisibleOnly:true,applicationServerKey:decodeVapidKey(pushPublicKey)})');
+});
