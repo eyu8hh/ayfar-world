@@ -6,7 +6,7 @@
   const parseDate=value=>{const [y,m,d]=value.split("-").map(Number);return new Date(y,m-1,d);};
   const monthLabel=d=>new Intl.DateTimeFormat("ar-MA",{month:"long",year:"numeric"}).format(d);
   let cursor=new Date();cursor=new Date(cursor.getFullYear(),cursor.getMonth(),1);
-  let selected=localDate(new Date()),events=[],user=null,channel=null,busy=false;
+  let selected=localDate(new Date()),events=[],user=null,channel=null,busy=false,opener=null;
   const overlay=document.createElement("div");overlay.className="dreams-overlay";overlay.id="calendar-dialog";overlay.hidden=true;
   overlay.innerHTML=`
     <section class="calendar-dialog" role="dialog" aria-modal="true" aria-labelledby="calendar-title">
@@ -51,16 +51,36 @@
     events=data||[];render();
   }
   async function open(){
+    opener=document.activeElement;
     overlay.hidden=false;document.body.style.overflow="hidden";feedback("");
+    $(".calendar-close").focus();
     if(!supa()){feedback("خدمة المزامنة غير متاحة.");return;}
     const {data,error}=await supa().auth.getUser();
     if(error||!data?.user){feedback("انتهت جلسة الدخول. سجّلا الدخول مجدداً.");return;}
     user=data.user;await load();
     if(!channel)channel=supa().channel("ayfar-shared-calendar-live").on("postgres_changes",{event:"*",schema:"public",table:"ayfar_shared_calendar"},()=>load()).subscribe();
   }
-  function close(){overlay.hidden=true;document.body.style.overflow="";if(channel&&supa()){supa().removeChannel(channel);channel=null;}}
+  function close(){
+    overlay.hidden=true;document.body.style.overflow="";
+    if(channel&&supa()){supa().removeChannel(channel);channel=null;}
+    if(opener?.isConnected)opener.focus();
+    opener=null;
+  }
+  function keepFocusInside(event){
+    if(event.key!=="Tab"||overlay.hidden)return;
+    const focusable=[...overlay.querySelectorAll('a[href],area[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')]
+      .filter(element=>element.getClientRects().length&&!element.closest('[aria-hidden="true"]'));
+    if(!focusable.length){event.preventDefault();return;}
+    const first=focusable[0],last=focusable[focusable.length-1];
+    if(event.shiftKey&&(document.activeElement===first||!overlay.contains(document.activeElement))){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&(document.activeElement===last||!overlay.contains(document.activeElement))){event.preventDefault();first.focus();}
+  }
   document.querySelectorAll("[data-open-calendar]").forEach(el=>el.addEventListener("click",open));
-  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!overlay.hidden)close();});
+  document.addEventListener("keydown",event=>{
+    if(overlay.hidden)return;
+    if(event.key==="Escape"){close();return;}
+    keepFocusInside(event);
+  });
   overlay.addEventListener("click",async e=>{
     if(e.target===overlay||e.target.closest("[data-calendar-close]")){close();return;}
     if(e.target.closest("[data-month-prev]")){cursor=new Date(cursor.getFullYear(),cursor.getMonth()-1,1);render();return;}
