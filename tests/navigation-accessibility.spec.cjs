@@ -51,7 +51,8 @@ test("home section navigation exposes one current page and follows selected sect
   await expect(moreMenu.getByRole("button")).toHaveCount(3);
   const plans = moreMenu.getByRole("button", { name: "خططنا وأنشطتنا" });
   await plans.click();
-  await expect(plans).toHaveAttribute("aria-current", "page");
+  await expect(page.locator('.home-more-menu [data-home-target="home-plans"]')).toHaveAttribute("aria-current", "page");
+  await expect(more).toHaveClass(/active/);
   await expect(moreMenu).toBeHidden();
   await expect(page.locator("#home-slide-label")).toHaveText("خططنا وأنشطتنا");
 
