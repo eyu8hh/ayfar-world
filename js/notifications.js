@@ -2,7 +2,7 @@
   const db=()=>window.ayfarSupabase, $=s=>document.querySelector(s);
   let user=null,channel=null,rows=[],loading=false,activeUserId=null;
   const esc=v=>String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  const icons={daily_rating:"💗",star_change:"⭐",routine_status:"🌿",habit_checkin:"🌱",pet_care:"🐾",music_added:"🎧"};
+  const icons={daily_rating:"💗",star_change:"⭐",routine_status:"🌿",habit_checkin:"🌱",pet_care:"🐾",music_added:"🎧",private_message:"✉️",love_letter:"💌"};
   function ensureButton(){
     const top=$("#home-top");if(!top||$("#notification-bell"))return;
     const b=document.createElement("button");b.id="notification-bell";b.type="button";b.setAttribute("aria-label","الإشعارات");b.innerHTML='<i class="bi bi-bell" aria-hidden="true"></i><i id="notification-count" hidden>0</i>';b.title="الإشعارات";
@@ -35,8 +35,11 @@
       routine_status:"#home-routine",
       habit_checkin:"#home-routine",
       pet_care:"#home-pets",
-      music_added:"#home-routine"
+      music_added:"#home-routine",
+      private_message:"#messages",
+      love_letter:"#home-messages"
     };
+    if(eventType==="love_letter")window.AYFAR_on_enter?.(window.WorldStore?.get?.().active);
     const target=document.querySelector(targets[eventType]||"#home-overview");
     if(target){
       if(target.matches("button"))target.click();
