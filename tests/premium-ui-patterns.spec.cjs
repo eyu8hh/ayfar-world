@@ -8,6 +8,8 @@ test("premium navigation has five primary tabs and preserves every original dest
  const nav=html.match(/<nav class="home-section-nav"[\s\S]*?<\/nav>/)?.[0]||"";
  expect((nav.match(/data-home-target=/g)||[]).length).toBe(4);
  expect(nav).toContain("home-more-toggle");
+ expect(html).toContain("home-quick-grid");
+ expect(html).toContain('data-home-shortcut="stars"');
  for(const id of ["home-overview","home-our-world","home-messages","home-games","home-plans","home-routine","home-pets"]) expect(html).toContain('id="'+id+'"');
  expect(app).toContain('.home-more-menu [data-home-target]');
 });
