@@ -1,5 +1,5 @@
 (()=>{"use strict";
-const $=(s,r=document)=>r.querySelector(s),$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const $=(s,r=document)=>r.querySelector(s),all=(s,r=document)=>Array.from(r.querySelectorAll(s));
 let lastChatGame="",lastChatTotal=null,unreadCount=0;
 const reduced=()=>window.matchMedia?.("(prefers-reduced-motion: reduce)").matches===true;
 let toastTimer=null;
@@ -99,7 +99,7 @@ function enhanceFunctionalIcons(){
  if(bell){const icon=bell.querySelector("i.bi");if(icon){icon.className="";icon.setAttribute("data-lucide","bell");icon.setAttribute("aria-hidden","true")}}
  const icons={daily_rating:"heart",star_change:"star",routine_status:"calendar-check",habit_checkin:"sprout",pet_care:"paw-print",music_added:"music",private_message:"message-circle",love_letter:"mail"};
  $(".notification-item .notification-icon").forEach(node=>{if(!node.querySelector("svg.lucide"))node.innerHTML='<i data-lucide="'+(icons[node.closest(".notification-item")?.querySelector("[data-event-type]")?.dataset.eventType]||"bell")+'" aria-hidden="true"></i>'});
- $$(".game-player-score").forEach(score=>{
+ all(".game-player-score").forEach(score=>{
   const avatar=score.querySelector(".game-player-avatar");if(!avatar||avatar.querySelector("img"))return;
   const isAyoub=score.classList.contains("ayoub"),isCurrent=isAyoub===document.body.classList.contains("ayoub-theme"),img=document.createElement("img");
   img.src=isAyoub?"./assets/brand/ayoub-profile.jpg":"./assets/brand/farah-profile.jpg";img.alt="";img.loading="lazy";if(isCurrent)avatar.dataset.presence="online";avatar.replaceChildren(img);
@@ -107,8 +107,8 @@ function enhanceFunctionalIcons(){
 }
 function setupReveal(){
  if(reduced())return;
- ["#hello","#plans-features-heading","#love-overlay .love-card h2","#love-overlay .love-card p"].forEach(selector=>{$$(selector).forEach(node=>node.classList.add("ayfar-text-reveal"))});
- const targets=$$(".home-anniversary,.plans-intro,.routine-intro,#home-games .games>button");
+ ["#hello","#plans-features-heading","#love-overlay .love-card h2","#love-overlay .love-card p"].forEach(selector=>{all(selector).forEach(node=>node.classList.add("ayfar-text-reveal"))});
+ const targets=all(".home-anniversary,.plans-intro,.routine-intro,#home-games .games>button");
  if(!("IntersectionObserver" in window)){targets.forEach(node=>node.classList.add("is-visible"));return}
  if(!window._ayfarRevealObserver)window._ayfarRevealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
   if(entry.isIntersecting){entry.target.classList.add("is-visible");entry.target.classList.remove("is-pending");window._ayfarRevealObserver.unobserve(entry.target)}
@@ -116,7 +116,7 @@ function setupReveal(){
  targets.forEach(node=>{if(node.dataset.revealReady)return;node.dataset.revealReady="true";node.classList.add("ayfar-scroll-reveal","is-pending");window._ayfarRevealObserver.observe(node)});
 }
 function avatarFallbacks(){
- $$(".ayfar-avatar img,.game-player-avatar img,.message-avatar img").forEach(img=>{
+ all(".ayfar-avatar img,.game-player-avatar img,.message-avatar img").forEach(img=>{
   if(img.dataset.fallbackReady)return;img.dataset.fallbackReady="true";
   img.addEventListener("error",()=>{const host=img.parentElement;img.remove();host.classList.add("avatar-fallback");host.innerHTML='<i data-lucide="user-round" aria-hidden="true"></i>'},{once:true});
  });
@@ -124,7 +124,7 @@ function avatarFallbacks(){
 function enhance(){
  setupMoreMenu();enhanceMessages();enhanceFunctionalIcons();addProgressRing();setupReveal();avatarFallbacks();renderIcons();
  const menu=$("#home-more-menu"),toggle=$(".home-more-toggle");
- if(menu&&toggle){const active=$$("[data-home-target]",menu).some(item=>item.classList.contains("active"));toggle.classList.toggle("active",active)}
+ if(menu&&toggle){const active=all("[data-home-target]",menu).some(item=>item.classList.contains("active"));toggle.classList.toggle("active",active)}
 }
 window.AYFAR_UI=Object.assign(window.AYFAR_UI||{},{toast,refreshIcons:renderIcons});
 document.addEventListener("DOMContentLoaded",()=>{
