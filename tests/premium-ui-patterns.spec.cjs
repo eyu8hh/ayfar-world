@@ -19,7 +19,8 @@ test("premium patterns provide Lucide, accessible progress, toast variants and r
  expect(html).toContain("lucide@0.468.0");
  expect(ui).toContain("game-progress-ring");
  expect(ui).toContain("unreadCount");
- expect(ui).toContain("data-presence");
+ expect(ui).toContain("dataset.presence");
+ expect(css).toContain("data-presence");
  expect(ui).toContain("enhanceEmptyStates");
  expect(ui).toContain(".game-chat-avatar");
  expect(html).toContain("home-quick-grid");
