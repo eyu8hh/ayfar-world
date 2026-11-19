@@ -204,15 +204,17 @@ Deno.serve(async (request: Request) => {
   if (request.method !== "POST") return json({ error: "method_not_allowed" }, 405, origin);
 
   const rawBody = await request.text();
+  if (rawBody.length > 8192) return json({ error: "payload_too_large" }, 413, origin);
   try {
-    const config = await getConfig();
     const hasSignature = request.headers.has("x-ayfar-timestamp") || request.headers.has("x-ayfar-signature");
     if (hasSignature) {
+      const config = await getConfig();
       if (!await verifyWebhook(rawBody, request, config.webhook_secret)) {
         return json({ error: "invalid_webhook_signature" }, 401);
       }
       return await handleNotificationEvent(rawBody, config);
     }
+    // Authenticate the browser request before reading Vault-backed configuration.
     return await handlePublicKey(request, rawBody, origin);
   } catch (error) {
     console.error("AYFAR push handler failed", error instanceof Error ? error.message : "unknown error");
