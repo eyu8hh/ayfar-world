@@ -155,3 +155,27 @@ test("private messages expose connection and send feedback through polite live r
   expect(messages).toContain('id="msg-status" class="notice" role="status" aria-live="polite" aria-atomic="true"');
   expect(messages).toContain('for="msg-body"');
 });
+
+
+test("large quiz banks load only when a bank-backed game is opened", async () => {
+  const html = read("index.html");
+  const games = read("js/games.js");
+  const worker = read("service-worker.js");
+  expect(html).not.toContain('src="js/ayfar-question-bank.js');
+  expect(html).not.toContain('src="js/ayfar-question-bank-expansion.js');
+  expect(worker).not.toContain('"./js/ayfar-question-bank.js"');
+  expect(worker).not.toContain('"./js/ayfar-question-bank-expansion.js"');
+  expect(games).toContain('const BANK_GAME_KEYS=new Set(["mixed","speed","riddles","geography"])');
+  expect(games).toContain('await loadQuestionScript("js/ayfar-question-bank.js?v=2")');
+  expect(games).toContain('await loadQuestionScript("js/ayfar-question-bank-expansion.js?v=2")');
+  expect(games).toContain('if(BANK_GAME_KEYS.has(key))await ensureQuestionBank()');
+});
+
+test("saved bank-backed matches load their questions before rendering or resuming", async () => {
+  const games = read("js/games.js");
+  expect(games).toContain('if(BANK_GAME_KEYS.has(data.game_key))await ensureQuestionBank();');
+  expect(games).toContain('if(BANK_GAME_KEYS.has(game.game_key))await ensureQuestionBank();');
+  expect(games).toContain('if(!data){localStorage.removeItem(ROOM_KEY);return}if(BANK_GAME_KEYS.has(data.game_key))await ensureQuestionBank();room=data;');
+  expect(games).toContain('quizBanks.riddles=sourceBank.filter');
+  expect(games).toContain('quizBanks.geography=sourceBank.filter');
+});
