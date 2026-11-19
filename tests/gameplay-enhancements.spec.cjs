@@ -135,3 +135,16 @@ test("home next-event dashboard uses Casablanca civil-day boundaries and formatt
   expect(dashboard).not.toContain("now.getMonth()");
   expect(dashboard).not.toContain("now.getDate()");
 });
+
+
+test("game chat dialog exposes modal semantics and traps keyboard focus", async () => {
+  const games = read("js/games.js");
+  expect(games).toContain('id="game-chat-panel" role="dialog" aria-modal="true" aria-labelledby="game-chat-title"');
+  expect(games).toContain('id="game-chat-title">حديثنا أثناء اللعب</b>');
+  expect(games).toContain('event.key==="Escape"');
+  expect(games).toContain('event.key!=="Tab"');
+  expect(games).toContain('event.shiftKey&&(document.activeElement===first||!chatPanel.contains(document.activeElement))');
+  expect(games).toContain('!event.shiftKey&&(document.activeElement===last||!chatPanel.contains(document.activeElement))');
+  expect(games).toContain('$("#game-chat-input")?.focus()');
+  expect(games).toContain('$("#game-chat-toggle")?.focus()');
+});
