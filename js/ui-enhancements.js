@@ -1,5 +1,6 @@
 (()=>{"use strict";
-const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const $=(s,r=document)=>r.querySelector(s),$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+let lastChatGame="",lastChatTotal=null,unreadCount=0;
 const reduced=()=>window.matchMedia?.("(prefers-reduced-motion: reduce)").matches===true;
 let toastTimer=null;
 function toast(message,kind="info",duration=2600){
@@ -38,7 +39,8 @@ function addProgressRing(){
  wrap.prepend(ring);wrap.dataset.ringReady="true";
 }
 function enhanceMessages(){
- $$(".messages-panel .message-bubble").forEach(bubble=>{
+ const empty=$(".messages-panel .empty-messages");if(empty&&!empty.dataset.premiumReady){empty.dataset.premiumReady="true";empty.innerHTML='<i data-lucide="message-circle" aria-hidden="true"></i><b>لا توجد رسائل بعد</b><span>اتركا أول كلمة جميلة هنا.</span>'}
+ $(".messages-panel .message-bubble").forEach(bubble=>{
   if(bubble.dataset.premiumReady)return;bubble.dataset.premiumReady="true";
   const small=bubble.querySelector("small"),body=bubble.querySelector(":scope > div");
   const author=small?.textContent?.split(" · ")[0]||"";
@@ -60,7 +62,14 @@ function enhanceFunctionalIcons(){
   if(icon&&!icon.querySelector("[data-lucide]"))icon.innerHTML='<i data-lucide="messages-square" aria-hidden="true"></i>';
   const label=toggle.querySelector(".game-chat-toggle-label");if(label)label.textContent="محادثتنا";
   const count=toggle.querySelector("i:not(.lucide):not([data-lucide])");
-  if(count){count.classList.add("game-chat-count");count.setAttribute("aria-label","عدد رسائل المحادثة")}
+  if(count){count.classList.add("game-chat-count");count.setAttribute("aria-label","رسائل جديدة في المحادثة")}
+  const screen=$(".game-screen"),gameKey=screen?[...screen.classList].filter(name=>name.startsWith("game-")).join(" "):"";
+  const countNode=toggle.querySelector(".game-chat-count"),total=Number(countNode?.textContent||0);
+  if(gameKey!==lastChatGame){lastChatGame=gameKey;lastChatTotal=total;unreadCount=0}
+  else if(lastChatTotal!==null&&total>lastChatTotal&&!toggle.classList.contains("is-open"))unreadCount+=total-lastChatTotal;
+  if(toggle.classList.contains("is-open"))unreadCount=0;
+  lastChatTotal=total;
+  if(countNode){countNode.textContent=String(unreadCount);countNode.hidden=unreadCount===0;countNode.setAttribute("aria-label",unreadCount+" رسائل جديدة")}
  }
  const bell=$("#notification-bell");
  if(bell){const icon=bell.querySelector("i.bi");if(icon){icon.className="";icon.setAttribute("data-lucide","bell");icon.setAttribute("aria-hidden","true")}}
@@ -68,8 +77,8 @@ function enhanceFunctionalIcons(){
  $$(".notification-item .notification-icon").forEach(node=>{if(node.querySelector("i.bi"))node.innerHTML='<i data-lucide="'+(icons[node.closest(".notification-item")?.querySelector("[data-event-type]")?.dataset.eventType]||"bell")+'" aria-hidden="true"></i>'});
  $$(".game-player-score").forEach(score=>{
   const avatar=score.querySelector(".game-player-avatar");if(!avatar||avatar.querySelector("img"))return;
-  const isAyoub=score.classList.contains("ayoub"),img=document.createElement("img");
-  img.src=isAyoub?"./assets/brand/ayoub-profile.jpg":"./assets/brand/farah-profile.jpg";img.alt="";img.loading="lazy";avatar.replaceChildren(img);
+  const isAyoub=score.classList.contains("ayoub"),isCurrent=isAyoub===document.body.classList.contains("ayoub-theme"),img=document.createElement("img");
+  img.src=isAyoub?"./assets/brand/ayoub-profile.jpg":"./assets/brand/farah-profile.jpg";img.alt="";img.loading="lazy";if(isCurrent)avatar.dataset.presence="online";avatar.replaceChildren(img);
  });
 }
 function setupReveal(){
@@ -85,7 +94,7 @@ function setupReveal(){
 function avatarFallbacks(){
  $$(".ayfar-avatar img,.game-player-avatar img,.message-avatar img").forEach(img=>{
   if(img.dataset.fallbackReady)return;img.dataset.fallbackReady="true";
-  img.addEventListener("error",()=>{const host=img.parentElement;img.remove();host.classList.add("avatar-fallback");host.textContent="♡"},{once:true});
+  img.addEventListener("error",()=>{const host=img.parentElement;img.remove();host.classList.add("avatar-fallback");host.innerHTML='<i data-lucide="user-round" aria-hidden="true"></i>'},{once:true});
  });
 }
 function enhance(){
