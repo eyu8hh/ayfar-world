@@ -139,6 +139,19 @@
       await syncDeviceNotificationButton();
     }
   }
+  async function disableForLogout(){
+    try{
+      if(!("serviceWorker" in navigator)||!("PushManager" in window)||!user)return;
+      const registration=pushRegistration||await navigator.serviceWorker.ready;
+      const subscription=pushSubscription||await registration.pushManager.getSubscription();
+      if(!subscription)return;
+      // Remove the account binding before the session is cleared so another account
+      // on this device cannot inherit the previous account's private push alerts.
+      await db().from("ayfar_push_subscriptions").delete().eq("user_id",user.id).eq("endpoint",subscription.endpoint);
+      await subscription.unsubscribe();
+      pushSubscription=null;pushRegistration=registration;pushPublicKey="";
+    }catch(error){console.warn("AYFAR push logout cleanup:",error?.message||error);}
+  }
   async function showBackgroundNotification(item){
     if(!item||!("Notification" in window)||Notification.permission!=="granted"||!("serviceWorker" in navigator))return;
     try{
@@ -187,6 +200,6 @@
     preparePushSubscription().then(syncDeviceNotificationButton).catch(()=>{});
     if(!window.__ayfarNotificationPoll)window.__ayfarNotificationPoll=setInterval(refresh,30000);
   }
-  window.AYFAR_Notifications={init,open:openCenter,refresh,enableDeviceNotifications};
+  window.AYFAR_Notifications={init,open:openCenter,refresh,enableDeviceNotifications,disableForLogout};
   document.addEventListener("DOMContentLoaded",ensureButton);
 })();
