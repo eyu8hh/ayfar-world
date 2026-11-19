@@ -18,7 +18,7 @@
     loading=false;if(error){console.warn("AYFAR notifications:",error.message);return;}
     rows=data||[];updateBadge();
   }
-  function formatDate(value){return new Intl.DateTimeFormat("ar-MA",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(value));}
+  function formatDate(value){return new Intl.DateTimeFormat("ar-MA",{timeZone:"Africa/Casablanca",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(value));}
   async function openNotification(id,eventType){
     const item=rows.find(row=>row.id===id);
     if(item&&!item.read_at){
