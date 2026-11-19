@@ -34,7 +34,7 @@ test("home section navigation exposes one current page and follows selected sect
 
   const navigation = page.getByRole("navigation", { name: "أقسام عالمنا" });
   const buttons = navigation.getByRole("button");
-  await expect(buttons).toHaveCount(7);
+  await expect(buttons).toHaveCount(5);
   await expect(buttons.first()).toHaveAttribute("aria-current", "page");
 
   const messages = navigation.getByRole("button", { name: "رسائلنا" });
@@ -43,6 +43,18 @@ test("home section navigation exposes one current page and follows selected sect
   await expect(page.locator("#home-slide-label")).toHaveText("رسائلنا");
   await expect(navigation.locator('[aria-current="page"]')).toHaveCount(1);
   await expect(page.locator("#home-messages")).toBeInViewport();
+
+  const more = navigation.getByRole("button", { name: "المزيد" });
+  await expect(more).toHaveAttribute("aria-expanded", "false");
+  await more.click();
+  const moreMenu = page.getByRole("group", { name: "أقسام إضافية" });
+  await expect(moreMenu.getByRole("button")).toHaveCount(3);
+  const plans = moreMenu.getByRole("button", { name: "خططنا وأنشطتنا" });
+  await plans.click();
+  await expect(plans).toHaveAttribute("aria-current", "page");
+  await expect(moreMenu).toBeHidden();
+  await expect(page.locator("#home-slide-label")).toHaveText("خططنا وأنشطتنا");
+
 });
 
 test("reduced-motion preference disables smooth document scrolling", async ({ page }) => {
