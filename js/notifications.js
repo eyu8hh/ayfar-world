@@ -1,6 +1,7 @@
 (()=> {
   const db=()=>window.ayfarSupabase, $=s=>document.querySelector(s);
   let user=null,channel=null,rows=[],loading=false,activeUserId=null;
+  let pushPublicKey="",pushRegistration=null,pushSubscription=null,pushPreparation=null;
   const esc=v=>String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const icons={daily_rating:"💗",star_change:"⭐",routine_status:"🌿",habit_checkin:"🌱",pet_care:"🐾",music_added:"🎧",private_message:"✉️",love_letter:"💌"};
   function ensureButton(){
