@@ -151,7 +151,7 @@ html{scroll-behavior:smooth}
 .stats article:nth-child(1)>:first-child{color:#a63d63}
 .stats article:nth-child(2)>:first-child{color:#47765a}
 .stats article:nth-child(3)>:first-child{color:#a77b2f}
-.primary{background:linear-gradient(110deg,#d66f94 0%,#a33f66 52%,#70243f 100%);box-shadow:none;}
+.primary{background:linear-gradient(110deg,#d66f94 0%,#a33f66 52%,#70243f 100%);box-shadow:none;color:#fff;}
 .secondary-action{transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}
 .question-card{background:linear-gradient(135deg,#fae9ef,#fff5f4 62%,#edf4ed);border-color:#e7cbd5}
 .score-strip{background:linear-gradient(100deg,#f8e5ec,#f4edf1 52%,#eaf2eb);border:1px solid #ead8de}
