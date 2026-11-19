@@ -213,6 +213,12 @@ test("Web Push subscriptions are private per user and notification delivery is s
   expect(migration).toContain("extensions.hmac(");
   expect(migration).toContain("net.http_post(");
   expect(migration).toContain("after insert on public.ayfar_notifications");
+  expect(migration).toContain("after insert on public.private_messages");
+  expect(migration).toContain("after insert on public.love_letters");
+  expect(migration).toContain("وصلتك رسالة خاصة. افتح عالمكما لقراءتها.");
+  expect(migration).toContain("هناك رسالة جديدة داخل المغلف. افتح عالمكما لقراءتها.");
+  expect(migration).not.toContain("new.body, new.id");
+
   expect(migration).toContain("revoke all on function public.ayfar_push_get_config() from public, anon, authenticated");
   expect(push).toContain('npm:web-push@3.6.7');
   expect(push).toContain("webpush.generateVAPIDKeys()");
@@ -229,6 +235,9 @@ test("Web Push subscriptions are private per user and notification delivery is s
   expect(notifications).toContain("async function disableForLogout()");
   expect(app).toContain("await window.AYFAR_Notifications?.disableForLogout?.()");
   expect(notifications).toContain("isIOSHomeScreenApp()");
+  expect(notifications).toContain('private_message:"#messages"');
+  expect(notifications).toContain('love_letter:"#home-messages"');
+  expect(notifications).toContain('window.AYFAR_on_enter?.(window.WorldStore?.get?.().active)');
   expect(notifications).toContain("await registration.pushManager.getSubscription())return");
   expect(worker).toContain('self.addEventListener("push"');
   expect(worker).toContain('target.searchParams.set("ayfar_notification",data.id)');
