@@ -4,8 +4,7 @@
 create extension if not exists pg_net with schema extensions;
 
 create schema if not exists private;
-revoke all on schema private from public, anon, authenticated;
-grant usage on schema private to service_role;
+revoke all on schema private from public, anon, authenticated, service_role;
 
 create table if not exists private.ayfar_push_settings (
   id smallint primary key check (id = 1),
@@ -15,8 +14,7 @@ create table if not exists private.ayfar_push_settings (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
-revoke all on private.ayfar_push_settings from public, anon, authenticated;
-grant select, insert, update on private.ayfar_push_settings to service_role;
+revoke all on private.ayfar_push_settings from public, anon, authenticated, service_role;
 
 do $$
 begin
