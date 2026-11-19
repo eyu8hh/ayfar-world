@@ -20,6 +20,9 @@ test("premium patterns provide Lucide, accessible progress, toast variants and r
  expect(ui).toContain("game-progress-ring");
  expect(ui).toContain("unreadCount");
  expect(ui).toContain("data-presence");
+ expect(ui).toContain("enhanceEmptyStates");
+ expect(ui).toContain(".game-chat-avatar");
+ expect(html).toContain("home-quick-grid");
  expect(ui).toContain('["success","error","warning","info"]');
  expect(css).toContain("@media(prefers-reduced-motion:reduce)");
  expect(css).toContain(".message-bubble.sent");
