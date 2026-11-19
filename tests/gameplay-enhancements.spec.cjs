@@ -224,4 +224,5 @@ test("Web Push subscriptions are private per user and notification delivery is s
   expect(notifications).toContain("await registration.pushManager.getSubscription())return");
   expect(worker).toContain('self.addEventListener("push"');
   expect(worker).toContain('target.searchParams.set("ayfar_notification",data.id)');
+  expect(worker).toContain('new URL(data.url||"./index.html",self.registration.scope)');
 });
