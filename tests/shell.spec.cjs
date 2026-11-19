@@ -17,7 +17,10 @@ async function stubExternalServices(page) {
             updateUser: async () => ({ data: { user: null }, error: null })
           },
           from: () => ({
-            select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: null, error: null }) }) }),
+            select: () => ({
+              eq: () => ({ maybeSingle: async () => ({ data: null, error: null }) }),
+              order: async () => ({ data: [], error: null })
+            }),
             upsert: async () => ({ error: null })
           })
         })
@@ -137,4 +140,42 @@ test("static page headings do not rely on decorative English overlines", async (
   await expect(page.locator("#hello")).toHaveText("مرحباً بك في عالمنا");
   await expect(page.locator(".home-anniversary h3")).toHaveText("منذ أول حديث بيننا");
   await expect(page.locator("#home-games h3")).toHaveText("ألعابنا");
+});
+
+
+test("shared planning dialogs trap keyboard focus and restore their opener", async ({ page }) => {
+  await stubExternalServices(page);
+  await page.goto("/");
+  await page.locator("#login").evaluate(element => element.classList.add("hidden"));
+  await page.locator("#home").evaluate(element => element.classList.remove("hidden"));
+
+  const dreamsTrigger = page.locator("[data-open-dreams]").first();
+  await dreamsTrigger.click();
+  const dreamsDialog = page.locator("#dreams-dialog [role='dialog']");
+  const dreamsClose = page.locator("[data-dream-close]");
+  await expect(dreamsDialog).toBeVisible();
+  await expect(page.locator("#dream-title-input")).toBeFocused();
+  await dreamsClose.focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(page.locator("#dream-save")).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(dreamsClose).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dreamsDialog).toBeHidden();
+  await expect(dreamsTrigger).toBeFocused();
+
+  const calendarTrigger = page.locator("[data-open-calendar]").first();
+  await calendarTrigger.click();
+  const calendarDialog = page.locator("#calendar-dialog [role='dialog']");
+  const calendarClose = page.locator("[data-calendar-close]");
+  await expect(calendarDialog).toBeVisible();
+  await expect(calendarClose).toBeFocused();
+  await page.locator("#calendar-save").focus();
+  await page.keyboard.press("Tab");
+  await expect(calendarClose).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(page.locator("#calendar-save")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(calendarDialog).toBeHidden();
+  await expect(calendarTrigger).toBeFocused();
 });

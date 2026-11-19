@@ -1,7 +1,7 @@
 (()=> {
   const supa=()=>window.ayfarSupabase;
   const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
-  let user=null,channel=null,editingId=null,items=[],busy=false;
+  let user=null,channel=null,editingId=null,items=[],busy=false,opener=null;
   const overlay=document.createElement("div");
   overlay.className="dreams-overlay";
   overlay.id="dreams-dialog";
@@ -53,9 +53,11 @@
     items=data||[];render();
   }
   async function open(){
+    opener=document.activeElement;
     overlay.hidden=false;
     document.body.style.overflow="hidden";
     setForm();
+    $("#dream-title-input").focus();
     if(!supa()){feedback("تعذر الاتصال بالخدمة. حدّث الصفحة وحاول مجدداً.");return;}
     const {data,error}=await supa().auth.getUser();
     if(error||!data?.user){feedback("انتهت جلسة الدخول. سجّل الدخول مجدداً.");return;}
@@ -71,6 +73,17 @@
   function close(){
     overlay.hidden=true;document.body.style.overflow="";
     if(channel&&supa()){supa().removeChannel(channel);channel=null;}
+    if(opener?.isConnected)opener.focus();
+    opener=null;
+  }
+  function keepFocusInside(event){
+    if(event.key!=="Tab"||overlay.hidden)return;
+    const focusable=[...overlay.querySelectorAll('a[href],area[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')]
+      .filter(element=>element.getClientRects().length&&!element.closest('[aria-hidden="true"]'));
+    if(!focusable.length){event.preventDefault();return;}
+    const first=focusable[0],last=focusable[focusable.length-1];
+    if(event.shiftKey&&(document.activeElement===first||!overlay.contains(document.activeElement))){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&(document.activeElement===last||!overlay.contains(document.activeElement))){event.preventDefault();first.focus();}
   }
   overlay.addEventListener("click",event=>{
     if(event.target===overlay||event.target.closest("[data-dream-close]")){close();return;}
@@ -82,7 +95,11 @@
     if(event.target.closest("[data-dream-toggle]")){toggle(item);return;}
     if(event.target.closest("[data-dream-delete]")){remove(item);return;}
   });
-  document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!overlay.hidden)close();});
+  document.addEventListener("keydown",event=>{
+    if(overlay.hidden)return;
+    if(event.key==="Escape"){close();return;}
+    keepFocusInside(event);
+  });
   document.querySelectorAll("[data-open-dreams]").forEach(button=>button.addEventListener("click",open));
   $("#dream-cancel").addEventListener("click",()=>setForm());
   $("#dreams-form").addEventListener("submit",async event=>{
