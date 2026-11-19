@@ -240,6 +240,7 @@ test("Web Push subscriptions are private per user and notification delivery is s
   expect(notifications).toContain("async function disableForLogout()");
   expect(app).toContain("await window.AYFAR_Notifications?.disableForLogout?.()");
   expect(notifications).toContain("isIOSHomeScreenApp()");
+  expect(notifications).toContain('timeZone:"Africa/Casablanca"');
   expect(notifications).toContain('private_message:"#messages"');
   expect(notifications).toContain('love_letter:"#home-messages"');
   expect(notifications).toContain('window.AYFAR_on_enter?.(window.WorldStore?.get?.().active)');
