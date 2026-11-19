@@ -127,7 +127,7 @@ test("home dashboard includes a live next-event card and notification bell", asy
   await expect(page.locator("#home-next-event")).toHaveCount(1);
   await expect(page.locator("#home-next-event-title")).toHaveText("موعدنا القادم");
   await expect(page.locator("#notification-bell")).toHaveCount(1);
-  await expect(page.locator("#notification-bell .bi-bell")).toHaveCount(1);
+  await expect(page.locator("#notification-bell .lucide-bell")).toHaveCount(1);
   await expect(page.locator(".home-next-event-action")).toHaveAttribute("type", "button");
   const actionBox = await page.locator(".home-next-event-action").boundingBox();
   expect(actionBox.height).toBeGreaterThanOrEqual(44);
