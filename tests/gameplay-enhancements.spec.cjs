@@ -217,7 +217,12 @@ test("Web Push subscriptions are private per user and notification delivery is s
   expect(migration).toContain("after insert on public.love_letters");
   expect(migration).toContain("وصلتك رسالة خاصة. افتح عالمكما لقراءتها.");
   expect(migration).toContain("هناك رسالة جديدة داخل المغلف. افتح عالمكما لقراءتها.");
-  expect(migration).not.toContain("new.body, new.id");
+  const privateMessageTrigger = migration.slice(migration.indexOf("create or replace function public.ayfar_notify_private_message"), migration.indexOf("revoke all on function public.ayfar_notify_private_message"));
+  const loveLetterTrigger = migration.slice(migration.indexOf("create or replace function public.ayfar_notify_love_letter"), migration.indexOf("revoke all on function public.ayfar_notify_love_letter"));
+  expect(privateMessageTrigger).not.toContain("new.body");
+  expect(privateMessageTrigger).not.toContain("new.subject");
+  expect(loveLetterTrigger).not.toContain("new.body");
+
 
   expect(migration).toContain("revoke all on function public.ayfar_push_get_config() from public, anon, authenticated");
   expect(push).toContain('npm:web-push@3.6.7');
