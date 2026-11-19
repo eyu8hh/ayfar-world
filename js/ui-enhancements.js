@@ -105,6 +105,17 @@ function enhanceFunctionalIcons(){
   img.src=isAyoub?"./assets/brand/ayoub-profile.jpg":"./assets/brand/farah-profile.jpg";img.alt="";img.loading="lazy";if(isCurrent)avatar.dataset.presence="online";avatar.replaceChildren(img);
  });
 }
+function enhanceEmptyStates(){
+ const selectors=[".unfinished-empty",".history-empty",".routine-music-empty",".routine-plus-empty",".plan-tool-empty"];
+ selectors.forEach(selector=>all(selector).forEach(node=>{
+  if(!/لا توجد|لا يوجد|لم نضف|أضف عادة/.test(node.textContent||""))return;
+  node.classList.add("ayfar-empty-state");
+  if(node.dataset.premiumEmpty==="true")return;
+  node.dataset.premiumEmpty="true";
+  const name=selector===".unfinished-empty"?"gamepad-2":selector===".routine-music-empty"?"music":selector===".routine-plus-empty"?"calendar-heart":selector===".history-empty"?"calendar-check":"heart";
+  const icon=document.createElement("i");icon.setAttribute("data-lucide",name);icon.setAttribute("aria-hidden","true");node.prepend(icon);
+ }));
+}
 function setupReveal(){
  if(reduced())return;
  ["#hello","#plans-features-heading","#love-overlay .love-card h2","#love-overlay .love-card p"].forEach(selector=>{all(selector).forEach(node=>node.classList.add("ayfar-text-reveal"))});
@@ -122,7 +133,7 @@ function avatarFallbacks(){
  });
 }
 function enhance(){
- setupMoreMenu();enhanceMessages();enhanceFunctionalIcons();addProgressRing();setupReveal();avatarFallbacks();renderIcons();
+ setupMoreMenu();enhanceMessages();enhanceEmptyStates();enhanceFunctionalIcons();addProgressRing();setupReveal();avatarFallbacks();renderIcons();
  const menu=$("#home-more-menu"),toggle=$(".home-more-toggle");
  if(menu&&toggle){const active=all("[data-home-target]",menu).some(item=>item.classList.contains("active"));toggle.classList.toggle("active",active)}
 }
