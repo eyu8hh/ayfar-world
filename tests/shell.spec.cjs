@@ -17,7 +17,10 @@ async function stubExternalServices(page) {
             updateUser: async () => ({ data: { user: null }, error: null })
           },
           from: () => ({
-            select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: null, error: null }) }) }),
+            select: () => ({
+              eq: () => ({ maybeSingle: async () => ({ data: null, error: null }) }),
+              order: async () => ({ data: [], error: null })
+            }),
             upsert: async () => ({ error: null })
           })
         })
