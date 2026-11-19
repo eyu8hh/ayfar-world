@@ -190,6 +190,7 @@ test("notifications show readable details and support background system delivery
   expect(notifications).toContain("registration.showNotification(item.title");
   expect(notifications).toContain('document.visibilityState==="hidden"');
   expect(worker).toContain('self.addEventListener("push"');
+  expect(worker).toContain("silent:false");
   expect(worker).toContain('silent:false');
   expect(worker).toContain('self.registration.showNotification(title,options)');
   expect(worker).toContain('self.addEventListener("notificationclick"');
@@ -201,6 +202,7 @@ test("Web Push subscriptions are private per user and notification delivery is s
   const migration = read("supabase/migrations/20261119040000_secure_web_push_delivery.sql");
   const push = read("supabase/functions/ayfar-push/index.ts");
   const notifications = read("js/notifications.js");
+  const app = read("js/app.js");
   const worker = read("service-worker.js");
   expect(migration).toContain("create extension if not exists pg_net with schema extensions");
   expect(migration).toContain("create table if not exists public.ayfar_push_subscriptions");
@@ -219,7 +221,9 @@ test("Web Push subscriptions are private per user and notification delivery is s
   expect(push).toContain("admin.auth.getUser(token)");
   expect(push).toContain('statusCode === 404 || statusCode === 410');
   expect(notifications).toContain('db().functions.invoke("ayfar-push"');
-  expect(notifications).toContain('registration.pushManager.subscribe');
+  expect(notifications).toContain('pushRegistration.pushManager.subscribe');
+  expect(notifications).toContain("preparePushSubscription().then(syncDeviceNotificationButton)");
+  expect(notifications).toContain("if(!pushRegistration||!pushPublicKey)");
   expect(notifications).toContain('from("ayfar_push_subscriptions").upsert');
   expect(notifications).toContain('from("ayfar_push_subscriptions").delete()');
   expect(notifications).toContain("async function disableForLogout()");
