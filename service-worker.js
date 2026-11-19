@@ -24,7 +24,7 @@ self.addEventListener("push",event=>{
     icon:payload.icon||"./assets/brand/ayfar-app-icon.jpg",
     badge:payload.badge||"./assets/brand/ayfar-app-icon.jpg",
     tag:payload.tag||("ayfar-push-"+(payload.id||Date.now())),
-    dir:"rtl",lang:"ar",
+    dir:"rtl",lang:"ar",silent:false,
     data:{url:payload.url||"./index.html",id:payload.id||null,eventType:payload.eventType||null}
   };
   event.waitUntil(self.registration.showNotification(title,options));
