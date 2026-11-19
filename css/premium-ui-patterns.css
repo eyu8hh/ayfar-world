@@ -48,8 +48,8 @@ body.ayoub-theme .home-section-nav button.active{background:linear-gradient(140d
 .game-progress-ring .ring-value{stroke:#70243f;stroke-linecap:round;stroke-dasharray:100;transition:stroke-dashoffset .42s var(--ayfar-ease)}
 .game-progress-ring strong{position:absolute;font-size:10px;font-variant-numeric:tabular-nums;color:var(--burgundy)}
 .game-progress-track{flex-basis:100%;height:4px;opacity:.45}
-.game-player-avatar{width:36px;height:36px;overflow:hidden;border:2px solid #fff;border-radius:50%;background:#f4dce5}
-.game-player-avatar img{width:100%;height:100%;object-fit:cover}
+.game-player-avatar{position:relative;width:36px;height:36px;overflow:hidden;border:2px solid #fff;border-radius:50%;background:#f4dce5}
+.game-player-avatar img{width:100%;height:100%;object-fit:cover}.game-player-avatar[data-presence="online"]::after{content:"";position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border:2px solid #fff;border-radius:50%;background:#4c9a68}
 .game-chat-widget{z-index:90}
 .game-chat-toggle{position:relative;width:54px;height:54px;min-height:54px;padding:0;justify-content:center;border-radius:50%;background:linear-gradient(145deg,#70243f,#944d69);box-shadow:0 9px 22px rgba(82,27,49,.25);transition:transform .18s ease,box-shadow .18s ease}
 .game-chat-toggle:active{transform:scale(.94)}
@@ -57,7 +57,7 @@ body.ayoub-theme .home-section-nav button.active{background:linear-gradient(140d
 .game-chat-toggle-icon svg{width:23px;height:23px;stroke-width:1.9}
 .game-chat-toggle-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .game-chat-count{position:absolute;top:-3px;inset-inline-end:-3px;display:grid;place-items:center;min-width:19px;height:19px;padding:0 4px;border:2px solid #fff;border-radius:99px;background:#47765c;color:#fff;font-size:9px;font-style:normal;font-weight:800}
-.game-chat-count:empty{display:none}
+.game-chat-count:empty,.game-chat-count[hidden]{display:none}
 /* Private chat bubbles and identity. No delivery/read state is fabricated. */
 .messages-panel .message-list{direction:rtl;gap:14px}
 .messages-panel .message-bubble{max-width:min(88%,560px);padding:12px 15px;border-radius:18px;box-shadow:0 4px 12px rgba(60,25,40,.045);animation:ayfarMessageIn .22s var(--ayfar-ease) both}
