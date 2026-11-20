@@ -447,3 +447,12 @@ test("PWA cache precaches the latest mobile visual layer", async () => {
   expect(worker).toContain('"./css/ux-visual-fixes.css?v=1"');
   expect(worker).toContain('"./css/no-shadows.css?v=1"');
 });
+
+test("private answer-key rows are never committed in public SQL migrations", async () => {
+  const bankMigration = read("supabase/migrations/202611200004_authoritative_bank_scoring.sql");
+  const flagsMigration = read("supabase/migrations/202611200005_secure_flags_bank.sql");
+  const expansionMigration = read("supabase/migrations/202611200008_seed_private_flag_expansion.sql");
+  expect(bankMigration).not.toMatch(/insert\\s+into\\s+ayfar_private\\.game_question_bank/i);
+  expect(flagsMigration).not.toMatch(/insert\\s+into\\s+ayfar_private\\.game_question_bank/i);
+  expect(expansionMigration).not.toMatch(/insert\\s+into\\s+ayfar_private\\.game_question_bank/i);
+});
