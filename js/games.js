@@ -51,16 +51,6 @@ async function rpc(n,a){const {data,error}=await client().rpc(n,a);if(error)thro
 function shuffleOrder(n){const order=Array.from({length:n},(_,i)=>i);for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}return order}
 function questionIndex(s,key,len){const order=s.questionOrder?.[key];return order?.length?order[(s.round-1)%order.length]:(s.round-1)%len}
 function normalizeParticipantKeys(state){if(!state||typeof state!=="object")return state;const move=(obj)=>{if(!obj||typeof obj!=="object")return;if(Object.prototype.hasOwnProperty.call(obj,"farhati")){if(!Object.prototype.hasOwnProperty.call(obj,"farahati"))obj.farahati=obj.farhati;delete obj.farhati;}};for(const key of ["scores","answers","truthAnswers","guesses","truthChoice","aiSubmitted","whoSubmitted","whoJudgments"])move(state[key]);if(Array.isArray(state.chatMessages))state.chatMessages.forEach(m=>{if(m?.sender==="farhati")m.sender="farahati"});return state}
-function scoreFeedback(player,answer,expected,points){const ok=norm(answer)===norm(expected);return '<p>'+(ok?"✅":"❌")+" "+label(player)+": "+esc(answer)+" · "+(ok?"+"+points:"0")+" نقطة</p>"}
- if(Number(s.scoredRound)===Number(s.round))return;
- const correct=(p,answer)=>norm(s.answers[p])===norm(answer);
- if(key==="truth"){for(const p of ["ayoub","farahati"])if(s.answers[p]!=="[تم التخطي]"&&s.answers[p]!=="[انتهى الوقت]")s.scores[p]++}
-
-
- else if(key==="qa"){for(const p of ["ayoub","farahati"])if(s.answers[p]&&s.answers[p]!=="[تم التخطي]")s.scores[p]++}
- else if(["thisorthat","compatibility"].includes(key)&&s.answers.ayoub===s.answers.farahati){s.scores.ayoub++;s.scores.farahati++}
- s.scoredRound=s.round;
-}
 function fresh(key){const sizes={...Object.fromEntries(Object.keys(prompts).map(k=>[k,prompts[k].length])),...Object.fromEntries(["flags"].map(k=>[k,window.AYFAR_KNOWLEDGE?.[k]?.length||0]))};for(const [k,list] of Object.entries(quizBanks))sizes[k]=list.length;const questionOrder={};for(const [k,n] of Object.entries(sizes))if(n)questionOrder[k]=shuffleOrder(n);return {key,phase:"ready",round:0,total:key==="thisorthat"||key==="predict"||key==="compatibility"||key==="riddles"||key==="flags"||key==="geography"||key==="mixed"?10:5,scores:{ayoub:0,farahati:0},answers:{},history:[],turn:"ayoub",questionIndex:0,questionOrder,scoredRound:0,found:[],diffIndex:Math.floor(Math.random()*12)}}
 const ROOM_KEY="ayfar_active_room_v1",LAST_GAME_KEY="ayfar_last_game_v1";function rememberGame(key,id){try{localStorage.setItem(LAST_GAME_KEY,JSON.stringify({key,id,at:Date.now()}))}catch(_){}}function cleanup(){chatOpen=false;chatSending=false;chatDraft="";if(channel)client().removeChannel(channel);channel=null;if(poll)clearInterval(poll);poll=null;if(clock)clearInterval(clock);clock=null;if(aiStatusPoll)clearInterval(aiStatusPoll);aiStatusPoll=null;aiStatusBusy=false;speedExpiryPending=false;room=null;try{localStorage.removeItem(ROOM_KEY)}catch(_){}}
 async function leaveCurrentGame(){if(room&&room.state?.phase!=="finished"){try{localStorage.removeItem(ROOM_KEY);}catch(_){}cleanup();location.reload();return;}cleanup();location.reload();}
