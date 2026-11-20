@@ -249,10 +249,9 @@ async function stopSavedGame(id){
  if(!window.confirm("هل تريد إيقاف هذه المباراة نهائياً؟ لن تتمكنا من إكمالها بعد ذلك."))return;
  try{
   await currentUser();
-  const {data,error}=await client().from("ayfar_games").select("*").eq("id",id).maybeSingle();
+  const {data,error}=await client().from("ayfar_games").select("id,version").eq("id",id).maybeSingle();
   if(error)throw error;if(!data)throw Error("المباراة غير موجودة.");
-  const state={...(data.state||{}),phase:"finished",endedEarly:true,stoppedBy:role||window.WorldStore.get().active,stoppedAt:new Date().toISOString()};
-  await rpc("ayfar_game_update",{p_game_id:data.id,p_expected_version:data.version,p_state:state,p_status:"cancelled"});
+  await rpc("ayfar_game_stop",{p_game_id:data.id,p_expected_version:data.version});
   if(room?.id===id)cleanup();
   toast("تم إيقاف المباراة");loadOpenGames();
  }catch(e){toast(e.message||"تعذر إيقاف المباراة");}
