@@ -195,3 +195,9 @@ body.ayoub-theme #home-overview>.hero p{
   font-size:11px!important;
   letter-spacing:0!important;
 }
+#home-plans{padding-top:22px!important}
+#home-plans>.plans-intro{margin-top:8px!important}
+#home-games>.heading .count{
+  direction:ltr;
+  unicode-bidi:isolate;
+}
