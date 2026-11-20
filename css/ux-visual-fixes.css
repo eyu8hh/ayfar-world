@@ -119,3 +119,27 @@ body.ayoub-theme #home-overview #home-anniversary-countdown .date-count-grid>div
 @media(max-width:520px){
   #home-overview>.hero{padding:24px 19px!important;min-height:180px}
 }
+
+/* The anniversary panel uses the burgundy-to-green premium gradient in both
+   themes, so its foreground copy and countdown must stay light. */
+#home-overview .home-anniversary-head h3{
+  color:#fff7fa!important;
+}
+#home-overview .home-anniversary-head p{
+  color:#f1dfe7!important;
+  font-family:Tahoma,sans-serif;
+  font-feature-settings:normal;
+  font-variant-numeric:normal;
+  letter-spacing:0!important;
+}
+#home-overview #home-anniversary-countdown,
+#home-overview #home-anniversary-countdown strong{
+  color:#fff7fa!important;
+}
+#home-overview #home-anniversary-countdown small{
+  color:#f1dfe7!important;
+}
+#home-overview #home-anniversary-countdown .date-count-grid>div{
+  background:rgba(255,255,255,.10);
+  border-color:rgba(255,255,255,.22);
+}
