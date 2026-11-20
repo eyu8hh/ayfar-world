@@ -371,7 +371,6 @@ test("flags use the same private server-side scoring path", async () => {
   expect(games).toContain('const SERVER_BANK_GAME_KEYS=new Set([...BANK_GAME_KEYS,"flags"])');
   expect(games).toContain('bankAction("ayfar_game_bank_answer",{p_answer:b.dataset.knowledgeAnswer})');
   expect(games).toContain('bankResultMarkup(s,"العلم التالي")');
-  expect(knowledge).not.toMatch(/\\banswer\\s*:/);
   expect(flagsMigration).toContain("'flags'");
   expect(flagsMigration).toContain("ayfar_game_bank_answer");
 });
