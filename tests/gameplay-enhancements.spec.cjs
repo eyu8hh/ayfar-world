@@ -397,3 +397,16 @@ test("legacy game creation sanitizes client-supplied result fields", async () =>
   expect(migration).toContain("'scores',jsonb_build_object('ayoub',0,'farahati',0)");
   expect(migration).toContain("'bankResult',null");
 });
+
+test("mobile home visual corrections restore heading contrast and spacing", async () => {
+  const html = read("index.html");
+  const noShadows = html.indexOf('css/no-shadows.css?v=1');
+  const fixes = html.indexOf('css/ux-visual-fixes.css?v=1');
+  expect(fixes).toBeGreaterThan(noShadows);
+  const css = read("css/ux-visual-fixes.css");
+  expect(css).toContain("color:#69243e!important");
+  expect(css).toContain("max-width:100%!important");
+  expect(css).toContain("unicode-bidi:plaintext");
+  expect(css).toContain("scroll-margin-top:96px");
+  expect(css).toContain("padding-bottom:104px");
+});
