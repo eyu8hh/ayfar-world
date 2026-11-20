@@ -291,3 +291,23 @@ test("P0.1 challenge bootstrap is server-canonical and rejects invalid player pa
   expect(migration).not.toMatch(/as \$\\ndeclare/);
 
 });
+
+
+test("early match stop is a server-authoritative action and never submits client-authored state", async () => {
+  const games = read("js/games.js");
+  const migration = read("supabase/migrations/202611200002_authoritative_game_stop.sql");
+  const stop = games.slice(games.indexOf("async function stopSavedGame"), games.indexOf("async function restore"));
+  expect(stop).toContain('rpc("ayfar_game_stop"');
+  expect(stop).not.toContain('rpc("ayfar_game_update"');
+  expect(stop).not.toContain("p_state:");
+  expect(migration).toContain("create or replace function public.ayfar_game_stop(");
+  expect(migration).toContain("auth.uid()");
+  expect(migration).toContain("for update");
+  expect(migration).toContain("v_game.version <> p_expected_version");
+  expect(migration).toContain("v_user not in (v_game.host_id, v_game.guest_id)");
+  expect(migration).toContain("'stoppedBy', v_role");
+  expect(migration).toContain("'stoppedAt', clock_timestamp()");
+  expect(migration).toContain("status = 'cancelled'");
+  expect(migration).toContain("revoke all on function public.ayfar_game_stop(uuid, bigint) from public, anon");
+  expect(migration).toContain("grant execute on function public.ayfar_game_stop(uuid, bigint) to authenticated");
+});
