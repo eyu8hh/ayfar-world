@@ -1,0 +1,71 @@
+/* AYFAR WORLD · mobile hierarchy, contrast and spacing corrections */
+body:not(.ayoub-theme) #home-overview>.hero h2{
+  color:#69243e!important;
+}
+body:not(.ayoub-theme) #home-overview>.hero p{
+  color:#634653!important;
+}
+#home-overview>.hero>div:first-child{
+  display:block;
+  width:100%;
+  max-width:100%!important;
+  min-width:0;
+  flex:1 1 100%;
+  text-align:right;
+}
+#home-overview>.hero h2,
+#home-overview>.hero p{
+  overflow-wrap:normal;
+  word-break:normal;
+}
+#home-overview .home-anniversary{
+  padding:18px!important;
+}
+#home-overview .home-anniversary:before,
+#home-overview>.hero:after{
+  display:none!important;
+}
+#home-overview .home-anniversary-head{
+  min-width:0;
+  gap:12px;
+}
+#home-overview .home-anniversary-head>div{
+  min-width:0;
+  flex:1 1 auto;
+}
+#home-overview .home-anniversary-head p{
+  color:#725766;
+  font-size:12px!important;
+  line-height:1.75;
+  letter-spacing:0!important;
+  direction:rtl;
+  unicode-bidi:plaintext;
+  font-variant-numeric:normal;
+}
+#home-overview #home-anniversary-countdown{
+  color:#563b49;
+}
+#home-overview #home-anniversary-countdown .date-count-grid small{
+  color:#705866;
+}
+#home-overview .continue-card h3{color:#fffaf7}
+#home-overview .continue-card p{color:#f8e8ef}
+#home-overview .continue-card .eyebrow{color:#f5dce5}
+.home-section-nav button{
+  font-size:12px!important;
+  min-height:44px;
+}
+#home-games .games>button small{font-size:11px!important}
+#home-games .games>button em{font-size:11px!important}
+.home-section-anchor{scroll-margin-top:96px}
+#home-pages{padding-bottom:92px}
+@media(max-width:520px){
+  #home-overview>.hero{padding:22px 18px;min-height:170px}
+  #home-overview>.hero>div:first-child{max-width:100%!important}
+  #home-overview .home-anniversary{padding:16px!important}
+  .home-section-nav button{padding-inline:12px;font-size:12px!important}
+  #home-pages{padding-bottom:104px}
+}
+@media(prefers-reduced-motion:reduce){
+  .home-section-nav button{transition:none!important}
+}
