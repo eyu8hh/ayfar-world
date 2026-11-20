@@ -410,3 +410,22 @@ test("mobile home visual corrections restore heading contrast and spacing", asyn
   expect(css).toContain("scroll-margin-top:96px");
   expect(css).toContain("padding-bottom:104px");
 });
+
+test("non-bank couple games submit answers and calculate scores only on the server", async () => {
+  const games = read("js/games.js");
+  const migration = read("supabase/migrations/202611200010_authoritative_couple_game_actions.sql");
+  expect(games).toContain('gameAction("start")');
+  expect(games).toContain('gameAction("who_submit",{answer,guess})');
+  expect(games).toContain('gameAction("who_judge"');
+  expect(games).toContain('gameAction("predict_actual"');
+  expect(games).toContain('gameAction("predict_guess"');
+  expect(games).toContain('gameAction("truth_choice"');
+  expect(games).toContain('gameAction("truth_skip")');
+  expect(games).toContain('gameAction("answer",{answer:v})');
+  expect(games).toContain('gameAction("next")');
+  expect(migration).toContain("public.ayfar_game_action");
+  expect(migration).toContain("public.ayfar_game_choice_valid");
+  expect(migration).toContain("public.ayfar_game_normalize_text");
+  expect(migration).toContain("v_chat:=jsonb_build_object");
+  expect(migration).toContain("v_state:=v_state-array['answers'");
+});
