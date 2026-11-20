@@ -48,9 +48,6 @@ body:not(.ayoub-theme) #home-overview>.hero p{
 #home-overview #home-anniversary-countdown .date-count-grid small{
   color:#705866;
 }
-#home-overview .continue-card h3{color:#fffaf7}
-#home-overview .continue-card p{color:#f8e8ef}
-#home-overview .continue-card .eyebrow{color:#f5dce5}
 .home-section-nav button{
   font-size:12px!important;
   min-height:44px;
@@ -153,4 +150,14 @@ body.ayoub-theme #home-overview #home-anniversary-countdown .date-count-grid>div
   line-height:1.8;
   letter-spacing:0!important;
   mix-blend-mode:normal!important;
+}
+
+body.ayoub-theme #home-overview>.hero h2{
+  color:#fff7fa!important;
+}
+body.ayoub-theme #home-overview>.hero p{
+  color:#f1dfe7!important;
+}
+.home-section-nav button span{
+  font-size:12px!important;
 }
