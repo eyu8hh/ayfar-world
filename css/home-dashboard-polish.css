@@ -22,10 +22,7 @@
   border:1px solid #ead5dd;border-radius:var(--home-card-radius);
   background:linear-gradient(135deg,#fffaf8,#f8edf1 65%,#f0f5ef);
 }
-#home-overview .home-anniversary:before{
-  content:"";position:absolute;inset-inline-end:0;top:0;bottom:0;width:3px;
-  background:linear-gradient(180deg,#d98ba5,#46735a);
-}
+
 #home-overview .home-anniversary-head{gap:12px;align-items:center}
 #home-overview .home-anniversary-head>span{
   display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;
