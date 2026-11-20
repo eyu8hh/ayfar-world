@@ -341,10 +341,17 @@ test("public question-bank scripts never ship correct-answer keys", async () => 
   const bank = read("js/ayfar-question-bank.js");
   const expansion = read("js/ayfar-question-bank-expansion.js");
   const knowledge = read("js/knowledge-bank.js");
+  const knowledgeExpansion = read("js/knowledge-bank-expansion.js");
+  const games = read("js/games.js");
   expect(bank).not.toContain("correctAnswer");
   expect(expansion).not.toContain("correctAnswer");
   expect(knowledge).not.toContain("answer:");
   expect(knowledge).not.toContain('"answer":');
+  expect(knowledgeExpansion).not.toContain("answer:");
+  expect(knowledgeExpansion).not.toContain('"answer":');
+  expect(games).not.toContain('speed:[["');
+  expect(games).not.toContain('mixed:[["');
+  expect(games).not.toContain('riddles:[["');
 });
 
 test("bank-backed games use private server scoring and protect authoritative state", async () => {
