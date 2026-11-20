@@ -276,6 +276,8 @@ async function bankAction(name,extra={}){
    const {data}=await client().from("ayfar_games").select("*").eq("id",roomId).maybeSingle();
    if(data&&room?.id===roomId)room=data;
    if(name==="ayfar_game_bank_answer"&&data?.state?.answers?.[role]){render();return true;}
+   if(name==="ayfar_game_bank_start"&&data?.state?.phase==="play"){render();return true;}
+   if(name==="ayfar_game_bank_next"&&Number(data?.state?.round)>Number(base.state?.round)){render();return true;}
    if(!data||Number(data.version)<=Number(base.version)||attempt===2){
     render();toast(error?.message||"تعذر تسجيل الحركة. حدّث المباراة وحاول مجدداً.");return false;
    }
