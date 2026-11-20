@@ -452,7 +452,7 @@ test("private answer-key rows are never committed in public SQL migrations", asy
   const bankMigration = read("supabase/migrations/202611200004_authoritative_bank_scoring.sql");
   const flagsMigration = read("supabase/migrations/202611200005_secure_flags_bank.sql");
   const expansionMigration = read("supabase/migrations/202611200008_seed_private_flag_expansion.sql");
-  expect(bankMigration).not.toMatch(/insert\\s+into\\s+ayfar_private\\.game_question_bank/i);
-  expect(flagsMigration).not.toMatch(/insert\\s+into\\s+ayfar_private\\.game_question_bank/i);
-  expect(expansionMigration).not.toMatch(/insert\\s+into\\s+ayfar_private\\.game_question_bank/i);
+  expect(bankMigration).not.toMatch(/insert\s+into\s+ayfar_private\.game_question_bank/i);
+  expect(flagsMigration).not.toMatch(/insert\s+into\s+ayfar_private\.game_question_bank/i);
+  expect(expansionMigration).not.toMatch(/insert\s+into\s+ayfar_private\.game_question_bank/i);
 });
