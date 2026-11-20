@@ -52,7 +52,6 @@ function shuffleOrder(n){const order=Array.from({length:n},(_,i)=>i);for(let i=o
 function questionIndex(s,key,len){const order=s.questionOrder?.[key];return order?.length?order[(s.round-1)%order.length]:(s.round-1)%len}
 function normalizeParticipantKeys(state){if(!state||typeof state!=="object")return state;const move=(obj)=>{if(!obj||typeof obj!=="object")return;if(Object.prototype.hasOwnProperty.call(obj,"farhati")){if(!Object.prototype.hasOwnProperty.call(obj,"farahati"))obj.farahati=obj.farhati;delete obj.farhati;}};for(const key of ["scores","answers","truthAnswers","guesses","truthChoice","aiSubmitted","whoSubmitted","whoJudgments"])move(state[key]);if(Array.isArray(state.chatMessages))state.chatMessages.forEach(m=>{if(m?.sender==="farhati")m.sender="farahati"});return state}
 function scoreFeedback(player,answer,expected,points){const ok=norm(answer)===norm(expected);return '<p>'+(ok?"✅":"❌")+" "+label(player)+": "+esc(answer)+" · "+(ok?"+"+points:"0")+" نقطة</p>"}
-function scoreRound(s,key){
  if(Number(s.scoredRound)===Number(s.round))return;
  const correct=(p,answer)=>norm(s.answers[p])===norm(answer);
  if(key==="truth"){for(const p of ["ayoub","farahati"])if(s.answers[p]!=="[تم التخطي]"&&s.answers[p]!=="[انتهى الوقت]")s.scores[p]++}
