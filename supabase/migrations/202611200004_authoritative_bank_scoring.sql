@@ -3210,7 +3210,7 @@ begin
  if v_user is null then raise exception 'يجب تسجيل الدخول أولاً'; end if;
  select * into v_game from public.ayfar_games where id=p_game_id for update;
  if not found then raise exception 'المباراة غير موجودة'; end if;
- if v_user not in (v_game.host_id,v_game.guest_id) then raise exception 'لست مشاركاً في هذه المباراة'; end if;
+ if v_user<>v_game.host_id and (v_game.guest_id is null or v_user<>v_game.guest_id) then raise exception 'لست مشاركاً في هذه المباراة'; end if;
  if v_game.game_key not in ('mixed','speed','riddles','geography') then raise exception 'هذه اللعبة لا تستخدم هذا المسار'; end if;
  if v_game.version<>p_expected_version then raise exception 'تغيرت المباراة على الهاتف الآخر؛ حدّث الحالة وحاول مجدداً'; end if;
  if v_game.state->>'phase'<>'ready' then raise exception 'لا يمكن بدء هذه المباراة الآن'; end if;
@@ -3230,7 +3230,7 @@ begin
  if v_user is null then raise exception 'يجب تسجيل الدخول أولاً'; end if;
  select * into v_game from public.ayfar_games where id=p_game_id for update;
  if not found then raise exception 'المباراة غير موجودة'; end if;
- if v_user not in (v_game.host_id,v_game.guest_id) then raise exception 'لست مشاركاً في هذه المباراة'; end if;
+ if v_user<>v_game.host_id and (v_game.guest_id is null or v_user<>v_game.guest_id) then raise exception 'لست مشاركاً في هذه المباراة'; end if;
  select lower(role) into v_role from public.profiles where id=v_user;
  if v_role='farhati' then v_role:='farahati'; end if;
  if v_role not in ('ayoub','farahati') then raise exception 'دور الحساب غير صالح'; end if;
@@ -3269,7 +3269,7 @@ begin
  if v_user is null then raise exception 'يجب تسجيل الدخول أولاً'; end if;
  select * into v_game from public.ayfar_games where id=p_game_id for update;
  if not found then raise exception 'المباراة غير موجودة'; end if;
- if v_user not in (v_game.host_id,v_game.guest_id) then raise exception 'لست مشاركاً في هذه المباراة'; end if;
+ if v_user<>v_game.host_id and (v_game.guest_id is null or v_user<>v_game.guest_id) then raise exception 'لست مشاركاً في هذه المباراة'; end if;
  if v_game.game_key not in ('mixed','speed','riddles','geography') or v_game.state->>'phase'<>'play' then raise exception 'لا يمكن الانتقال الآن'; end if;
  if v_game.version<>p_expected_version then raise exception 'تغيرت المباراة؛ حدّث الحالة'; end if;
  if not (coalesce(v_game.state->'answers','{}'::jsonb) ? 'ayoub' and coalesce(v_game.state->'answers','{}'::jsonb) ? 'farahati') then raise exception 'ننتظر إجابة الطرفين'; end if;
@@ -3291,7 +3291,7 @@ begin
  if v_user is null then raise exception 'يجب تسجيل الدخول أولاً'; end if;
  select * into v_game from public.ayfar_games where id=p_game_id for update;
  if not found then raise exception 'المباراة غير موجودة'; end if;
- if v_user not in (v_game.host_id,v_game.guest_id) then raise exception 'لست مشاركاً في هذه المباراة'; end if;
+ if v_user<>v_game.host_id and (v_game.guest_id is null or v_user<>v_game.guest_id) then raise exception 'لست مشاركاً في هذه المباراة'; end if;
  if v_game.game_key<>'speed' or v_game.state->>'phase'<>'play' then raise exception 'لا ينطبق انتهاء الوقت على هذه المباراة'; end if;
  if v_game.version<>p_expected_version then raise exception 'تغيرت حالة المؤقت؛ حدّث المباراة'; end if;
  if coalesce((v_game.state->>'deadlineAt')::numeric,0)>extract(epoch from clock_timestamp())*1000 then raise exception 'ما زال وقت الإجابة متاحاً'; end if;
@@ -3318,7 +3318,7 @@ begin
  if v_user is null then raise exception 'يجب تسجيل الدخول أولاً'; end if;
  select * into v_game from public.ayfar_games where id=p_game_id for update;
  if not found then raise exception 'المباراة غير موجودة'; end if;
- if v_user not in (v_game.host_id,v_game.guest_id) then raise exception 'لست مشاركاً في هذه المباراة'; end if;
+ if v_user<>v_game.host_id and (v_game.guest_id is null or v_user<>v_game.guest_id) then raise exception 'لست مشاركاً في هذه المباراة'; end if;
  if v_game.version<>p_expected_version then raise exception 'تغيرت المباراة على الهاتف الآخر؛ حدّث الحالة وحاول مجدداً'; end if;
  if v_game.status in ('finished','cancelled') then raise exception 'انتهت هذه المباراة'; end if;
  if v_game.game_key in ('mixed','speed','riddles','geography') then
