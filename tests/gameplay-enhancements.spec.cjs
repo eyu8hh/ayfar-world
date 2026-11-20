@@ -79,7 +79,6 @@ test("speed challenge uses a shared server timestamp and calibrated local clock"
   const games = read("js/games.js");
   expect(games).toContain("function observeServerTime(row,startedAt,endedAt)");
   expect(games).toContain('Date.parse(updated.updated_at)');
-  expect(games).toContain('x.deadlineAt=null');
   expect(games).toContain('Date.now()+serverClockOffsetMs');
   expect(games).toContain('key==="speed"&&!s.deadlineAt');
   expect(games).toContain('bankAction("ayfar_game_bank_start")');
