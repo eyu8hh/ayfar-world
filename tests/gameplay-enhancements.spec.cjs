@@ -359,6 +359,7 @@ test("bank-backed games use private server scoring and protect authoritative sta
   const bankMigration = read("supabase/migrations/202611200004_authoritative_bank_scoring.sql");
   const flagsMigration = read("supabase/migrations/202611200005_secure_flags_bank.sql");
   const timeoutMigration = read("supabase/migrations/202611200006_idempotent_speed_timeout.sql");
+  const nextMigration = read("supabase/migrations/202611200009_require_scored_round_before_next.sql");
   expect(games).toContain('bankAction("ayfar_game_bank_answer"');
   expect(games).toContain('bankAction("ayfar_game_bank_next"');
   expect(games).toContain('bankAction("ayfar_game_bank_timeout"');
@@ -368,6 +369,7 @@ test("bank-backed games use private server scoring and protect authoritative sta
   expect(flagsMigration).toContain("'flags'");
   expect(timeoutMigration).toContain("scoredRound");
   expect(timeoutMigration).toContain("return v_game");
+  expect(nextMigration).toContain("لم تُحتسب نتيجة الجولة على الخادم بعد");
   expect(games).not.toContain("item?.options?.[item.correctAnswer]");
 });
 
