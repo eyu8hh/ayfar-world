@@ -82,7 +82,9 @@ test("speed challenge uses a shared server timestamp and calibrated local clock"
   expect(games).toContain('x.deadlineAt=null');
   expect(games).toContain('Date.now()+serverClockOffsetMs');
   expect(games).toContain('key==="speed"&&!s.deadlineAt');
-  expect(games).toContain('const startedAt=Date.now();const {data,error}=await client().from("ayfar_games")');
+  expect(games).toContain('bankAction("ayfar_game_bank_start")');
+  const startMigration = read("supabase/migrations/202611200007_sanitize_legacy_game_create.sql");
+  expect(startMigration).toContain("clock_timestamp()+interval '15 seconds'");
   expect(games).toContain('observeServerTime(data,startedAt,endedAt)');
   expect(games).toContain('if(data.game_key==="speed"&&data.state?.deadlineAt)');
 
@@ -349,7 +351,6 @@ test("public question-bank scripts never ship correct-answer keys", async () => 
   expect(rowsMatch).not.toBeNull();
   const rows = JSON.parse(rowsMatch[1]);
   expect(rows.every(row => row.length === 3)).toBe(true);
-  expect(expansion).toContain('explanation:""');
   expect(bank).not.toContain('"explanation":');
   expect(expansion).not.toContain("explanation:");
   expect(knowledge).not.toContain("answer:");
