@@ -357,8 +357,27 @@ test("bank-backed games use private server scoring and protect authoritative sta
   expect(bankMigration).toContain("ayfar_private.game_question_bank");
   expect(bankMigration).toContain("correct_answer");
   expect(bankMigration).toContain("v_next:=(coalesce(p_state,'{}'::jsonb)");
-  expect(flagsMigration).toContain("('flags')");
+  expect(flagsMigration).toContain("'flags'");
   expect(timeoutMigration).toContain("scoredRound");
   expect(timeoutMigration).toContain("return v_game");
   expect(games).not.toContain("item?.options?.[item.correctAnswer]");
+});
+
+test("flags use the same private server-side scoring path", async () => {
+  const games = read("js/games.js");
+  const knowledge = read("js/knowledge-bank.js");
+  const flagsMigration = read("supabase/migrations/202611200005_secure_flags_bank.sql");
+  expect(games).toContain('const SERVER_BANK_GAME_KEYS=new Set([...BANK_GAME_KEYS,"flags"])');
+  expect(games).toContain('bankAction("ayfar_game_bank_answer",{p_answer:b.dataset.knowledgeAnswer})');
+  expect(games).toContain('bankResultMarkup(s,"العلم التالي")');
+  expect(knowledge).not.toMatch(/\\banswer\\s*:/);
+  expect(flagsMigration).toContain("'flags'");
+  expect(flagsMigration).toContain("ayfar_game_bank_answer");
+});
+
+test("bank-game timer is cleared on rerender and speed timeout is server-owned", async () => {
+  const games = read("js/games.js");
+  expect(games).toContain('function render(){if(clock){clearInterval(clock);clock=null;}if(!room)return;');
+  expect(games).toContain('bankAction("ayfar_game_bank_timeout")');
+  expect(games).toContain('if(name==="ayfar_game_bank_next")speedExpiryPending=false');
 });
