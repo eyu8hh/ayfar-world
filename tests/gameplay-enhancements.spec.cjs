@@ -268,3 +268,19 @@ test("Web Push lifecycle is wired from service-worker registration through authe
   expect(notifications).toContain('db().functions.invoke("ayfar-push",{body:{action:"public-key"}})');
   expect(notifications).toContain('pushManager.subscribe({userVisibleOnly:true,applicationServerKey:decodeVapidKey(pushPublicKey)})');
 });
+
+
+test("P0.1 challenge bootstrap is server-canonical and rejects invalid player pairing", async () => {
+  const migration = read("supabase/migrations/202611200001_strict_game_challenge_bootstrap.sql");
+  expect(migration).toContain("set search_path = ''");
+  expect(migration).toContain("v_target_count <> 1");
+  expect(migration).toContain("يجب أن يكون التحدي بين أيوب وفرحتي فقط");
+  expect(migration).toContain("يجب أن يكون التحدي بين أيوب وفرحتي فقط");
+  expect(migration).toContain("'scores', jsonb_build_object('ayoub', 0, 'farahati', 0)");
+  expect(migration).toContain("'phase', 'ready'");
+  expect(migration).toContain("'answers', '{}'::jsonb");
+  expect(migration).toContain("Rebuild the initial state rather than trusting the stored challenge JSON");
+  expect(migration).toContain("revoke all on function public.ayfar_challenge_send(text, jsonb) from public, anon");
+  expect(migration).toContain("grant execute on function public.ayfar_challenge_accept(uuid) to authenticated");
+  expect(migration).not.toContain("min(p.id)");
+});
