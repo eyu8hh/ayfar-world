@@ -29,7 +29,7 @@ body:not(.ayoub-theme) #home-overview>.hero p{
   min-width:0;
   gap:12px;
 }
-#home-overview .home-anniversary-head>div{
+#home-overview .home-anniversary-head>div:first-of-type{
   min-width:0;
   flex:1 1 auto;
 }
