@@ -35,7 +35,7 @@ begin
   return false;
  end if;
  return p_answer=any(v_options);
-end $$;
+end; $;
 
 create or replace function public.ayfar_game_normalize_text(p_value text)
 returns text
@@ -149,7 +149,7 @@ begin
  elsif p_action='predict_actual' then
   if v_game.game_key<>'predict' or v_state->>'phase'<>'play' then raise exception 'اختيار التوقع غير متاح'; end if;
   v_predictor:=case when v_round%2=1 then 'ayoub' else 'farahati' end;
-  if v_role<>case when v_predictor='ayoub' then 'farahati' else 'ayoub' end then raise exception 'هذا الاختيار مخصص للطرف الآخر'; end if;
+  if v_role<>(case when v_predictor='ayoub' then 'farahati' else 'ayoub' end) then raise exception 'هذا الاختيار مخصص للطرف الآخر'; end if;
   if coalesce(v_state->>'actualChoice','')<>'' then raise exception 'تم تثبيت الاختيار الحقيقي بالفعل'; end if;
   v_answer:=btrim(coalesce(p_payload->>'choice',''));
   if v_answer='' or length(v_answer)>300 then raise exception 'اكتب اختياراً صالحاً'; end if;
@@ -192,7 +192,7 @@ begin
  end if;
  update public.ayfar_games set state=v_state,version=version+1,updated_at=now() where id=p_game_id returning * into v_game;
  return v_game;
-end $$;
+end; $;
 
 -- General client updates are now restricted to chat metadata for every game type.
 create or replace function public.ayfar_game_update(p_game_id uuid,p_expected_version bigint,p_state jsonb,p_status text default null)
@@ -217,7 +217,7 @@ begin
  v_next:=(v_game.state-array['chatMessages','chatReadAt','chatTyping','lastChatAt','chatReactions'])||v_chat;
  update public.ayfar_games set state=v_next,version=version+1,updated_at=now() where id=p_game_id returning * into v_game;
  return v_game;
-end $$;
+end; $;
 
 revoke all on function public.ayfar_game_choice_valid(text,integer,text) from public,anon,authenticated;
 revoke all on function public.ayfar_game_normalize_text(text) from public,anon,authenticated;
