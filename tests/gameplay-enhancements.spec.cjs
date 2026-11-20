@@ -360,6 +360,7 @@ test("bank-backed games use private server scoring and protect authoritative sta
   const flagsMigration = read("supabase/migrations/202611200005_secure_flags_bank.sql");
   const timeoutMigration = read("supabase/migrations/202611200006_idempotent_speed_timeout.sql");
   const nextMigration = read("supabase/migrations/202611200009_require_scored_round_before_next.sql");
+  const deadlineMigration = read("supabase/migrations/202611200011_repair_legacy_speed_deadline.sql");
   expect(games).toContain('bankAction("ayfar_game_bank_answer"');
   expect(games).toContain('bankAction("ayfar_game_bank_next"');
   expect(games).toContain('bankAction("ayfar_game_bank_timeout"');
@@ -370,6 +371,7 @@ test("bank-backed games use private server scoring and protect authoritative sta
   expect(timeoutMigration).toContain("scoredRound");
   expect(timeoutMigration).toContain("return v_game");
   expect(nextMigration).toContain("لم تُحتسب نتيجة الجولة على الخادم بعد");
+  expect(deadlineMigration).toContain("deadlineAt");
   expect(games).not.toContain("item?.options?.[item.correctAnswer]");
 });
 
@@ -423,6 +425,8 @@ test("non-bank couple games submit answers and calculate scores only on the serv
   expect(games).toContain('gameAction("truth_skip")');
   expect(games).toContain('gameAction("answer",{answer:v})');
   expect(games).toContain('gameAction("next")');
+  expect(games).not.toContain("scoreRound(");
+  expect(games).toContain("gameActionAlreadyApplied");
   expect(migration).toContain("public.ayfar_game_action");
   expect(migration).toContain("public.ayfar_game_choice_valid");
   expect(migration).toContain("public.ayfar_game_normalize_text");
