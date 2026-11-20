@@ -11,7 +11,7 @@ returns public.ayfar_games
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 declare
   v_user uuid := auth.uid();
   v_role text;
@@ -66,14 +66,14 @@ begin
 
   return v_game;
 end;
-$;
+$$;
 
 create or replace function public.ayfar_game_join(p_game_id uuid)
 returns public.ayfar_games
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 declare
   v_user uuid := auth.uid();
   v_guest_role text;
@@ -127,7 +127,7 @@ begin
 
   return v_game;
 end;
-$;
+$$;
 
 create or replace function public.ayfar_challenge_send(
   p_game_key text,
