@@ -343,7 +343,8 @@ test("public question-bank scripts never ship correct-answer keys", async () => 
   const knowledge = read("js/knowledge-bank.js");
   expect(bank).not.toContain("correctAnswer");
   expect(expansion).not.toContain("correctAnswer");
-  expect(knowledge).not.toMatch(/\\banswer\\s*:/);
+  expect(knowledge).not.toContain("answer:");
+  expect(knowledge).not.toContain('"answer":');
 });
 
 test("bank-backed games use private server scoring and protect authoritative state", async () => {
@@ -380,4 +381,11 @@ test("bank-game timer is cleared on rerender and speed timeout is server-owned",
   expect(games).toContain('function render(){if(clock){clearInterval(clock);clock=null;}if(!room)return;');
   expect(games).toContain('bankAction("ayfar_game_bank_timeout")');
   expect(games).toContain('if(name==="ayfar_game_bank_next")speedExpiryPending=false');
+});
+
+test("legacy game creation sanitizes client-supplied result fields", async () => {
+  const migration = read("supabase/migrations/202611200007_sanitize_legacy_game_create.sql");
+  expect(migration).toContain("public.ayfar_game_initial_state(p_game_key,p_state)");
+  expect(migration).toContain("'scores',jsonb_build_object('ayoub',0,'farahati',0)");
+  expect(migration).toContain("'bankResult',null");
 });
