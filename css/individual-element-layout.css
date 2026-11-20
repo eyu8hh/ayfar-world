@@ -151,3 +151,29 @@
     transition:none!important;
   }
 }
+
+/* Extend the standalone-card rule to routine and pet feature collections. */
+#home-pages .pet-stats,
+#home-pages .pet-care-grid,
+#home-pages .routine-people,
+#home-pages .routine-music-list,
+#home-pages .routine-plus-fields,
+#home-pages .routine-form-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:14px!important;
+  width:100%;
+}
+#home-pages .pet-stats>*,
+#home-pages .pet-care-grid>*,
+#home-pages .routine-people>*,
+#home-pages .routine-music-list>*,
+#home-pages .routine-plus-fields>*,
+#home-pages .routine-form-row>*{
+  width:100%;
+  min-width:0;
+  grid-column:1/-1!important;
+}
+#home-pages .pet-stats>*,#home-pages .pet-care-grid>*{
+  margin:0;
+}
