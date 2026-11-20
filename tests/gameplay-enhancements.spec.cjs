@@ -419,6 +419,8 @@ test("mobile home visual corrections restore heading contrast and spacing", asyn
   expect(css).toContain("unicode-bidi:plaintext");
   expect(css).toContain("scroll-margin-top:96px");
   expect(css).toContain("padding-bottom:104px");
+  expect(css).toContain("display:block!important");
+  expect(css).toContain("home-anniversary-head h3");
 });
 
 test("non-bank couple games submit answers and calculate scores only on the server", async () => {
