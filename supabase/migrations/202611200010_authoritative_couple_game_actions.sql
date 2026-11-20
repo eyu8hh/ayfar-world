@@ -35,7 +35,7 @@ begin
   return false;
  end if;
  return p_answer=any(v_options);
-end; $;
+end; $$;
 
 create or replace function public.ayfar_game_normalize_text(p_value text)
 returns text
@@ -192,7 +192,7 @@ begin
  end if;
  update public.ayfar_games set state=v_state,version=version+1,updated_at=now() where id=p_game_id returning * into v_game;
  return v_game;
-end; $;
+end; $$;
 
 -- General client updates are now restricted to chat metadata for every game type.
 create or replace function public.ayfar_game_update(p_game_id uuid,p_expected_version bigint,p_state jsonb,p_status text default null)
@@ -217,7 +217,7 @@ begin
  v_next:=(v_game.state-array['chatMessages','chatReadAt','chatTyping','lastChatAt','chatReactions'])||v_chat;
  update public.ayfar_games set state=v_next,version=version+1,updated_at=now() where id=p_game_id returning * into v_game;
  return v_game;
-end; $;
+end; $$;
 
 revoke all on function public.ayfar_game_choice_valid(text,integer,text) from public,anon,authenticated;
 revoke all on function public.ayfar_game_normalize_text(text) from public,anon,authenticated;
