@@ -311,3 +311,17 @@ test("early match stop is a server-authoritative action and never submits client
   expect(migration).toContain("revoke all on function public.ayfar_game_stop(uuid, bigint) from public, anon");
   expect(migration).toContain("grant execute on function public.ayfar_game_stop(uuid, bigint) to authenticated");
 });
+
+
+test("challenge creation and acceptance rebuild a server-owned clean initial state", async () => {
+  const migration = read("supabase/migrations/202611200003_server_owned_challenge_state.sql");
+  expect(migration).toContain("public.ayfar_game_initial_state(p_game_key,p_state)");
+  expect(migration).toContain("'phase', 'ready'");
+  expect(migration).toContain("'scores', jsonb_build_object('ayoub',0,'farahati',0)");
+  expect(migration).toContain("'answers', jsonb_build_object()");
+  expect(migration).toContain("public.ayfar_game_initial_state(v_challenge.game_key,v_challenge.state)");
+  expect(migration).toContain("revoke all on function public.ayfar_game_initial_state(text,jsonb) from public, anon, authenticated");
+  expect(migration).toContain("grant execute on function public.ayfar_challenge_send(text,jsonb) to authenticated");
+  expect(migration).toContain("grant execute on function public.ayfar_challenge_accept(uuid) to authenticated");
+  expect(migration).not.toMatch(/drop\\s+table|truncate\\s+table|delete\\s+from\\s+public\\.ayfar_games/i);
+});
