@@ -45,13 +45,21 @@ begin
   end if;
 
   if v_role = 'ayoub' then
-    select count(*), min(p.id) into v_target_count, v_target
+    select count(*) into v_target_count
     from public.profiles p
     where lower(p.role) in ('farahati','farhati') and p.id <> v_user;
+    select p.id into v_target
+    from public.profiles p
+    where lower(p.role) in ('farahati','farhati') and p.id <> v_user
+    limit 1;
   else
-    select count(*), min(p.id) into v_target_count, v_target
+    select count(*) into v_target_count
     from public.profiles p
     where lower(p.role) = 'ayoub' and p.id <> v_user;
+    select p.id into v_target
+    from public.profiles p
+    where lower(p.role) = 'ayoub' and p.id <> v_user
+    limit 1;
   end if;
 
   if v_target_count <> 1 or v_target is null then
