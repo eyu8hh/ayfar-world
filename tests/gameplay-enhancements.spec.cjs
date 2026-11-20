@@ -440,3 +440,10 @@ test("non-bank couple games submit answers and calculate scores only on the serv
   expect(migration).toContain("v_chat:=jsonb_build_object");
   expect(migration).toContain("v_state:=v_state-array['answers'");
 });
+
+test("PWA cache precaches the latest mobile visual layer", async () => {
+  const worker = read("service-worker.js");
+  expect(worker).toContain('const CACHE="ayfar-world-shell-v144"');
+  expect(worker).toContain('"./css/ux-visual-fixes.css?v=1"');
+  expect(worker).toContain('"./css/no-shadows.css?v=1"');
+});
