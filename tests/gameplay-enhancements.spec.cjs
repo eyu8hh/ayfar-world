@@ -79,10 +79,11 @@ test("speed challenge uses a shared server timestamp and calibrated local clock"
   const games = read("js/games.js");
   expect(games).toContain("function observeServerTime(row,startedAt,endedAt)");
   expect(games).toContain('Date.parse(updated.updated_at)');
-  expect(games).toContain('x.deadlineAt=null');
   expect(games).toContain('Date.now()+serverClockOffsetMs');
   expect(games).toContain('key==="speed"&&!s.deadlineAt');
-  expect(games).toContain('const startedAt=Date.now();const {data,error}=await client().from("ayfar_games")');
+  expect(games).toContain('bankAction("ayfar_game_bank_start")');
+  const startMigration = read("supabase/migrations/202611200007_sanitize_legacy_game_create.sql");
+  expect(startMigration).toContain("clock_timestamp()+interval '15 seconds'");
   expect(games).toContain('observeServerTime(data,startedAt,endedAt)');
   expect(games).toContain('if(data.game_key==="speed"&&data.state?.deadlineAt)');
 
@@ -267,4 +268,203 @@ test("Web Push lifecycle is wired from service-worker registration through authe
   expect(notifications).toContain('pushRegistration=await navigator.serviceWorker.ready');
   expect(notifications).toContain('db().functions.invoke("ayfar-push",{body:{action:"public-key"}})');
   expect(notifications).toContain('pushManager.subscribe({userVisibleOnly:true,applicationServerKey:decodeVapidKey(pushPublicKey)})');
+});
+
+
+test("P0.1 challenge bootstrap is server-canonical and rejects invalid player pairing", async () => {
+  const migration = read("supabase/migrations/202611200001_strict_game_challenge_bootstrap.sql");
+  expect(migration).toContain("set search_path = ''");
+  expect(migration).toContain("v_target_count <> 1");
+  expect(migration).toContain("create or replace function public.ayfar_game_create(");
+  expect(migration).toContain("create or replace function public.ayfar_game_join(p_game_id uuid)");
+  expect(migration).toContain("يجب أن ينضم حساب الطرف الآخر، لا حساب بنفس الدور");
+  expect(migration).toContain("يجب أن يكون التحدي بين أيوب وفرحتي فقط");
+  expect(migration).toContain("يجب أن يكون التحدي بين أيوب وفرحتي فقط");
+  expect(migration).toContain("'scores', jsonb_build_object('ayoub', 0, 'farahati', 0)");
+  expect(migration).toContain("'phase', 'ready'");
+  expect(migration).toContain("'answers', '{}'::jsonb");
+  expect(migration).toContain("Rebuild the initial state rather than trusting the stored challenge JSON");
+  expect(migration).toContain("revoke all on function public.ayfar_challenge_send(text, jsonb) from public, anon");
+  expect(migration).toContain("grant execute on function public.ayfar_challenge_accept(uuid) to authenticated");
+  expect(migration).not.toContain("min(p.id)");
+  expect((migration.match(/as \$\$/g)||[]).length).toBe(4);
+  expect((migration.match(/\$\$;/g)||[]).length).toBe(4);
+  expect(migration).not.toMatch(/as \$\\ndeclare/);
+
+});
+
+
+test("early match stop is a server-authoritative action and never submits client-authored state", async () => {
+  const games = read("js/games.js");
+  const migration = read("supabase/migrations/202611200002_authoritative_game_stop.sql");
+  const stop = games.slice(games.indexOf("async function stopSavedGame"), games.indexOf("async function restore"));
+  expect(stop).toContain('rpc("ayfar_game_stop"');
+  expect(stop).not.toContain('rpc("ayfar_game_update"');
+  expect(stop).not.toContain("p_state:");
+  expect(migration).toContain("create or replace function public.ayfar_game_stop(");
+  expect(migration).toContain("auth.uid()");
+  expect(migration).toContain("for update");
+  expect(migration).toContain("v_game.version <> p_expected_version");
+  expect(migration).toContain("v_user not in (v_game.host_id, v_game.guest_id)");
+  expect(migration).toContain("'stoppedBy', v_role");
+  expect(migration).toContain("'stoppedAt', clock_timestamp()");
+  expect(migration).toContain("status = 'cancelled'");
+  expect(migration).toContain("revoke all on function public.ayfar_game_stop(uuid, bigint) from public, anon");
+  expect(migration).toContain("grant execute on function public.ayfar_game_stop(uuid, bigint) to authenticated");
+});
+
+
+test("challenge creation and acceptance rebuild a server-owned clean initial state", async () => {
+  const migration = read("supabase/migrations/202611200003_server_owned_challenge_state.sql");
+  expect(migration).toContain("public.ayfar_game_initial_state(p_game_key,p_state)");
+  expect(migration).toContain("'phase', 'ready'");
+  expect(migration).toContain("'scores', jsonb_build_object('ayoub',0,'farahati',0)");
+  expect(migration).toContain("'answers', jsonb_build_object()");
+  expect(migration).toContain("public.ayfar_game_initial_state(v_challenge.game_key,v_challenge.state)");
+  expect(migration).toContain("revoke all on function public.ayfar_game_initial_state(text,jsonb) from public, anon, authenticated");
+  expect(migration).toContain("grant execute on function public.ayfar_challenge_send(text,jsonb) to authenticated");
+  expect(migration).toContain("grant execute on function public.ayfar_challenge_accept(uuid) to authenticated");
+  expect(migration).not.toMatch(/drop\\s+table|truncate\\s+table|delete\\s+from\\s+public\\.ayfar_games/i);
+});
+
+test("the final visual layer consistently applies the existing shadow-free design system", async () => {
+  const html = read("index.html");
+  const polish = html.indexOf('css/individual-element-layout.css?v=1');
+  const noShadows = html.indexOf('css/no-shadows.css?v=1');
+  expect(polish).toBeGreaterThan(-1);
+  expect(noShadows).toBeGreaterThan(polish);
+  const stylesheet = read("css/no-shadows.css");
+  expect(stylesheet).toContain("box-shadow: none !important");
+  expect(stylesheet).toContain("text-shadow: none !important");
+});
+
+test("public question-bank scripts never ship correct-answer keys", async () => {
+  const bank = read("js/ayfar-question-bank.js");
+  const expansion = read("js/ayfar-question-bank-expansion.js");
+  const knowledge = read("js/knowledge-bank.js");
+  const knowledgeExpansion = read("js/knowledge-bank-expansion.js");
+  const games = read("js/games.js");
+  expect(bank).not.toContain("correctAnswer");
+  expect(expansion).not.toContain("correctAnswer");
+  const rowsMatch = expansion.match(/const rows=(\[[\s\S]*?\]);\nconst start=801;/);
+  expect(rowsMatch).not.toBeNull();
+  const rows = JSON.parse(rowsMatch[1]);
+  expect(rows.every(row => row.length === 3)).toBe(true);
+  expect(bank).not.toContain('"explanation":');
+  expect(expansion).not.toContain("explanation:");
+  expect(knowledge).not.toContain("answer:");
+  expect(knowledge).not.toContain('"answer":');
+  expect(knowledgeExpansion).not.toContain("answer:");
+  expect(knowledgeExpansion).not.toContain('"answer":');
+  expect(games).not.toContain('speed:[["');
+  expect(games).not.toContain('mixed:[["');
+  expect(games).not.toContain('riddles:[["');
+});
+
+test("bank-backed games use private server scoring and protect authoritative state", async () => {
+  const games = read("js/games.js");
+  const bankMigration = read("supabase/migrations/202611200004_authoritative_bank_scoring.sql");
+  const flagsMigration = read("supabase/migrations/202611200005_secure_flags_bank.sql");
+  const timeoutMigration = read("supabase/migrations/202611200006_idempotent_speed_timeout.sql");
+  const nextMigration = read("supabase/migrations/202611200009_require_scored_round_before_next.sql");
+  const deadlineMigration = read("supabase/migrations/202611200011_repair_legacy_speed_deadline.sql");
+  expect(games).toContain('bankAction("ayfar_game_bank_answer"');
+  expect(games).toContain('bankAction("ayfar_game_bank_next"');
+  expect(games).toContain('bankAction("ayfar_game_bank_timeout"');
+  expect(bankMigration).toContain("ayfar_private.game_question_bank");
+  expect(bankMigration).toContain("correct_answer");
+  expect(bankMigration).toContain("v_next:=(coalesce(p_state,'{}'::jsonb)");
+  expect(flagsMigration).toContain("'flags'");
+  expect(timeoutMigration).toContain("scoredRound");
+  expect(timeoutMigration).toContain("return v_game");
+  expect(nextMigration).toContain("لم تُحتسب نتيجة الجولة على الخادم بعد");
+  expect(deadlineMigration).toContain("deadlineAt");
+  expect(games).not.toContain("item?.options?.[item.correctAnswer]");
+});
+
+test("flags use the same private server-side scoring path", async () => {
+  const games = read("js/games.js");
+  const knowledge = read("js/knowledge-bank.js");
+  const flagsMigration = read("supabase/migrations/202611200005_secure_flags_bank.sql");
+  expect(games).toContain('const SERVER_BANK_GAME_KEYS=new Set([...BANK_GAME_KEYS,"flags"])');
+  expect(games).toContain('bankAction("ayfar_game_bank_answer",{p_answer:b.dataset.knowledgeAnswer})');
+  expect(games).toContain('bankResultMarkup(s,"العلم التالي")');
+  expect(flagsMigration).toContain("'flags'");
+  expect(flagsMigration).toContain("ayfar_game_bank_answer");
+});
+
+test("bank-game timer is cleared on rerender and speed timeout is server-owned", async () => {
+  const games = read("js/games.js");
+  expect(games).toContain('function render(){if(clock){clearInterval(clock);clock=null;}if(!room)return;');
+  expect(games).toContain('bankAction("ayfar_game_bank_timeout")');
+  expect(games).toContain('if(name==="ayfar_game_bank_next")speedExpiryPending=false');
+});
+
+test("legacy game creation sanitizes client-supplied result fields", async () => {
+  const migration = read("supabase/migrations/202611200007_sanitize_legacy_game_create.sql");
+  expect(migration).toContain("public.ayfar_game_initial_state(p_game_key,p_state)");
+  expect(migration).toContain("'scores',jsonb_build_object('ayoub',0,'farahati',0)");
+  expect(migration).toContain("'bankResult',null");
+});
+
+test("mobile home visual corrections restore heading contrast and spacing", async () => {
+  const html = read("index.html");
+  const noShadows = html.indexOf('css/no-shadows.css?v=1');
+  const fixes = html.indexOf('css/ux-visual-fixes.css?v=1');
+  expect(fixes).toBeGreaterThan(noShadows);
+  const css = read("css/ux-visual-fixes.css");
+  expect(css).toContain("color:#69243e!important");
+  expect(css).toContain("max-width:100%!important");
+  expect(css).toContain("unicode-bidi:plaintext");
+  expect(css).toContain("scroll-margin-top:142px!important");
+  expect(css).toContain("padding-bottom:104px");
+  expect(css).toContain("display:block!important");
+  expect(css).toContain("home-anniversary-head h3");
+  expect(css).toContain("align-items:stretch!important");
+  expect(css).toContain("width:100%");
+  expect(css).toContain("unicode-bidi:isolate");
+});
+
+test("non-bank couple games submit answers and calculate scores only on the server", async () => {
+  const games = read("js/games.js");
+  const migration = read("supabase/migrations/202611200010_authoritative_couple_game_actions.sql");
+  expect(games).toContain('gameAction("start")');
+  expect(games).toContain('gameAction("who_submit",{answer,guess})');
+  expect(games).toContain('gameAction("who_judge"');
+  expect(games).toContain('gameAction("predict_actual"');
+  expect(games).toContain('gameAction("predict_guess"');
+  expect(games).toContain('gameAction("truth_choice"');
+  expect(games).toContain('gameAction("truth_skip")');
+  expect(games).toContain('gameAction("answer",{answer:v})');
+  expect(games).toContain('gameAction("next")');
+  expect(games).not.toContain("scoreRound(");
+  expect(games).toContain("gameActionAlreadyApplied");
+  expect(migration).toContain("public.ayfar_game_action");
+  expect(migration).toContain("public.ayfar_game_choice_valid");
+  expect(migration).toContain("public.ayfar_game_normalize_text");
+  expect(migration).toContain("v_chat:=jsonb_build_object");
+  expect(migration).toContain("v_state:=v_state-array['answers'");
+});
+
+test("PWA cache precaches the latest mobile visual layer", async () => {
+  const worker = read("service-worker.js");
+  expect(worker).toContain('const CACHE="ayfar-world-shell-v144"');
+  expect(worker).toContain('"./css/ux-visual-fixes.css?v=1"');
+  expect(worker).toContain('"./css/no-shadows.css?v=1"');
+});
+
+test("private answer-key rows are never committed in public SQL migrations", async () => {
+  const bankMigration = read("supabase/migrations/202611200004_authoritative_bank_scoring.sql");
+  const flagsMigration = read("supabase/migrations/202611200005_secure_flags_bank.sql");
+  const expansionMigration = read("supabase/migrations/202611200008_seed_private_flag_expansion.sql");
+  expect(bankMigration).not.toMatch(/insert\s+into\s+ayfar_private\.game_question_bank/i);
+  expect(flagsMigration).not.toMatch(/insert\s+into\s+ayfar_private\.game_question_bank/i);
+  expect(expansionMigration).not.toMatch(/insert\s+into\s+ayfar_private\.game_question_bank/i);
+});
+test("plans intro clears the sticky section navigation on mobile", async () => {
+  const css = read("css/ux-visual-fixes.css");
+  const html = read("index.html");
+  expect(css).toContain("#home-plans{padding-top:22px!important}");
+  expect(css).toContain("#home-games>.heading .count");
+  expect(html).toContain("bi-lightbulb-fill");
 });

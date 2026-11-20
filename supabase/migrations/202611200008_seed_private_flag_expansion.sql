@@ -1,0 +1,1 @@
+-- The additional flag answer keys are seeded privately in Supabase and intentionally not committed to this public repository.

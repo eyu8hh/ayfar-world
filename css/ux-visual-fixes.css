@@ -1,0 +1,203 @@
+/* AYFAR WORLD · mobile hierarchy, contrast and spacing corrections */
+body:not(.ayoub-theme) #home-overview>.hero h2{
+  color:#69243e!important;
+}
+body:not(.ayoub-theme) #home-overview>.hero p{
+  color:#634653!important;
+}
+#home-overview>.hero>div:first-child{
+  display:block;
+  width:100%;
+  max-width:100%!important;
+  min-width:0;
+  flex:1 1 100%;
+  text-align:right;
+}
+#home-overview>.hero h2,
+#home-overview>.hero p{
+  overflow-wrap:normal;
+  word-break:normal;
+}
+#home-overview .home-anniversary{
+  padding:18px!important;
+}
+#home-overview .home-anniversary:before,
+#home-overview>.hero:after{
+  display:none!important;
+}
+#home-overview .home-anniversary-head{
+  min-width:0;
+  gap:12px;
+}
+#home-overview .home-anniversary-head>div:first-of-type{
+  min-width:0;
+  flex:1 1 auto;
+}
+#home-overview .home-anniversary-head p{
+  color:#725766;
+  font-size:12px!important;
+  line-height:1.75;
+  letter-spacing:0!important;
+  direction:rtl;
+  unicode-bidi:plaintext;
+  font-variant-numeric:normal;
+}
+#home-overview #home-anniversary-countdown{
+  color:#563b49;
+}
+#home-overview #home-anniversary-countdown .date-count-grid small{
+  color:#705866;
+}
+.home-section-nav button{
+  font-size:12px!important;
+  min-height:44px;
+}
+#home-games .games>button small{font-size:11px!important}
+#home-games .games>button em{font-size:11px!important}
+.home-section-anchor{scroll-margin-top:96px}
+#home-pages{padding-bottom:92px}
+@media(max-width:520px){
+  #home-overview>.hero{padding:22px 18px;min-height:170px}
+  #home-overview>.hero>div:first-child{max-width:100%!important}
+  #home-overview .home-anniversary{padding:16px!important}
+  .home-section-nav button{padding-inline:12px;font-size:12px!important}
+  #home-pages{padding-bottom:104px}
+}
+@media(prefers-reduced-motion:reduce){
+  .home-section-nav button{transition:none!important}
+}
+
+/* The hero has no foreground portrait on this layout; use a block flow so
+   the copy cannot shrink to a narrow flex column on small screens. */
+#home-overview>.hero{
+  display:block!important;
+  padding:26px 22px!important;
+  min-height:180px;
+}
+#home-overview>.hero>div:first-child{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0;
+}
+#home-overview>.hero>div:first-child>h2{
+  display:block;
+  width:100%;
+  margin:12px 0 10px!important;
+  line-height:1.45;
+}
+#home-overview>.hero>div:first-child>p{
+  display:block;
+  width:100%;
+  max-width:none!important;
+  margin:0;
+  line-height:1.9;
+}
+body.ayoub-theme #home-overview .home-anniversary-head h3{
+  color:#fff4f7!important;
+}
+body.ayoub-theme #home-overview .home-anniversary-head p{
+  color:#e5d2db!important;
+  font-family:Tahoma,sans-serif;
+  font-feature-settings:normal;
+  font-variant-numeric:normal;
+}
+body.ayoub-theme #home-overview #home-anniversary-countdown,
+body.ayoub-theme #home-overview #home-anniversary-countdown strong{
+  color:#fff4f7!important;
+}
+body.ayoub-theme #home-overview #home-anniversary-countdown small{
+  color:#e5d2db!important;
+}
+body.ayoub-theme #home-overview #home-anniversary-countdown .date-count-grid>div{
+  background:rgba(255,255,255,.10);
+  border-color:rgba(255,255,255,.22);
+}
+@media(max-width:520px){
+  #home-overview>.hero{padding:24px 19px!important;min-height:180px}
+}
+
+/* The anniversary panel uses the burgundy-to-green premium gradient in both
+   themes, so its foreground copy and countdown must stay light. */
+#home-overview .home-anniversary-head h3{
+  color:#fff7fa!important;
+}
+#home-overview .home-anniversary-head p{
+  color:#f1dfe7!important;
+  font-family:Tahoma,sans-serif;
+  font-feature-settings:normal;
+  font-variant-numeric:normal;
+  letter-spacing:0!important;
+}
+#home-overview #home-anniversary-countdown,
+#home-overview #home-anniversary-countdown strong{
+  color:#fff7fa!important;
+}
+#home-overview #home-anniversary-countdown small{
+  color:#f1dfe7!important;
+}
+#home-overview #home-anniversary-countdown .date-count-grid>div{
+  background:rgba(255,255,255,.10);
+  border-color:rgba(255,255,255,.22);
+}
+
+#home-overview .home-anniversary-head p,
+#home-overview .home-anniversary-head p *{
+  color:#fff!important;
+  opacity:1!important;
+  font-size:13px!important;
+  font-weight:600;
+  line-height:1.8;
+  letter-spacing:0!important;
+  mix-blend-mode:normal!important;
+}
+
+body.ayoub-theme #home-overview>.hero h2{
+  color:#fff7fa!important;
+}
+body.ayoub-theme #home-overview>.hero p{
+  color:#f1dfe7!important;
+}
+.home-section-nav button span{
+  font-size:12px!important;
+}
+
+/* Full-width text blocks inside the one-column mobile game tiles. */
+#home-games .games>button{
+  align-items:stretch!important;
+  text-align:right;
+}
+#home-games .games>button>.home-tile-icon{
+  align-self:flex-start;
+  flex:0 0 46px;
+}
+#home-games .games>button>b,
+#home-games .games>button>small,
+#home-games .games>button>em{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  text-align:right;
+  overflow-wrap:anywhere;
+}
+#home-games .games>button>b{font-size:14px!important}
+#home-games .games>button>small{font-size:12px!important;line-height:1.65}
+#home-games .games>button>em{font-size:11px!important}
+.home-section-anchor{scroll-margin-top:142px!important}
+#home-pages .home-section-anchor>.heading{padding-top:12px}
+#date-label{
+  display:block;
+  min-width:110px;
+  white-space:nowrap;
+  direction:ltr;
+  unicode-bidi:isolate;
+  font-size:11px!important;
+  letter-spacing:0!important;
+}
+#home-plans{padding-top:22px!important}
+#home-plans>.plans-intro{margin-top:8px!important}
+#home-games>.heading .count{
+  direction:ltr;
+  unicode-bidi:isolate;
+}
