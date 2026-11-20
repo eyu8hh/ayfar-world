@@ -286,4 +286,8 @@ test("P0.1 challenge bootstrap is server-canonical and rejects invalid player pa
   expect(migration).toContain("revoke all on function public.ayfar_challenge_send(text, jsonb) from public, anon");
   expect(migration).toContain("grant execute on function public.ayfar_challenge_accept(uuid) to authenticated");
   expect(migration).not.toContain("min(p.id)");
+  expect((migration.match(/as \$\$/g)||[]).length).toBe(4);
+  expect((migration.match(/\$\$;/g)||[]).length).toBe(4);
+  expect(migration).not.toMatch(/as \$\\ndeclare/);
+
 });
