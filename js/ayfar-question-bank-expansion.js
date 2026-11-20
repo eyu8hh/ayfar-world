@@ -1082,7 +1082,7 @@ const rows=[
 ["الفنون والثقافة","ما اسم الفن الذي يعتمد على تشكيل الحروف العربية بخطوط جمالية؟",["الخط العربي","الزليج","الفخار","النحت"],0,"الخط العربي فن تشكيل الحروف والكلمات وفق قواعد وأساليب جمالية."]
 ];
 const start=801;
-const extra=rows.map((r,i)=>({id:start+i,category:r[0],difficulty:i%3===0?"سهل":i%3===1?"متوسط":"صعب",question:r[1],options:r[2],correctAnswer:r[3],explanation:r[4]}));
+const extra=rows.map((r,i)=>({id:start+i,category:r[0],difficulty:i%3===0?"سهل":i%3===1?"متوسط":"صعب",question:r[1],options:r[2],explanation:r[4]}));
 const bank=window.AYFAR_QUESTION_BANK;
 if(!Array.isArray(bank))throw new Error("AYFAR_QUESTION_BANK is not loaded");
 const known=new Set(bank.map(q=>String(q.question).trim()));
