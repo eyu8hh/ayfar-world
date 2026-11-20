@@ -143,3 +143,14 @@ body.ayoub-theme #home-overview #home-anniversary-countdown .date-count-grid>div
   background:rgba(255,255,255,.10);
   border-color:rgba(255,255,255,.22);
 }
+
+#home-overview .home-anniversary-head p,
+#home-overview .home-anniversary-head p *{
+  color:#fff!important;
+  opacity:1!important;
+  font-size:13px!important;
+  font-weight:600;
+  line-height:1.8;
+  letter-spacing:0!important;
+  mix-blend-mode:normal!important;
+}
