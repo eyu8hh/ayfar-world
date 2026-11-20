@@ -336,3 +336,29 @@ test("the final visual layer consistently applies the existing shadow-free desig
   expect(stylesheet).toContain("box-shadow: none !important");
   expect(stylesheet).toContain("text-shadow: none !important");
 });
+
+test("public question-bank scripts never ship correct-answer keys", async () => {
+  const bank = read("js/ayfar-question-bank.js");
+  const expansion = read("js/ayfar-question-bank-expansion.js");
+  const knowledge = read("js/knowledge-bank.js");
+  expect(bank).not.toContain("correctAnswer");
+  expect(expansion).not.toContain("correctAnswer");
+  expect(knowledge).not.toMatch(/\\banswer\\s*:/);
+});
+
+test("bank-backed games use private server scoring and protect authoritative state", async () => {
+  const games = read("js/games.js");
+  const bankMigration = read("supabase/migrations/202611200004_authoritative_bank_scoring.sql");
+  const flagsMigration = read("supabase/migrations/202611200005_secure_flags_bank.sql");
+  const timeoutMigration = read("supabase/migrations/202611200006_idempotent_speed_timeout.sql");
+  expect(games).toContain('bankAction("ayfar_game_bank_answer"');
+  expect(games).toContain('bankAction("ayfar_game_bank_next"');
+  expect(games).toContain('bankAction("ayfar_game_bank_timeout"');
+  expect(bankMigration).toContain("ayfar_private.game_question_bank");
+  expect(bankMigration).toContain("correct_answer");
+  expect(bankMigration).toContain("v_next:=(coalesce(p_state,'{}'::jsonb)");
+  expect(flagsMigration).toContain("('flags')");
+  expect(timeoutMigration).toContain("scoredRound");
+  expect(timeoutMigration).toContain("return v_game");
+  expect(games).not.toContain("item?.options?.[item.correctAnswer]");
+});
