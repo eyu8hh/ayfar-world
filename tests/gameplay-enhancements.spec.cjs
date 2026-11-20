@@ -345,6 +345,11 @@ test("public question-bank scripts never ship correct-answer keys", async () => 
   const games = read("js/games.js");
   expect(bank).not.toContain("correctAnswer");
   expect(expansion).not.toContain("correctAnswer");
+  const rowsMatch = expansion.match(/const rows=(\\[[\\s\\S]*?\\]);\\nconst start=801;/);
+  expect(rowsMatch).not.toBeNull();
+  const rows = JSON.parse(rowsMatch[1]);
+  expect(rows.every(row => row.length === 4)).toBe(true);
+  expect(expansion).toContain("explanation:r[3]");
   expect(knowledge).not.toContain("answer:");
   expect(knowledge).not.toContain('"answer":');
   expect(knowledgeExpansion).not.toContain("answer:");
