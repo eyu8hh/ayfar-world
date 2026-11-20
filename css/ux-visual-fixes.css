@@ -161,3 +161,37 @@ body.ayoub-theme #home-overview>.hero p{
 .home-section-nav button span{
   font-size:12px!important;
 }
+
+/* Full-width text blocks inside the one-column mobile game tiles. */
+#home-games .games>button{
+  align-items:stretch!important;
+  text-align:right;
+}
+#home-games .games>button>.home-tile-icon{
+  align-self:flex-start;
+  flex:0 0 46px;
+}
+#home-games .games>button>b,
+#home-games .games>button>small,
+#home-games .games>button>em{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  text-align:right;
+  overflow-wrap:anywhere;
+}
+#home-games .games>button>b{font-size:14px!important}
+#home-games .games>button>small{font-size:12px!important;line-height:1.65}
+#home-games .games>button>em{font-size:11px!important}
+.home-section-anchor{scroll-margin-top:142px!important}
+#home-pages .home-section-anchor>.heading{padding-top:12px}
+#date-label{
+  display:block;
+  min-width:110px;
+  white-space:nowrap;
+  direction:ltr;
+  unicode-bidi:isolate;
+  font-size:11px!important;
+  letter-spacing:0!important;
+}
