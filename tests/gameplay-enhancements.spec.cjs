@@ -274,6 +274,9 @@ test("P0.1 challenge bootstrap is server-canonical and rejects invalid player pa
   const migration = read("supabase/migrations/202611200001_strict_game_challenge_bootstrap.sql");
   expect(migration).toContain("set search_path = ''");
   expect(migration).toContain("v_target_count <> 1");
+  expect(migration).toContain("create or replace function public.ayfar_game_create(");
+  expect(migration).toContain("create or replace function public.ayfar_game_join(p_game_id uuid)");
+  expect(migration).toContain("يجب أن ينضم حساب الطرف الآخر، لا حساب بنفس الدور");
   expect(migration).toContain("يجب أن يكون التحدي بين أيوب وفرحتي فقط");
   expect(migration).toContain("يجب أن يكون التحدي بين أيوب وفرحتي فقط");
   expect(migration).toContain("'scores', jsonb_build_object('ayoub', 0, 'farahati', 0)");
