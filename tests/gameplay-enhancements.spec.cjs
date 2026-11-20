@@ -461,3 +461,10 @@ test("private answer-key rows are never committed in public SQL migrations", asy
   expect(flagsMigration).not.toMatch(/insert\s+into\s+ayfar_private\.game_question_bank/i);
   expect(expansionMigration).not.toMatch(/insert\s+into\s+ayfar_private\.game_question_bank/i);
 });
+test("plans intro clears the sticky section navigation on mobile", async () => {
+  const css = read("css/ux-visual-fixes.css");
+  const html = read("index.html");
+  expect(css).toContain("#home-plans{padding-top:22px!important}");
+  expect(css).toContain("#home-games>.heading .count");
+  expect(html).toContain("bi-lightbulb-fill");
+});
