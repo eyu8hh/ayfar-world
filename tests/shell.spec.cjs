@@ -46,7 +46,8 @@ test("Arabic RTL login shell renders at a mobile viewport", async ({ page }) => 
 test("all seven home sections remain in the document", async ({ page }) => {
   await stubExternalServices(page);
   await page.goto("/");
-  await expect(page.locator(".home-section-nav [data-home-target]")).toHaveCount(7);
+  await expect(page.locator(".home-section-nav [data-home-target]")).toHaveCount(4);
+  await expect(page.locator(".home-more-menu [data-home-target]")).toHaveCount(3);
   await expect(page.locator("#home-pages > .home-section-anchor")).toHaveCount(7);
   for (const id of [
     "home-overview", "home-our-world", "home-messages",
@@ -114,7 +115,7 @@ test("home navigation uses smooth native horizontal touch scrolling and readable
     await expect(control.locator("i")).toHaveAttribute("aria-hidden", "true");
   }
   await expect(page.locator("#home-slide-label")).not.toContainText(/[0-9]/);
-  await expect(page.locator(".home-section-nav button")).toHaveCount(7);
+  await expect(page.locator(".home-section-nav button")).toHaveCount(5);
 });
 
 
@@ -126,7 +127,7 @@ test("home dashboard includes a live next-event card and notification bell", asy
   await expect(page.locator("#home-next-event")).toHaveCount(1);
   await expect(page.locator("#home-next-event-title")).toHaveText("موعدنا القادم");
   await expect(page.locator("#notification-bell")).toHaveCount(1);
-  await expect(page.locator("#notification-bell .bi-bell")).toHaveCount(1);
+  await expect(page.locator("#notification-bell .lucide-bell")).toHaveCount(1);
   await expect(page.locator(".home-next-event-action")).toHaveAttribute("type", "button");
   const actionBox = await page.locator(".home-next-event-action").boundingBox();
   expect(actionBox.height).toBeGreaterThanOrEqual(44);

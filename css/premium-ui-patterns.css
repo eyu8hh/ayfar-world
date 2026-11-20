@@ -1,0 +1,113 @@
+/* AYFAR WORLD · premium UI patterns, mobile-first and RTL */
+:root{--ayfar-motion-fast:160ms;--ayfar-motion-base:220ms;--ayfar-ease:cubic-bezier(.2,.7,.2,1);--ayfar-card-shadow:0 8px 24px rgba(75,31,49,.075);--ayfar-card-shadow-hover:0 14px 30px rgba(75,31,49,.12)}
+[data-lucide],.lucide{width:1.15em;height:1.15em;stroke-width:1.8;flex:0 0 auto;vertical-align:middle}
+.home-section-nav button{min-width:0;flex:1 1 0;gap:6px;padding-inline:7px}
+.home-section-nav button span{font-size:11px}
+.home-section-nav [data-lucide]{width:19px;height:19px;transition:transform var(--ayfar-motion-base) var(--ayfar-ease),color var(--ayfar-motion-base) ease}
+.home-section-nav button.active [data-lucide]{transform:translateY(-1px);stroke-width:2.15}
+.home-section-nav button.active{background:linear-gradient(140deg,#70243f,#8f4964);color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(112,36,63,.16)}
+body.ayoub-theme .home-section-nav button.active{background:linear-gradient(140deg,#8a405d,#47765c)}
+.home-more-toggle{border:1px solid var(--line);border-radius:15px;background:var(--surface,#fff);color:var(--muted)}
+.home-more-menu{display:flex;flex:0 0 auto;gap:8px;flex-wrap:wrap;padding:8px 2px 10px;animation:ayfarMenuIn .18s var(--ayfar-ease)}
+.home-more-menu[hidden]{display:none}
+.home-more-menu button{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:8px 12px;border:1px solid var(--line);border-radius:13px;background:var(--surface,#fff);color:var(--ink);font:inherit;font-size:11px}
+.home-more-menu button.active{border-color:var(--pink);background:#faedf2;color:var(--burgundy)}
+.home-more-menu [data-lucide]{width:17px;height:17px;color:var(--green)}
+/* Bento overview preserves every existing section and target ID. */
+#home-overview{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));align-content:start;gap:12px}
+#home-overview>.hero,#home-overview>.home-anniversary,#home-overview>.history-section{grid-column:1/-1;min-width:0}
+#home-overview>.continue-wrap,#home-overview>.unfinished-section{grid-column:span 6;min-width:0;margin:0}
+#home-overview>.hero{margin-bottom:0}
+#home-overview .home-anniversary{min-height:156px;padding:clamp(17px,3vw,24px);border-radius:25px;background:radial-gradient(circle at 8% 90%,rgba(71,118,92,.13),transparent 35%),linear-gradient(125deg,#70243f 0%,#8c4a64 55%,#47765c 100%);border:1px solid rgba(255,255,255,.24);color:#fff;box-shadow:0 14px 30px rgba(89,35,58,.16)}
+#home-overview .home-anniversary-head{display:flex;align-items:center;gap:12px}
+#home-overview .home-anniversary-head h3,#home-overview .home-anniversary-head p{color:#fff}
+#home-overview .home-anniversary-head h3{font-size:clamp(16px,3vw,20px);margin:0 0 4px}
+#home-overview .home-anniversary-head p{font-size:11px;opacity:.85;margin:0}
+#home-overview .anniversary-mark{display:grid;place-items:center;width:46px;height:46px;border:1px solid rgba(255,255,255,.3);border-radius:16px;background:rgba(255,255,255,.12);color:#fff}
+#home-overview .anniversary-mark svg{width:23px;height:23px}
+#home-overview #home-anniversary-countdown{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.22);color:#fff}
+#home-overview .date-count-grid>div{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22)}
+#home-overview .date-count-grid strong,#home-overview .date-count-grid small{color:#fff}
+.ayfar-avatar-group{display:flex;align-items:center;direction:ltr;margin-inline-start:auto;padding-inline-start:8px}
+.ayfar-avatar{position:relative;display:grid;place-items:center;width:42px;height:42px;margin-inline-start:-9px;border:2px solid rgba(255,255,255,.9);border-radius:50%;overflow:hidden;background:#f4dce5;box-shadow:0 3px 9px rgba(35,10,20,.15)}
+.ayfar-avatar:first-child{margin-inline-start:0}
+.ayfar-avatar img{width:100%;height:100%;object-fit:cover}.ayfar-avatar[data-presence="online"]::after{content:"";position:absolute;right:0;bottom:0;width:10px;height:10px;border:2px solid #fff;border-radius:50%;background:#4c9a68}
+#home-overview .continue-card,#home-overview .unfinished-match{height:100%;border-radius:20px;box-shadow:var(--ayfar-card-shadow)}
+#home-overview .history-section{margin-top:2px}
+#home-overview .history-section .heading{margin-top:0}
+/* Hover lift on desktop and equivalent press feedback on touch. */
+#home-our-world .stats article,#home-our-world .feature,#home-messages .message-feature,#home-games .games>button,#home-plans .plan-card,.unfinished-match,.continue-card{transition:transform var(--ayfar-motion-base) var(--ayfar-ease),box-shadow var(--ayfar-motion-base) ease,border-color var(--ayfar-motion-base) ease}
+@media(hover:hover) and (pointer:fine){#home-our-world .stats article:hover,#home-our-world .feature:hover,#home-messages .message-feature:hover,#home-games .games>button:hover,#home-plans .plan-card:hover{transform:translateY(-3px) scale(1.008);box-shadow:var(--ayfar-card-shadow-hover)}}
+#home-our-world .stats article:active,#home-our-world .feature:active,#home-messages .message-feature:active,#home-games .games>button:active,#home-plans .plan-card:active{transform:scale(.985);box-shadow:var(--ayfar-card-shadow)}
+/* Determinate game progress ring, layered over the existing progress bar. */
+.game-progress-wrap{display:grid;grid-template-columns:54px minmax(0,1fr);grid-template-rows:auto auto;align-items:center;gap:6px 13px}
+.game-progress-label{grid-column:2;grid-row:1;display:flex;min-width:0;align-items:center;justify-content:space-between;gap:12px}
+.game-progress-ring{grid-column:1;grid-row:1/3;position:relative;display:grid;place-items:center;width:54px;height:54px}
+.game-progress-ring svg{width:54px;height:54px;transform:rotate(-90deg)}
+.game-progress-ring circle{fill:none;stroke-width:3.5}
+.game-progress-ring .ring-track{stroke:rgba(112,36,63,.12)}
+.game-progress-ring .ring-value{stroke:#70243f;stroke-linecap:round;stroke-dasharray:100;transition:stroke-dashoffset .42s var(--ayfar-ease)}
+.game-progress-ring strong{position:absolute;font-size:10px;font-variant-numeric:tabular-nums;color:var(--burgundy)}
+.game-progress-track{grid-column:2;grid-row:2;width:100%;min-width:0;height:4px;opacity:.45}
+.game-player-avatar{position:relative;width:36px;height:36px;overflow:hidden;border:2px solid #fff;border-radius:50%;background:#f4dce5}
+.game-player-avatar img{width:100%;height:100%;object-fit:cover}.game-player-avatar[data-presence="online"]::after{content:"";position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border:2px solid #fff;border-radius:50%;background:#4c9a68}
+.game-chat-widget{z-index:90}
+.game-chat-message-row{animation:ayfarMessageIn .2s var(--ayfar-ease) both}
+.game-chat-message{border-radius:16px;line-height:1.75}
+.game-chat-avatar{display:grid;place-items:center;overflow:hidden;border:2px solid #fff;border-radius:50%}
+.game-chat-avatar img{display:block;width:100%;height:100%;object-fit:cover}
+.game-chat-toggle{position:relative;width:54px;height:54px;min-height:54px;padding:0;justify-content:center;border-radius:50%;background:linear-gradient(145deg,#70243f,#944d69);box-shadow:0 9px 22px rgba(82,27,49,.25);transition:transform .18s ease,box-shadow .18s ease}
+.game-chat-toggle:active{transform:scale(.94)}
+.game-chat-toggle-icon{display:grid;place-items:center}
+.game-chat-toggle-icon svg{width:23px;height:23px;stroke-width:1.9}
+.game-chat-toggle-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.game-chat-count{position:absolute;top:-3px;inset-inline-end:-3px;display:grid;place-items:center;min-width:19px;height:19px;padding:0 4px;border:2px solid #fff;border-radius:99px;background:#47765c;color:#fff;font-size:9px;font-style:normal;font-weight:800}
+.game-chat-count:empty,.game-chat-count[hidden]{display:none}
+/* Private chat bubbles and identity. No delivery/read state is fabricated. */
+.messages-panel .message-list{direction:rtl;gap:14px}
+.messages-panel .message-bubble{max-width:min(88%,560px);padding:12px 15px;border-radius:18px;box-shadow:0 4px 12px rgba(60,25,40,.045);animation:ayfarMessageIn .22s var(--ayfar-ease) both}
+.messages-panel .message-bubble.sent{align-self:flex-start;border-bottom-right-radius:5px;background:linear-gradient(145deg,#f8e7ee,#fff8fa);border-color:#e9cbd6;color:#542638}
+.messages-panel .message-bubble.received{align-self:flex-end;border-bottom-left-radius:5px;background:linear-gradient(145deg,#edf4ee,#f9fcf8);border-color:#d7e5d8;color:#315b43}
+.message-author{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:11px}
+.message-avatar{display:grid;place-items:center;width:27px;height:27px;overflow:hidden;border:1px solid rgba(112,36,63,.15);border-radius:50%;background:#f4dce5}
+.message-avatar img{width:100%;height:100%;object-fit:cover}
+.message-body{font-size:14px;line-height:1.9;overflow-wrap:anywhere}
+.message-bubble small{display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:8px;font-size:10px;color:#806c76}
+.message-delivery{display:inline-flex;align-items:center;gap:4px;color:#47765c}
+.message-delivery:before{content:"✓";font-weight:800}
+.ayfar-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:112px;padding:20px 14px;border:1px dashed #e4d1d9;border-radius:17px;background:linear-gradient(145deg,#fff9fb,#f5f8f3);text-align:center;color:var(--muted)}
+.ayfar-empty-state>svg{width:26px;height:26px;color:var(--burgundy)}
+.empty-messages,.notification-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;min-height:150px;padding:24px;border:1px dashed #e4d1d9;border-radius:18px;background:linear-gradient(145deg,#fff9fb,#f5f8f3);color:var(--muted)}
+.empty-messages>svg,.notification-empty-icon svg{width:28px;height:28px;color:var(--burgundy)}
+.empty-messages b,.notification-empty b{color:var(--burgundy);font-size:14px}
+.empty-messages span,.notification-empty p{font-size:12px;line-height:1.8;margin:0}
+.notification-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:13px;background:#f8e8ee;color:var(--burgundy)}
+.notification-icon svg{width:19px;height:19px}
+.notification-empty-icon{display:grid;place-items:center;width:48px;height:48px;border-radius:16px;background:#f8e8ee;color:var(--burgundy)}
+/* Non-blocking toast variants. */
+#toast{z-index:200;max-width:min(92vw,440px);min-width:180px;bottom:calc(18px + env(safe-area-inset-bottom));padding:12px 16px;border:1px solid rgba(255,255,255,.18);border-radius:15px;box-shadow:0 12px 30px rgba(36,10,22,.2);text-align:center;line-height:1.7;opacity:0;visibility:hidden;transform:translate(-50%,12px);transition:opacity .18s ease,transform .18s ease,visibility .18s}
+#toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+#toast[data-kind="success"]{background:#315f49}
+#toast[data-kind="error"]{background:#9b3049}
+#toast[data-kind="warning"]{background:#805b22}
+#toast[data-kind="info"],#toast:not([data-kind]){background:#70243f}
+#toast[role="alert"]{font-weight:700}
+/* Gentle reveal; visible by default so content is never gated by animation JS. */
+.ayfar-text-reveal{animation:ayfarTextReveal .48s var(--ayfar-ease) both}
+.ayfar-scroll-reveal{opacity:1;transform:none}
+.ayfar-scroll-reveal.is-pending{opacity:1;transform:translateY(8px)}
+.ayfar-scroll-reveal.is-visible{opacity:1;transform:translateY(0);transition:opacity .42s ease,transform .42s var(--ayfar-ease)}
+@keyframes ayfarTextReveal{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ayfarMessageIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ayfarMenuIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){#home-overview{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#home-overview>.hero,#home-overview>.home-anniversary,#home-overview>.history-section{grid-column:1/-1}#home-overview>.continue-wrap,#home-overview>.unfinished-section{grid-column:1/-1}.home-section-nav button{min-height:48px;padding-inline:4px}.home-section-nav button span{font-size:10px}.home-section-nav [data-lucide]{width:20px;height:20px}.home-more-menu{display:grid;grid-template-columns:1fr;gap:7px}.home-more-menu button{width:100%;justify-content:flex-start}.ayfar-avatar{width:36px;height:36px}.game-chat-toggle{width:52px;height:52px}}
+@media(prefers-reduced-motion:reduce){.ayfar-text-reveal,.ayfar-scroll-reveal.is-visible,.messages-panel .message-bubble{animation:none!important;transition:none!important}.ayfar-scroll-reveal.is-pending{opacity:1;transform:none}.home-section-nav button,.game-chat-toggle,#home-our-world .stats article,#home-our-world .feature,#home-messages .message-feature,#home-games .games>button,#home-plans .plan-card{transition:none!important}}
+body.ayoub-theme #home-overview .home-anniversary{background:linear-gradient(125deg,#26374b,#3d354a 58%,#29443d);border-color:#526275}
+body.ayoub-theme .home-more-menu button{background:#202f43;border-color:#40516a;color:#eef2f7}
+body.ayoub-theme .messages-panel .message-bubble.sent{background:#3b2d42;border-color:#68475c;color:#f3e9ef}
+body.ayoub-theme .messages-panel .message-bubble.received{background:#263c38;border-color:#466558;color:#e6f0e8}
+body.ayoub-theme .ayfar-empty-state,body.ayoub-theme .empty-messages,body.ayoub-theme .notification-empty{background:#202f43;border-color:#40516a;color:#c5ced8}
+body.ayoub-theme .empty-messages b,body.ayoub-theme .notification-empty b{color:#f0e7eb}
+body.ayoub-theme .game-progress-ring .ring-track{stroke:rgba(255,255,255,.16)}
+body.ayoub-theme .game-progress-ring .ring-value{stroke:#d98ba5}
+body.ayoub-theme .game-progress-ring strong{color:#f3e8ed}
