@@ -1,0 +1,153 @@
+/* AYFAR WORLD · one feature per card, no crowded multi-card dashboards.
+   Mobile-first, RTL-safe; keeps all existing IDs, routes and behavior intact. */
+#home-overview{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch;
+  gap:18px!important;
+}
+#home-overview>.hero,
+#home-overview>.home-anniversary,
+#home-overview>.home-quick-grid,
+#home-overview>.continue-wrap,
+#home-overview>.unfinished-section,
+#home-overview>.history-section{
+  width:100%;
+  min-width:0;
+  margin:0;
+}
+#home-overview>.continue-wrap,
+#home-overview>.unfinished-section{
+  grid-column:1/-1!important;
+}
+.home-quick-grid,
+#home-our-world .stats,
+#home-our-world .features,
+#home-games .games,
+#home-plans .planned-features{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-flow:row;
+  gap:14px!important;
+  width:100%;
+  min-width:0;
+}
+.home-quick-grid>.home-quick-action,
+#home-our-world .stats>article,
+#home-our-world .features>.feature,
+#home-games .games>button,
+#home-plans .planned-features>.plan-card{
+  display:flex;
+  width:100%;
+  min-width:0;
+  max-width:none;
+  margin:0;
+  grid-column:1/-1!important;
+  align-self:stretch;
+}
+.home-quick-grid>.home-quick-action{
+  min-height:76px;
+  flex-direction:row;
+  justify-content:flex-start;
+  align-items:center;
+  gap:12px;
+  text-align:start;
+}
+.home-quick-grid>.home-quick-action small{
+  margin-inline-start:auto;
+}
+#home-our-world .stats>article{
+  min-height:82px;
+}
+#home-our-world .features>.feature{
+  min-height:104px;
+}
+#home-games .games>button{
+  min-height:92px;
+}
+#home-plans .planned-features>.plan-card{
+  min-height:150px;
+}
+#home-overview .history-section,
+#home-overview .unfinished-section,
+#home-overview .continue-wrap{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+#home-overview .continue-card{
+  width:100%;
+  min-height:unset;
+  height:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:14px;
+}
+#home-overview .continue-card>.primary{
+  width:100%;
+}
+#home-overview .unfinished-section>#unfinished-games,
+#home-overview .history-section>#match-history{
+  width:100%;
+  min-width:0;
+}
+#home-our-world,
+#home-messages,
+#home-games,
+#home-plans,
+#home-routine,
+#home-pets{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:16px;
+}
+#home-our-world>.heading,
+#home-messages>.heading,
+#home-games>.heading{
+  width:100%;
+  margin:0;
+}
+#home-plans .plans-intro{
+  width:100%;
+}
+#home-plans .plans-section-caption{
+  width:100%;
+  margin-block:2px 0;
+}
+#home-pages .home-section-anchor>*{
+  min-width:0;
+}
+@media(min-width:760px){
+  #home-overview,
+  #home-our-world,
+  #home-messages,
+  #home-games,
+  #home-plans,
+  #home-routine,
+  #home-pets{
+    gap:20px!important;
+  }
+  #home-overview>.home-anniversary,
+  #home-overview>.continue-wrap,
+  #home-overview>.unfinished-section,
+  #home-overview>.history-section{
+    grid-column:1/-1!important;
+  }
+  .home-quick-grid,
+  #home-our-world .stats,
+  #home-our-world .features,
+  #home-games .games,
+  #home-plans .planned-features{
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:16px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #home-pages .home-section-anchor>*{
+    scroll-behavior:auto;
+    animation:none!important;
+    transition:none!important;
+  }
+}
