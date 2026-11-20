@@ -325,3 +325,14 @@ test("challenge creation and acceptance rebuild a server-owned clean initial sta
   expect(migration).toContain("grant execute on function public.ayfar_challenge_accept(uuid) to authenticated");
   expect(migration).not.toMatch(/drop\\s+table|truncate\\s+table|delete\\s+from\\s+public\\.ayfar_games/i);
 });
+
+test("the final visual layer consistently applies the existing shadow-free design system", async () => {
+  const html = read("index.html");
+  const polish = html.indexOf('css/individual-element-layout.css?v=1');
+  const noShadows = html.indexOf('css/no-shadows.css?v=1');
+  expect(polish).toBeGreaterThan(-1);
+  expect(noShadows).toBeGreaterThan(polish);
+  const stylesheet = read("css/no-shadows.css");
+  expect(stylesheet).toContain("box-shadow: none !important");
+  expect(stylesheet).toContain("text-shadow: none !important");
+});
