@@ -99,3 +99,45 @@ body.ayoub-theme .notification-copy b,body.ayoub-theme .notification-heading h2{
 @media(prefers-reduced-motion:reduce){
  .home-section-nav{scroll-behavior:auto}
 }
+
+
+/* v151: allocate the viewport between the top chrome, scrollable pages and
+   controls. Do not hard-code a second viewport height inside the flex item. */
+html,body{height:100%;min-height:100%;overflow:hidden}
+.shell{height:100dvh;height:100svh;min-height:0;max-height:100dvh;overflow:hidden}
+@supports(height:100dvh){.shell{height:100dvh;max-height:100dvh}}
+#home{height:100%;min-height:0;max-height:100%;overflow:hidden}
+#home-pages{
+  flex:1 1 0%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  margin:0!important;
+}
+#home-pages>.home-section-anchor{
+  height:100%!important;
+  min-height:100%!important;
+  max-height:none!important;
+  padding-bottom:calc(34px + env(safe-area-inset-bottom,0px))!important;
+  overscroll-behavior-y:auto!important;
+  scroll-padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
+}
+.home-slide-controls{
+  position:relative!important;
+  z-index:2!important;
+  flex:0 0 52px!important;
+  min-height:52px!important;
+  height:52px!important;
+  margin:4px auto 0!important;
+  padding:0 0 env(safe-area-inset-bottom,0px)!important;
+  box-sizing:content-box!important;
+}
+@media(max-width:520px){
+  #home-pages{height:auto!important;min-height:0!important}
+  #home-pages>.home-section-anchor{padding-bottom:calc(42px + env(safe-area-inset-bottom,0px))!important}
+  .home-slide-controls{margin-top:2px!important}
+}
+@media(prefers-reduced-motion:reduce){#home-pages{scroll-behavior:auto!important}}

@@ -35,16 +35,29 @@ test("premium patterns provide Lucide, accessible progress, toast variants and r
 test("mobile home sections cannot shrink and overlap their content", () => {
  const html=read("index.html"),worker=read("service-worker.js"),css=read("css/home-layout-stability.css");
  expect(html).toContain("css/home-layout-stability.css?v=1");
- expect(worker).toContain("ayfar-world-shell-v150");
+ expect(worker).toContain("ayfar-world-shell-v151");
  expect(worker).toContain("home-layout-stability.css?v=1");
  expect(html).toContain("css/visual-resources-refresh.css?v=1");
  expect(html).toContain("js/numeric-legibility.js?v=1");
  expect(worker).toContain("visual-resources-refresh.css?v=1");
- expect(html).toContain("css/final-mobile-clarity.css?v=1");
- expect(worker).toContain("final-mobile-clarity.css?v=1");
+ expect(html).toContain("css/final-mobile-clarity.css?v=2");
+ expect(worker).toContain("final-mobile-clarity.css?v=2");
  expect(worker).toContain("numeric-legibility.js?v=1");
  expect(css).toContain("flex-shrink:0!important");
  expect(css).toContain("#home-overview>*");
  expect(css).toContain("flex:0 0 auto!important");
  expect(css).toContain("overflow-y:auto!important");
+});
+
+test("mobile home viewport gives the content a flexible scroll area above slide controls", () => {
+ const layout=read("css/horizontal-layout.css");
+ expect(layout).toContain("#home-pages{\n  flex:1 1 0%!important;");
+ expect(layout).toContain("height:auto!important;");
+ expect(layout).toContain("padding-bottom:calc(42px + env(safe-area-inset-bottom,0px))");
+});
+test("More page intro stacks kicker, title and description without header flex collision", () => {
+ const clarity=read("css/final-mobile-clarity.css");
+ expect(clarity).toContain("#home-more-page>header.more-page-intro");
+ expect(clarity).toContain("flex-direction:column!important");
+ expect(clarity).toContain("white-space:normal!important");
 });
