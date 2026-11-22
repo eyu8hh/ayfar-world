@@ -1,0 +1,62 @@
+/* AYFAR WORLD · fully expanded home cards and a dedicated More page */
+#home-overview>.hero{
+  height:auto!important;min-height:0!important;max-height:none!important;
+  overflow:visible!important;display:block!important;
+  padding:clamp(22px,5vw,32px)!important;
+}
+#home-overview>.hero>div:first-child{width:100%!important;max-width:none!important}
+#home-overview>.hero h2{line-height:1.5!important;white-space:normal!important}
+#home-overview>.hero p{line-height:2!important;white-space:normal!important}
+#home-overview .ayfar-duo-scene{
+  height:auto!important;min-height:156px!important;max-height:none!important;
+  overflow:visible!important;margin-block:18px 8px!important;
+}
+#home-overview .home-anniversary{
+  height:auto!important;min-height:0!important;max-height:none!important;
+  overflow:visible!important;padding:clamp(17px,4vw,24px)!important;
+}
+#home-overview .home-anniversary-head{align-items:center;flex-wrap:wrap}
+#home-overview .home-anniversary-head>div:first-of-type{flex:1 1 180px;min-width:0}
+#home-overview .home-anniversary-head p{white-space:normal!important;overflow-wrap:anywhere;line-height:1.9!important}
+#home-overview #home-anniversary-countdown{
+  display:block!important;height:auto!important;max-height:none!important;
+  overflow:visible!important;padding-bottom:4px;
+}
+#home-overview #home-anniversary-countdown .date-count-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;
+}
+#home-overview #home-anniversary-countdown .date-count-grid>div{
+  min-width:0;min-height:68px;padding:10px 5px;border-radius:14px;
+}
+.home-more-page{display:flex;flex-direction:column;gap:20px}
+.more-page-intro{
+  padding:24px 20px;border:1px solid rgba(233,168,186,.2);border-radius:24px;
+  background:linear-gradient(135deg,#70243f,#443047 62%,#315747);color:#fff;
+}
+.more-page-kicker{font-size:10px;letter-spacing:.12em;color:#f0c8d5;font-weight:800}
+.more-page-intro h2{margin:9px 0 7px;font-size:clamp(21px,5vw,28px);color:#fff}
+.more-page-intro p{margin:0;color:#f3e2e9;font-size:13px;line-height:1.9}
+.more-page-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.more-page-card{
+  display:flex;align-items:center;gap:13px;width:100%;min-height:86px;
+  padding:15px;border:1px solid var(--line,#46566b);border-radius:19px;
+  background:var(--surface,#24354a);color:var(--text,#f5eaf0);text-align:right;
+  font:inherit;cursor:pointer;touch-action:manipulation;
+}
+.more-page-card>span:nth-child(2){flex:1;min-width:0}
+.more-page-card b{display:block;font-size:14px}
+.more-page-card small{display:block;margin-top:5px;color:var(--muted,#bac5d1);font-size:11px;line-height:1.7}
+.more-page-icon{display:grid;place-items:center;flex:0 0 46px;height:46px;border-radius:15px;background:rgba(233,168,186,.13);color:#e9a8ba;font-size:21px}
+.more-page-card>.bi{font-size:17px;color:#d9bdc8}
+.more-page-note{display:flex;align-items:flex-start;gap:12px;padding:17px;border:1px solid rgba(233,168,186,.2);border-radius:18px;background:rgba(105,36,62,.12)}
+.more-page-note>i{color:#e9a8ba;font-size:20px;flex:0 0 auto}
+.more-page-note p{margin:0;font-size:12px;line-height:1.9;color:var(--text,#e9e2e8)}
+@media(max-width:520px){
+ #home-overview>.hero{padding:22px 18px!important}
+ #home-overview .ayfar-duo-scene{min-height:150px!important}
+ #home-overview .home-anniversary-head{gap:10px}
+ #home-overview .home-anniversary-head .ayfar-avatar-group{margin-inline-start:auto}
+ #home-overview #home-anniversary-countdown .date-count-grid{gap:6px}
+ #home-overview #home-anniversary-countdown .date-count-grid>div{min-height:62px;padding:8px 3px}
+}
+@media(prefers-reduced-motion:reduce){.more-page-card{transition:none!important}}
