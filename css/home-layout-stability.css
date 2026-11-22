@@ -1,0 +1,185 @@
+/* AYFAR WORLD · stable mobile home flow + tactile visual language
+   Inspired by fffuel's editable SVG gradients/patterns and Uiverse's small,
+   accessible interaction states. No third-party runtime is required. */
+
+/* Critical fix: the horizontal carousel is a viewport. Its vertical page
+   contents must scroll; flex children must never shrink to fit that viewport. */
+#home-pages{align-items:stretch!important}
+#home-pages>.home-section-anchor{
+  flex-shrink:0!important;
+  min-height:100%!important;
+  height:100%!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior-y:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+#home-overview{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  gap:18px!important;
+  height:100%!important;
+  min-height:100%!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+}
+#home-overview>*{
+  position:relative;
+  flex:0 0 auto!important;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+}
+#home-overview>.hero{
+  min-height:190px!important;
+  height:auto!important;
+  max-height:none!important;
+  padding:26px 22px!important;
+  overflow:visible!important;
+  border-radius:25px!important;
+}
+#home-overview>.hero>div:first-child{width:100%!important;max-width:100%!important}
+#home-overview>.hero h2{font-size:clamp(23px,6vw,32px)!important;line-height:1.55!important;overflow-wrap:normal!important}
+#home-overview>.hero p{max-width:100%!important;line-height:1.95!important}
+#home-overview .ayfar-duo-scene{
+  flex:0 0 auto!important;
+  width:100%!important;
+  min-height:170px!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  margin-block:14px 0!important;
+}
+#home-overview>.home-anniversary{
+  flex:0 0 auto!important;
+  min-height:0!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding:18px!important;
+  margin:0!important;
+}
+#home-overview .home-anniversary-head{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:12px!important;
+}
+#home-overview .home-anniversary-head>div:first-of-type{flex:1 1 180px!important;min-width:0!important}
+#home-overview .home-anniversary-head h3{line-height:1.5!important;overflow-wrap:anywhere}
+#home-overview .home-anniversary-head p{
+  display:block!important;
+  width:100%!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:anywhere!important;
+  line-height:1.9!important;
+}
+#home-overview .ayfar-avatar-group{flex:0 0 auto!important}
+#home-overview #home-anniversary-countdown{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow:visible!important;
+  margin-top:14px!important;
+}
+#home-overview #home-anniversary-countdown .date-count-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:7px!important;
+  width:100%!important;
+}
+#home-overview #home-anniversary-countdown .date-count-grid>div{
+  min-width:0!important;
+  min-height:66px!important;
+  height:auto!important;
+  padding:9px 4px!important;
+}
+#home-overview>.home-quick-grid,
+#home-overview>.continue-wrap,
+#home-overview>.unfinished-section,
+#home-overview>.history-section{
+  flex:0 0 auto!important;
+  min-height:0!important;
+  height:auto!important;
+  overflow:visible!important;
+}
+
+/* A warmer, quieter graphic system: layered mesh + subtle grain-like dots. */
+#home-overview>.hero{
+  background:
+    radial-gradient(ellipse at 12% 18%,rgba(233,168,186,.19),transparent 45%),
+    radial-gradient(ellipse at 88% 90%,rgba(107,151,119,.18),transparent 48%),
+    linear-gradient(125deg,#202f43 0%,#263648 52%,#263d38 100%)!important;
+  border:1px solid rgba(233,168,186,.22)!important;
+}
+#home-overview>.hero:after{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background-image:radial-gradient(rgba(255,255,255,.11) .65px,transparent .8px);
+  background-size:13px 13px;opacity:.16;
+}
+#home-overview .home-anniversary{
+  background:
+    radial-gradient(ellipse at 0 100%,rgba(111,147,117,.17),transparent 55%),
+    linear-gradient(135deg,rgba(57,48,67,.98),rgba(35,51,66,.98))!important;
+  border:1px solid rgba(233,168,186,.22)!important;
+  border-radius:24px!important;
+}
+
+/* Tactile, consistent touch feedback inspired by Uiverse component patterns. */
+.home-section-nav button,
+.home-slide-controls button,
+.more-page-card,
+.home-quick-action,
+.plan-card,
+#home-overview .continue-card button{
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .18s cubic-bezier(.2,.75,.25,1),border-color .18s ease,background-color .18s ease,box-shadow .18s ease!important;
+}
+.home-section-nav button:active,
+.home-slide-controls button:not(:disabled):active,
+.more-page-card:active,
+.home-quick-action:active,
+.plan-card:active,
+#home-overview .continue-card button:active{transform:scale(.975)!important}
+.home-section-nav button:focus-visible,
+.home-slide-controls button:focus-visible,
+.more-page-card:focus-visible,
+.home-quick-action:focus-visible,
+.plan-card:focus-visible{
+  outline:2px solid #e9a8ba!important;
+  outline-offset:3px!important;
+}
+.more-page-card{
+  min-height:88px!important;
+  border-radius:20px!important;
+  background:
+    radial-gradient(circle at 100% 0,rgba(233,168,186,.10),transparent 42%),
+    linear-gradient(145deg,rgba(39,55,73,.98),rgba(34,54,52,.98))!important;
+}
+.more-page-card .more-page-icon{
+  border:1px solid rgba(233,168,186,.20);
+  box-shadow:inset 0 1px rgba(255,255,255,.08);
+}
+#home-pages .home-section-anchor>.heading{margin-bottom:4px!important}
+#home-pages .home-section-anchor{scrollbar-width:thin;scrollbar-color:rgba(233,168,186,.28) transparent}
+
+@media(max-width:520px){
+  #home-overview{gap:16px!important}
+  #home-overview>.hero{min-height:180px!important;padding:23px 18px!important}
+  #home-overview .ayfar-duo-scene{min-height:158px!important}
+  #home-overview>.home-anniversary{padding:16px!important}
+  #home-overview #home-anniversary-countdown .date-count-grid{gap:5px!important}
+  #home-overview #home-anniversary-countdown .date-count-grid>div{min-height:60px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .home-section-nav button,.home-slide-controls button,.more-page-card,.home-quick-action,.plan-card,
+  #home-overview .continue-card button{transition:none!important}
+  .home-section-nav button:active,.home-slide-controls button:active,.more-page-card:active,
+  .home-quick-action:active,.plan-card:active{transform:none!important}
+}
