@@ -180,3 +180,25 @@ test("shared planning dialogs trap keyboard focus and restore their opener", asy
   await expect(calendarDialog).toBeHidden();
   await expect(calendarTrigger).toBeFocused();
 });
+
+
+test("mobile home cards keep natural heights and never overlap", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await stubExternalServices(page);
+  await page.goto("/");
+  await page.locator("#login").evaluate(element => element.classList.add("hidden"));
+  await page.locator("#home").evaluate(element => element.classList.remove("hidden"));
+  await expect(page.locator("#ayfar-sky")).toHaveCount(1);
+  const boxes = await page.evaluate(() => {
+    const ids = [".hero", ".home-anniversary", "#ayfar-sky"];
+    return ids.map(selector => {
+      const r = document.querySelector("#home-overview "+selector).getBoundingClientRect();
+      return { top:r.top, bottom:r.bottom, height:r.height };
+    });
+  });
+  expect(boxes[0].height).toBeGreaterThan(220);
+  expect(boxes[1].height).toBeGreaterThan(110);
+  expect(boxes[2].height).toBeGreaterThanOrEqual(205);
+  expect(boxes[0].bottom).toBeLessThanOrEqual(boxes[1].top + 1);
+  expect(boxes[1].bottom).toBeLessThanOrEqual(boxes[2].top + 1);
+});
