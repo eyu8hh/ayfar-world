@@ -100,3 +100,46 @@
 .home-more-page .more-page-intro,
 .home-more-page .more-page-intro *{pointer-events:none!important}
 #home-overview .home-next-event-action{min-height:44px!important;height:44px!important;box-sizing:border-box!important}
+
+
+/* v151: isolate the More heading from global header/flex rules. */
+#home-more-page>header.more-page-intro{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  gap:9px!important;
+  width:100%!important;
+  min-height:0!important;
+  height:auto!important;
+  max-height:none!important;
+  padding:22px 19px!important;
+  margin:0 0 4px!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+  text-align:right!important;
+  direction:rtl!important;
+}
+#home-more-page>header.more-page-intro>.more-page-kicker,
+#home-more-page>header.more-page-intro>h2,
+#home-more-page>header.more-page-intro>p{
+  display:block!important;
+  position:static!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  float:none!important;
+  clear:both!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-align:right!important;
+  box-sizing:border-box!important;
+}
+#home-more-page>header.more-page-intro>.more-page-kicker{order:0!important;line-height:1.6!important}
+#home-more-page>header.more-page-intro>h2{order:1!important;font-size:clamp(23px,6vw,29px)!important;line-height:1.42!important}
+#home-more-page>header.more-page-intro>p{order:2!important;font-size:13px!important;line-height:1.95!important}
