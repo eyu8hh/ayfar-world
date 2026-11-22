@@ -15,7 +15,7 @@ function makeReaction(person){
 function enhanceDuo(){
  const scene=$("#ayfar-duo-scene");if(!scene||scene.dataset.touchReady)return;scene.dataset.touchReady="true";
  scene.querySelectorAll(".ayfar-duo-person").forEach(person=>{
-  person.setAttribute("role","button");person.setAttribute("tabindex","0");
+  person.setAttribute("aria-label",person.getAttribute("aria-label")||"");
   person.setAttribute("aria-label","المس شخصية "+(person.dataset.duoPerson==="ayoub"?"أيوب":"فرحتي") +" لتظهر رسالة لطيفة");
   person.addEventListener("click",()=>makeReaction(person));
   person.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();makeReaction(person)}});
