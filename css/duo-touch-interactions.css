@@ -1,0 +1,34 @@
+/* AYFAR WORLD · real touch feedback and contrast repair */
+body.ayoub-theme #home-overview .home-quick-grid{gap:12px!important}
+body.ayoub-theme #home-overview .home-quick-grid .home-quick-action{
+ min-width:0!important;min-height:112px!important;padding:15px 12px!important;
+ color:#f1e8ee!important;background:linear-gradient(145deg,#26384d,#202f43 62%,#2b403c)!important;
+ border:1px solid #485a70!important;border-radius:20px!important;
+}
+body.ayoub-theme #home-overview .home-quick-grid .home-quick-action b,
+body.ayoub-theme #home-overview .home-quick-grid .home-quick-action small,
+body.ayoub-theme #home-overview .home-quick-grid .home-quick-action span,
+body.ayoub-theme #home-overview .home-quick-grid .home-quick-action i{
+ color:#f1e8ee!important;opacity:1!important;
+}
+body.ayoub-theme #home-overview .home-quick-grid .home-quick-action small{color:#c3cfda!important}
+body.ayoub-theme #home-overview .home-quick-grid .home-quick-action .home-tile-icon,
+body.ayoub-theme #home-overview .home-quick-grid .home-quick-action>i{
+ color:#e9c5d3!important;background:rgba(233,197,211,.12)!important;
+}
+.ayfar-duo-person{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.ayfar-duo-person:focus-visible{outline:3px solid #b85b78;outline-offset:5px;border-radius:18px}
+.ayfar-duo-reaction{
+ position:absolute;z-index:4;inset-inline:12px;top:8px;margin:auto;width:max-content;max-width:calc(100% - 24px);
+ padding:8px 13px;border:1px solid rgba(105,36,62,.16);border-radius:15px;
+ background:rgba(255,250,250,.96);color:#69243e;font-size:11px;font-weight:800;text-align:center;
+ box-shadow:0 7px 22px rgba(60,25,42,.12);animation:ayfar-reaction-in .3s ease both;
+}
+.ayfar-duo-scene.is-reacting .ayfar-duo-heart,.ayfar-duo-scene.is-heart-pulse .ayfar-duo-heart{animation:ayfar-heart-pop .7s ease both}
+.ayfar-sky-canvas{cursor:crosshair;touch-action:manipulation}
+.ayfar-sky-star-new{animation:ayfar-star-arrive .7s cubic-bezier(.2,.8,.2,1) both}
+.ayfar-moment{touch-action:manipulation}
+@keyframes ayfar-reaction-in{from{opacity:0;transform:translateY(-6px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes ayfar-heart-pop{0%,100%{transform:scale(1)}35%{transform:scale(1.35)}65%{transform:scale(.92)}}
+@keyframes ayfar-star-arrive{0%{opacity:0;transform:scale(.1)}65%{opacity:1;transform:scale(1.8)}100%{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.ayfar-duo-reaction,.ayfar-sky-star-new{animation:none!important}}
