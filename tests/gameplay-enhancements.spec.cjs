@@ -481,7 +481,7 @@ test("touch-first duo reactions and dashboard contrast remain available on phone
   expect(html).toContain('src="js/duo-touch-interactions.js?v=1"');
   expect(interactions).toContain('addEventListener("click",()=>makeReaction(person))');
   expect(interactions).toContain('addEventListener("keydown"');
-  expect(interactions).toContain('svg.addEventListener("click"');
+  expect(interactions).toContain('svg?.addEventListener("click"');
   expect(styles).toContain('body.ayoub-theme #home-overview .home-quick-grid .home-quick-action');
   expect(styles).toContain('color:#f1e8ee!important');
   expect(worker).toContain('"./css/duo-touch-interactions.css?v=1"');
