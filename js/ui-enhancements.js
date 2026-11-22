@@ -57,7 +57,7 @@ function setupMoreDestinations(){
   if(button.dataset.moreReady)return;button.dataset.moreReady="true";
   button.addEventListener("click",()=>{
    const target=button.dataset.moreDestination;
-   document.querySelector('.home-section-nav [data-home-target="'+target+'"]')?.click();
+   document.getElementById(target)?.scrollIntoView({behavior:"smooth",block:"nearest",inline:"start"});
   });
  });
 }
