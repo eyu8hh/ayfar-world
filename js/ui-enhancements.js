@@ -52,6 +52,15 @@ function setupMoreMenu(){
   if(event.key==="Escape"&&!menu.hidden){menu.hidden=true;toggle.setAttribute("aria-expanded","false");toggle.focus()}
  });
 }
+function setupMoreDestinations(){
+ all("[data-more-destination]").forEach(button=>{
+  if(button.dataset.moreReady)return;button.dataset.moreReady="true";
+  button.addEventListener("click",()=>{
+   const target=button.dataset.moreDestination;
+   document.querySelector('.home-section-nav [data-home-target="'+target+'"]')?.click();
+  });
+ });
+}
 function setupHomeShortcuts(){
  all("[data-home-shortcut]").forEach(button=>{
   if(button.dataset.shortcutReady)return;button.dataset.shortcutReady="true";
@@ -147,7 +156,7 @@ function avatarFallbacks(){
  });
 }
 function enhance(){
- setupMoreMenu();setupHomeShortcuts();enhanceMessages();enhanceEmptyStates();enhanceFunctionalIcons();addProgressRing();setupReveal();avatarFallbacks();renderIcons();
+ setupMoreMenu();setupMoreDestinations();setupHomeShortcuts();enhanceMessages();enhanceEmptyStates();enhanceFunctionalIcons();addProgressRing();setupReveal();avatarFallbacks();renderIcons();
  const menu=$("#home-more-menu"),toggle=$(".home-more-toggle");
  if(menu&&toggle){const active=all("[data-home-target]",menu).some(item=>item.classList.contains("active"));toggle.classList.toggle("active",active)}
 }
