@@ -448,7 +448,7 @@ test("non-bank couple games submit answers and calculate scores only on the serv
 
 test("PWA cache precaches the latest mobile visual layer", async () => {
   const worker = read("service-worker.js");
-  expect(worker).toContain('const CACHE="ayfar-world-shell-v145"');
+  expect(worker).toContain('const CACHE="ayfar-world-shell-v146"');
   expect(worker).toContain('"./css/ux-visual-fixes.css?v=1"');
   expect(worker).toContain('"./css/no-shadows.css?v=1"');
   expect(worker).toContain('"./css/duo-interactive-world.css?v=1"');
@@ -469,4 +469,21 @@ test("plans intro clears the sticky section navigation on mobile", async () => {
   expect(css).toContain("#home-plans{padding-top:22px!important}");
   expect(css).toContain("#home-games>.heading .count");
   expect(html).toContain("bi-lightbulb-fill");
+});
+
+
+test("touch-first duo reactions and dashboard contrast remain available on phones", async () => {
+  const html = read("index.html");
+  const interactions = read("js/duo-touch-interactions.js");
+  const styles = read("css/duo-touch-interactions.css");
+  const worker = read("service-worker.js");
+  expect(html).toContain('href="css/duo-touch-interactions.css?v=1"');
+  expect(html).toContain('src="js/duo-touch-interactions.js?v=1"');
+  expect(interactions).toContain('addEventListener("click",()=>makeReaction(person))');
+  expect(interactions).toContain('addEventListener("keydown"');
+  expect(interactions).toContain('svg?.addEventListener("click"');
+  expect(styles).toContain('body.ayoub-theme #home-overview .home-quick-grid .home-quick-action');
+  expect(styles).toContain('color:#f1e8ee!important');
+  expect(worker).toContain('"./css/duo-touch-interactions.css?v=1"');
+  expect(worker).toContain('"./js/duo-touch-interactions.js?v=1"');
 });
