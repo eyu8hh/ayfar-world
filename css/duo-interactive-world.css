@@ -23,3 +23,5 @@
 @keyframes ayfar-page-enter{from{transform:translateY(12px) scale(.992)}to{transform:translateY(0) scale(1)}}
 @keyframes ayfar-home-enter{from{transform:translateY(7px)}to{transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){#page:not(.hidden),#home:not(.hidden){animation:none!important}.message-feature .feature-icon{transition:none!important}}
+
+.ayfar-duo-person{appearance:none;-webkit-appearance:none;border:0;padding:0;background:transparent;color:inherit;font:inherit;}
