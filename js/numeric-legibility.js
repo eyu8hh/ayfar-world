@@ -8,7 +8,7 @@ function normalize(el){
  for(const node of el.childNodes){
   if(node.nodeType!==Node.TEXT_NODE)continue;
   const value=node.nodeValue||"";
-  if(allowed.test(value))node.nodeValue=value.replace(/[٠-٩۰-۹]/g,d=>digitMap[d]);
+  if(allowed.test(value)&&/[٠-٩۰-۹]/.test(value))node.nodeValue=value.replace(/[٠-٩۰-۹]/g,d=>digitMap[d]);
  }
 }
 function scan(root=document){
