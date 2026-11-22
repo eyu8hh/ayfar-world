@@ -2,6 +2,7 @@
    Fixes the More intro collision and gives numeric values a dependable,
    high-legibility Latin numeral face across Android browsers. */
 .home-more-page .more-page-intro{
+  pointer-events:none!important;
   display:grid!important;
   grid-template-columns:minmax(0,1fr)!important;
   grid-auto-flow:row!important;
@@ -94,3 +95,8 @@
  .date-count-grid strong{font-size:22px!important}
 }
 @media(prefers-reduced-motion:reduce){.home-more-page .more-page-card{transition:none!important}}
+
+/* The More intro is decorative text; never let its box intercept card taps. */
+.home-more-page .more-page-intro,
+.home-more-page .more-page-intro *{pointer-events:none!important}
+#home-overview .home-next-event-action{min-height:44px!important;height:44px!important;box-sizing:border-box!important}
