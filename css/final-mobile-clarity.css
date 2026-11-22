@@ -99,7 +99,7 @@
 /* The More intro is decorative text; never let its box intercept card taps. */
 .home-more-page .more-page-intro,
 .home-more-page .more-page-intro *{pointer-events:none!important}
-#home-overview .home-next-event-action{min-height:44px!important;height:44px!important;box-sizing:border-box!important}
+#home-overview .home-next-event-action{min-height:44px!important;height:45px!important;min-height:45px!important;box-sizing:border-box!important}
 
 
 /* v151: isolate the More heading from global header/flex rules. */
