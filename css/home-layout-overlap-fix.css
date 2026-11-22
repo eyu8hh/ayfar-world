@@ -1,0 +1,122 @@
+/* AYFAR WORLD · prevent mobile home cards from shrinking into one another.
+   The horizontal pager is a fixed-height viewport; each slide must retain its
+   natural content height and scroll vertically instead of compressing cards. */
+#home-pages > #home-overview{
+  display:flex!important;
+  flex:0 0 100%!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  gap:20px!important;
+  height:100%!important;
+  min-height:0!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+}
+#home-overview > .hero,
+#home-overview > .home-anniversary,
+#home-overview > #ayfar-sky,
+#home-overview > #ayfar-moments,
+#home-overview > .home-quick-grid,
+#home-overview > .continue-wrap,
+#home-overview > .unfinished-section,
+#home-overview > .history-section{
+  position:relative!important;
+  inset:auto!important;
+  flex:0 0 auto!important;
+  align-self:stretch!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  transform:none;
+}
+#home-overview > .hero{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  align-items:stretch!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  padding:24px 20px 18px!important;
+  overflow:visible!important;
+  gap:14px!important;
+}
+#home-overview > .hero > div:first-child{
+  display:block!important;
+  flex:0 0 auto!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+}
+#home-overview > .hero h2{margin:8px 0 10px!important;line-height:1.45!important}
+#home-overview > .hero p{margin:0!important;line-height:1.9!important}
+#home-overview .ayfar-duo-scene{
+  position:relative!important;
+  flex:0 0 auto!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:158px!important;
+  max-height:none!important;
+  margin:4px 0 0!important;
+  overflow:hidden!important;
+}
+#home-overview > .home-anniversary{
+  display:block!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  padding:18px!important;
+  overflow:visible!important;
+}
+#home-overview .home-anniversary-head{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-width:0!important;
+}
+#home-overview .home-anniversary-head > span{flex:0 0 43px!important}
+#home-overview .home-anniversary-head > div:first-of-type{
+  flex:1 1 170px!important;
+  min-width:0!important;
+}
+#home-overview .home-anniversary-head .ayfar-avatar-group{
+  flex:0 0 auto!important;
+  margin-inline-start:auto!important;
+}
+#home-overview .home-anniversary-head p{
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  line-height:1.85!important;
+}
+#home-overview #home-anniversary-countdown{
+  display:block!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow:visible!important;
+  margin-top:14px!important;
+}
+#home-overview > #ayfar-sky{
+  display:block!important;
+  height:auto!important;
+  min-height:220px!important;
+  max-height:none!important;
+  overflow:hidden!important;
+}
+#home-overview > #ayfar-moments{display:grid!important;grid-template-columns:minmax(0,1fr)!important}
+#home-overview > .home-quick-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important}
+#home-overview > .continue-wrap,
+#home-overview > .unfinished-section,
+#home-overview > .history-section{display:flex!important;flex-direction:column!important;gap:12px!important}
+@media(max-width:520px){
+  #home-pages > #home-overview{gap:18px!important}
+  #home-overview > .hero{padding:22px 17px 16px!important}
+  #home-overview .ayfar-duo-scene{min-height:150px!important}
+  #home-overview > .home-anniversary{padding:16px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #home-overview > *{scroll-behavior:auto!important;animation:none!important}
+}
