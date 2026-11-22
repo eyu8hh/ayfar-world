@@ -46,9 +46,9 @@ test("Arabic RTL login shell renders at a mobile viewport", async ({ page }) => 
 test("all seven home sections remain in the document", async ({ page }) => {
   await stubExternalServices(page);
   await page.goto("/");
-  await expect(page.locator(".home-section-nav [data-home-target]")).toHaveCount(4);
-  await expect(page.locator(".home-more-menu [data-home-target]")).toHaveCount(3);
-  await expect(page.locator("#home-pages > .home-section-anchor")).toHaveCount(7);
+  await expect(page.locator(".home-section-nav [data-home-target]")).toHaveCount(5);
+  await expect(page.locator(".home-more-menu [data-home-target]")).toHaveCount(0);
+  await expect(page.locator("#home-pages > .home-section-anchor")).toHaveCount(8);
   for (const id of [
     "home-overview", "home-our-world", "home-messages",
     "home-games", "home-plans", "home-routine", "home-pets"

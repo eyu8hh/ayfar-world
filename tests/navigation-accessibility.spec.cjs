@@ -45,15 +45,13 @@ test("home section navigation exposes one current page and follows selected sect
   await expect(page.locator("#home-messages")).toBeInViewport();
 
   const more = navigation.getByRole("button", { name: "المزيد" });
-  await expect(more).toHaveAttribute("aria-expanded", "false");
   await more.click();
-  const moreMenu = page.getByRole("group", { name: "أقسام إضافية" });
-  await expect(moreMenu.getByRole("button")).toHaveCount(3);
-  const plans = moreMenu.getByRole("button", { name: "خططنا وأنشطتنا" });
+  await expect(page.locator("#home-more-page")).toBeInViewport();
+  await expect(more).toHaveAttribute("aria-current", "page");
+  const plans = page.getByRole("button", { name: /خططنا وأنشطتنا/ });
   await plans.click();
-  await expect(page.locator('.home-more-menu [data-home-target="home-plans"]')).toHaveAttribute("aria-current", "page");
-  await expect(more).toHaveClass(/active/);
-  await expect(moreMenu).toBeHidden();
+  await expect(page.locator("#home-plans")).toBeInViewport();
+  await expect(more).toHaveAttribute("aria-current", "page");
   await expect(page.locator("#home-slide-label")).toHaveText("خططنا وأنشطتنا");
 
 });
