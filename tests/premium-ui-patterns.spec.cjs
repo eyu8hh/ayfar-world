@@ -31,3 +31,14 @@ test("premium patterns provide Lucide, accessible progress, toast variants and r
  expect(worker).toContain("premium-ui-patterns.css");
  expect(worker).toContain("ui-enhancements.js");
 });
+
+test("mobile home sections cannot shrink and overlap their content", () => {
+ const html=read("index.html"),worker=read("service-worker.js"),css=read("css/home-layout-stability.css");
+ expect(html).toContain("css/home-layout-stability.css?v=1");
+ expect(worker).toContain("ayfar-world-shell-v148");
+ expect(worker).toContain("home-layout-stability.css?v=1");
+ expect(css).toContain("flex-shrink:0!important");
+ expect(css).toContain("#home-overview>*");
+ expect(css).toContain("flex:0 0 auto!important");
+ expect(css).toContain("overflow-y:auto!important");
+});
