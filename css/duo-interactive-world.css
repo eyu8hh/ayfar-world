@@ -20,6 +20,6 @@
 .message-feature.ayfar-envelope-open .feature-icon{transform:translateY(-4px) rotateX(32deg) scale(1.08);filter:drop-shadow(0 7px 8px rgba(105,36,62,.2))}
 #page:not(.hidden){animation:ayfar-page-enter .38s cubic-bezier(.2,.75,.25,1) both;transform-origin:50% 15%}
 #home:not(.hidden){animation:ayfar-home-enter .34s ease-out both}
-@keyframes ayfar-page-enter{from{opacity:0;transform:translateY(12px) scale(.992);filter:blur(3px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
-@keyframes ayfar-home-enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ayfar-page-enter{from{transform:translateY(12px) scale(.992)}to{transform:translateY(0) scale(1)}}
+@keyframes ayfar-home-enter{from{transform:translateY(7px)}to{transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){#page:not(.hidden),#home:not(.hidden){animation:none!important}.message-feature .feature-icon{transition:none!important}}
