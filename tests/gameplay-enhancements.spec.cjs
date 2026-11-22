@@ -448,9 +448,11 @@ test("non-bank couple games submit answers and calculate scores only on the serv
 
 test("PWA cache precaches the latest mobile visual layer", async () => {
   const worker = read("service-worker.js");
-  expect(worker).toContain('const CACHE="ayfar-world-shell-v144"');
+  expect(worker).toContain('const CACHE="ayfar-world-shell-v145"');
   expect(worker).toContain('"./css/ux-visual-fixes.css?v=1"');
   expect(worker).toContain('"./css/no-shadows.css?v=1"');
+  expect(worker).toContain('"./css/duo-interactive-world.css?v=1"');
+  expect(worker).toContain('"./js/duo-interactive-world.js?v=1"');
 });
 
 test("private answer-key rows are never committed in public SQL migrations", async () => {
