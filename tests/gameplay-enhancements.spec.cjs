@@ -448,8 +448,9 @@ test("non-bank couple games submit answers and calculate scores only on the serv
 
 test("PWA cache precaches the latest mobile visual layer", async () => {
   const worker = read("service-worker.js");
-  expect(worker).toContain('const CACHE="ayfar-world-shell-v147"');
+  expect(worker).toContain('const CACHE="ayfar-world-shell-v148"');
   expect(worker).toContain('"./css/ux-visual-fixes.css?v=1"');
+  expect(worker).toContain('"./css/home-layout-overlap-fix.css?v=1"');
   expect(worker).toContain('"./css/no-shadows.css?v=1"');
   expect(worker).toContain('"./css/duo-interactive-world.css?v=1"');
   expect(worker).toContain('"./js/duo-interactive-world.js?v=1"');
