@@ -1,0 +1,96 @@
+/* AYFAR WORLD · final mobile clarity pass
+   Fixes the More intro collision and gives numeric values a dependable,
+   high-legibility Latin numeral face across Android browsers. */
+.home-more-page .more-page-intro{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-flow:row!important;
+  align-items:start!important;
+  justify-items:stretch!important;
+  gap:8px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:auto!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+  position:relative!important;
+  overflow:visible!important;
+  padding:22px 20px!important;
+  text-align:right!important;
+}
+.home-more-page .more-page-intro>*{
+  display:block!important;
+  position:static!important;
+  inset:auto!important;
+  float:none!important;
+  clear:both!important;
+  transform:none!important;
+  grid-column:1/-1!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:break-word!important;
+  word-break:normal!important;
+  text-align:right!important;
+}
+.home-more-page .more-page-kicker{
+  order:0!important;
+  font-size:10px!important;
+  line-height:1.5!important;
+  letter-spacing:.12em!important;
+  color:#f5cbd8!important;
+}
+.home-more-page .more-page-intro h2{
+  order:1!important;
+  margin:2px 0 0!important;
+  font-size:clamp(23px,6vw,29px)!important;
+  line-height:1.38!important;
+  font-weight:800!important;
+}
+.home-more-page .more-page-intro p{
+  order:2!important;
+  margin:0!important;
+  font-size:13px!important;
+  line-height:1.9!important;
+  color:#f5e8ed!important;
+}
+.home-more-page .more-page-grid{margin-top:0!important;gap:13px!important}
+.home-more-page .more-page-card{min-height:88px!important}
+.home-more-page .more-page-note{margin-top:2px!important}
+.ayfar-numeric,
+:where(.date-count-grid strong,.date-number,.stats strong,.star-total,
+  .game-player-score>b,.game-progress-label b,.final-result-scores article>strong,
+  .game-chat-toggle i,.game-chat-meta time,#ap,#fp,#sp,
+  .unfinished-match-score b,.score-strip b,.score-strip strong,
+  .compatibility-final-rate strong,[data-numeric]){
+  font-family:"IBM Plex Sans","Roboto","Arial",sans-serif!important;
+  font-variant-numeric:lining-nums tabular-nums!important;
+  font-feature-settings:"lnum" 1,"tnum" 1!important;
+  font-style:normal!important;
+  font-synthesis:none!important;
+  font-weight:700!important;
+  direction:ltr!important;
+  unicode-bidi:isolate!important;
+  text-align:center!important;
+  letter-spacing:0!important;
+  text-rendering:geometricPrecision;
+  -webkit-font-smoothing:antialiased;
+}
+.date-count-grid strong{font-size:clamp(23px,6vw,32px)!important;line-height:1.2!important}
+.home-anniversary .date-count-grid strong{font-size:clamp(22px,5.8vw,29px)!important}
+#ap,#fp,#sp,.star-total,.date-number{font-size:1.2em!important;line-height:1.25!important}
+@media(max-width:380px){
+ .home-more-page .more-page-intro{padding:19px 16px!important;gap:7px!important}
+ .home-more-page .more-page-intro h2{font-size:23px!important}
+ .home-more-page .more-page-intro p{font-size:12px!important}
+ .date-count-grid{gap:5px!important}
+ .date-count-grid>div{padding-inline:2px!important}
+ .date-count-grid strong{font-size:22px!important}
+}
+@media(prefers-reduced-motion:reduce){.home-more-page .more-page-card{transition:none!important}}
