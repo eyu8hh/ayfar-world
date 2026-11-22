@@ -1,0 +1,84 @@
+/* AYFAR WORLD · visual resource inspired refresh
+   fffuel-inspired SVG-like mesh, grain and organic accents; Uiverse-inspired tactile controls.
+   All effects are local CSS: no third-party runtime or remote image dependency. */
+:root{
+  --ayfar-mesh:radial-gradient(ellipse at 12% 8%,rgba(233,168,186,.17),transparent 36%),
+    radial-gradient(ellipse at 92% 82%,rgba(84,125,104,.16),transparent 38%),
+    linear-gradient(135deg,rgba(255,248,244,.025),rgba(105,36,62,.045));
+}
+#home-pages>.home-section-anchor{
+  background-image:var(--ayfar-mesh);
+  background-size:cover;
+  background-position:center;
+}
+#home-overview>.hero,
+#home-overview .home-anniversary,
+#home-overview .continue-card,
+#home-plans .plan-card,
+#home-routine .routine-card,
+#home-pets .pet-card{
+  isolation:isolate;
+}
+#home-overview>.hero:before,
+#home-overview .home-anniversary:before,
+#home-overview .continue-card:before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(circle at 88% 12%,rgba(255,255,255,.22),transparent 28%),
+    radial-gradient(circle at 8% 92%,rgba(233,168,186,.12),transparent 34%);
+  opacity:.85;
+}
+body.ayoub-theme #home-overview>.hero:before,
+body.ayoub-theme #home-overview .home-anniversary:before,
+body.ayoub-theme #home-overview .continue-card:before{opacity:.45}
+#home-overview .home-anniversary .date-count-grid>div{
+  min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:72px;border-radius:15px;
+  background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(249,232,238,.72));
+  border:1px solid rgba(105,36,62,.12);
+}
+body.ayoub-theme #home-overview .home-anniversary .date-count-grid>div{
+  background:linear-gradient(145deg,rgba(42,57,77,.94),rgba(28,42,60,.9));
+  border-color:rgba(197,164,109,.22)
+}
+/* Uiverse-inspired pressed/hover states, restrained for a romantic interface. */
+:where(button,.primary,.secondary-action,.home-section-nav button,.more-page-card,.home-slide-controls button){
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background-color .18s ease;
+}
+:where(button,.primary,.secondary-action,.home-section-nav button,.more-page-card,.home-slide-controls button):active{
+  transform:translateY(1px) scale(.985);
+}
+:where(button,.primary,.secondary-action,.home-section-nav button,.more-page-card,.home-slide-controls button):focus-visible{
+  outline:2px solid #d98ba5;outline-offset:3px;
+}
+@media(hover:hover) and (pointer:fine){
+  #home-overview .home-anniversary:hover,
+  #home-overview>.hero:hover{border-color:rgba(217,139,165,.5)}
+  .more-page-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(16,25,40,.12)}
+}
+/* Clear, consistent numerals: Latin lining digits, fixed-width columns, and LTR isolation. */
+:where(.date-count-grid strong,.date-number,.stats strong,.star-total,
+  .game-player-score>b,.game-progress-label b,.final-result-scores article>strong,
+  .game-chat-toggle i,.game-chat-meta time,[data-numeric]){
+  font-family:"IBM Plex Sans","Arial",sans-serif!important;
+  font-variant-numeric:lining-nums tabular-nums!important;
+  font-feature-settings:"lnum" 1,"tnum" 1!important;
+  font-weight:700;
+  direction:ltr;unicode-bidi:isolate;
+  text-align:center;letter-spacing:.015em;
+  font-synthesis:none;
+}
+.date-count-grid strong{font-size:clamp(22px,6vw,31px);line-height:1.18;min-height:1.2em}
+.home-anniversary .date-count-grid strong{font-size:clamp(21px,5.6vw,28px)}
+.stats strong,.star-total,.date-number{line-height:1.2}
+.game-player-score>b,.game-progress-label b,.final-result-scores article>strong{font-size:1.12em;line-height:1.2}
+@media(max-width:380px){
+  .date-count-grid{gap:5px}
+  .date-count-grid>div{padding-inline:2px}
+  .date-count-grid strong{font-size:21px}
+  .date-count-grid small{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  :where(button,.primary,.secondary-action,.home-section-nav button,.more-page-card,.home-slide-controls button){transition:none!important}
+}
