@@ -41,8 +41,8 @@ test("mobile home sections cannot shrink and overlap their content", () => {
  expect(html).toContain("js/numeric-legibility.js?v=2");
  expect(worker).toContain("visual-resources-refresh.css?v=1");
  expect(html).toContain("css/final-mobile-clarity.css?v=3");
- expect(worker).toContain("final-mobile-clarity.css?v=2");
- expect(worker).toContain("numeric-legibility.js?v=1");
+ expect(worker).toContain("final-mobile-clarity.css?v=3");
+ expect(worker).toContain("numeric-legibility.js?v=2");
  expect(css).toContain("flex-shrink:0!important");
  expect(css).toContain("#home-overview>*");
  expect(css).toContain("flex:0 0 auto!important");
