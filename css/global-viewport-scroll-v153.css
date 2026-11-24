@@ -1,0 +1,157 @@
+/* AYFAR WORLD v153 — shared viewport and scrolling repair.
+   Keep the app chrome fixed while every page owns a reachable vertical scroll area.
+   This removes the obsolete bottom spacer that was shrinking all home sections. */
+
+/* Use the visible mobile viewport, including browsers with dynamic address bars. */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.shell {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100%;
+  height: 100vh !important;
+  min-height: 0 !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+@supports (height: 100dvh) {
+  .shell {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+  }
+}
+
+/* Home: header + section tabs + flexible pages + bottom controls. */
+#home {
+  display: flex;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+#home-top,
+.home-section-nav,
+.home-slide-controls {
+  flex: 0 0 auto !important;
+}
+
+#home-pages {
+  flex: 1 1 0% !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: none;
+}
+
+#home-pages > .home-section-anchor {
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  box-sizing: border-box !important;
+  padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-x pan-y pinch-zoom !important;
+  scroll-padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+}
+
+/* The bottom arrows remain visible without taking content height away twice. */
+.home-slide-controls {
+  position: relative !important;
+  z-index: 3 !important;
+  min-height: 52px !important;
+  height: auto !important;
+  margin: 4px auto 0 !important;
+  padding: 0 0 env(safe-area-inset-bottom, 0px) !important;
+  box-sizing: border-box !important;
+}
+
+/* Secondary/internal pages use one predictable vertical scroll owner. */
+#page {
+  display: flex;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  width: 100%;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+#page > header {
+  flex: 0 0 auto !important;
+}
+
+#pagebody {
+  flex: 1 1 0% !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 auto !important;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+}
+
+#pagebody > .panel {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+
+/* Keep nested message/game regions usable without clipping their parent page. */
+#pagebody .message-list {
+  max-height: min(55vh, 520px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#pagebody textarea {
+  max-width: 100%;
+}
+
+@media (max-width: 520px) {
+  #home-pages > .home-section-anchor {
+    padding-bottom: calc(30px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  #pagebody {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home-pages {
+    scroll-behavior: auto !important;
+  }
+}
