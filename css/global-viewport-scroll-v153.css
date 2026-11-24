@@ -30,7 +30,7 @@ body {
 
 /* Home: header + section tabs + flexible pages + bottom controls. */
 #home {
-  display: flex !important;
+  display: flex;
   flex: 1 1 auto !important;
   flex-direction: column !important;
   height: auto !important;
@@ -89,7 +89,7 @@ body {
 
 /* Secondary/internal pages use one predictable vertical scroll owner. */
 #page {
-  display: flex !important;
+  display: flex;
   flex: 1 1 auto !important;
   flex-direction: column !important;
   width: 100%;
