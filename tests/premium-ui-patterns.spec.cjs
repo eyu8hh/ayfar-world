@@ -35,14 +35,14 @@ test("premium patterns provide Lucide, accessible progress, toast variants and r
 test("mobile home sections cannot shrink and overlap their content", () => {
  const html=read("index.html"),worker=read("service-worker.js"),css=read("css/home-layout-stability.css");
  expect(html).toContain("css/home-layout-stability.css?v=1");
- expect(worker).toContain("ayfar-world-shell-v151");
+ expect(worker).toContain("ayfar-world-shell-v152");
  expect(worker).toContain("home-layout-stability.css?v=1");
  expect(html).toContain("css/visual-resources-refresh.css?v=1");
- expect(html).toContain("js/numeric-legibility.js?v=1");
+ expect(html).toContain("js/numeric-legibility.js?v=2");
  expect(worker).toContain("visual-resources-refresh.css?v=1");
- expect(html).toContain("css/final-mobile-clarity.css?v=2");
- expect(worker).toContain("final-mobile-clarity.css?v=2");
- expect(worker).toContain("numeric-legibility.js?v=1");
+ expect(html).toContain("css/final-mobile-clarity.css?v=3");
+ expect(worker).toContain("final-mobile-clarity.css?v=3");
+ expect(worker).toContain("numeric-legibility.js?v=2");
  expect(css).toContain("flex-shrink:0!important");
  expect(css).toContain("#home-overview>*");
  expect(css).toContain("flex:0 0 auto!important");
@@ -60,4 +60,19 @@ test("More page intro stacks kicker, title and description without header flex c
  expect(clarity).toContain("#home-more-page>header.more-page-intro");
  expect(clarity).toContain("flex-direction:column!important");
  expect(clarity).toContain("white-space:normal!important");
+});
+
+test("More page intro no longer uses a global header element and has explicit vertical layout", () => {
+ const html=read("index.html"),css=read("css/visual-readability-v152.css");
+ expect(html).toContain('<div class="more-page-intro">');
+ expect(html).not.toContain('<header class="more-page-intro">');
+ expect(css).toContain("#home-more-page>.more-page-intro");
+ expect(css).toContain("#home-more-page>.more-page-grid");
+});
+test("countdown and match numbers use high-contrast text numerals", () => {
+ const css=read("css/visual-readability-v152.css"),script=read("js/numeric-legibility.js"),games=read("js/games.js");
+ expect(css).toContain("font-variant-emoji:text");
+ expect(css).toContain("opacity:1!important");
+ expect(script).toContain("if(/[٠-٩۰-۹]/.test(value))");
+ expect(games).toContain('class="ayfar-numeric"');
 });
