@@ -51,27 +51,25 @@ begin
     using_expression := replace(policy_row.using_sql, 'auth.uid()', '(select auth.uid())');
     check_expression := replace(policy_row.check_sql, 'auth.uid()', '(select auth.uid())');
 
-    if policy_row.polcmd = 'r' then
-      execute format(
-        'alter policy %I on %I.%I using (%s)',
-        policy_row.polname, policy_row.schema_name, policy_row.table_name, using_expression
-      );
-    elsif policy_row.polcmd = 'a' then
-      execute format(
-        'alter policy %I on %I.%I with check (%s)',
-        policy_row.polname, policy_row.schema_name, policy_row.table_name, check_expression
-      );
-    elsif policy_row.polcmd = 'w' or policy_row.polcmd = '*' then
-      execute format(
-        'alter policy %I on %I.%I using (%s) with check (%s)',
-        policy_row.polname, policy_row.schema_name, policy_row.table_name,
-        using_expression, check_expression
-      );
-    elsif policy_row.polcmd = 'd' then
-      execute format(
-        'alter policy %I on %I.%I using (%s)',
-        policy_row.polname, policy_row.schema_name, policy_row.table_name, using_expression
-      );
+    -- Build only the clauses that existed on the original policy. Passing a
+    -- NULL expression to ALTER POLICY would silently turn that side into a
+    -- deny-all predicate for UPDATE/ALL policies that define only one side.
+    if policy_row.polcmd in ('r', 'd', 'w', '*') then
+      if using_expression is not null then
+        execute format(
+          'alter policy %I on %I.%I using (%s)',
+          policy_row.polname, policy_row.schema_name, policy_row.table_name, using_expression
+        );
+      end if;
+    end if;
+
+    if policy_row.polcmd in ('a', 'w', '*') then
+      if check_expression is not null then
+        execute format(
+          'alter policy %I on %I.%I with check (%s)',
+          policy_row.polname, policy_row.schema_name, policy_row.table_name, check_expression
+        );
+      end if;
     end if;
   end loop;
 end
