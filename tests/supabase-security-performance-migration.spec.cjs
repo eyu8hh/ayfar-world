@@ -57,11 +57,3 @@ test("Supabase hardening migration preserves policy clauses that do not referenc
   expect(migration).not.toContain("using (%s) with check (%s)");
 });
  
-test("Supabase hardening migration preserves policy clauses that do not reference auth.uid()", async () => {
-  const migration = read("supabase/migrations/20261127161000_supabase_security_performance_hardening.sql");
-  expect(migration).toContain("if using_expression is not null then");
-  expect(migration).toContain("if check_expression is not null then");
-  expect(migration).toContain("alter policy %I on %I.%I using (%s)");
-  expect(migration).toContain("alter policy %I on %I.%I with check (%s)");
-  expect(migration).not.toContain("using (%s) with check (%s)");
-});
