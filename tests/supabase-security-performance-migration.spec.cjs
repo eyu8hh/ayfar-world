@@ -5,7 +5,7 @@ const path = require("node:path");
 const read = file => fs.readFileSync(path.join(process.cwd(), file), "utf8");
 
 test("Supabase hardening migration limits direct function execution and preserves authenticated game RPCs", async () => {
-  const migration = read("supabase/migrations/20261127161000_supabase_security_performance_hardening.sql");
+  const migration = read("supabase/migrations/20261127160851_supabase_security_performance_hardening.sql");
   for (const fn of [
     "ayfar_notify_daily_rating",
     "ayfar_notify_habit_checkin",
@@ -23,7 +23,7 @@ test("Supabase hardening migration limits direct function execution and preserve
 });
 
 test("Supabase hardening migration removes only redundant private-message policies and indexes audited foreign keys", async () => {
-  const migration = read("supabase/migrations/20261127161000_supabase_security_performance_hardening.sql");
+  const migration = read("supabase/migrations/20261127160851_supabase_security_performance_hardening.sql");
   expect(migration).toContain('drop policy if exists "participants can read their messages" on public.private_messages');
   expect(migration).toContain('drop policy if exists "Ayoub can send messages to Farahati" on public.private_messages');
   for (const index of [
@@ -49,7 +49,7 @@ test("Supabase hardening migration removes only redundant private-message polici
 });
 
 test("Supabase hardening migration preserves policy clauses that do not reference auth.uid()", async () => {
-  const migration = read("supabase/migrations/20261127161000_supabase_security_performance_hardening.sql");
+  const migration = read("supabase/migrations/20261127160851_supabase_security_performance_hardening.sql");
   expect(migration).toContain("if using_expression is not null then");
   expect(migration).toContain("if check_expression is not null then");
   expect(migration).toContain("alter policy %I on %I.%I using (%s)");
